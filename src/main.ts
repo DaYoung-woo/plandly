@@ -8,6 +8,9 @@ import { Quasar } from 'quasar'
 import App from './App.vue'
 import router from './router'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import VueNativeSock from "vue-native-websocket-vue3";
+
+
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -19,5 +22,7 @@ app.use(Quasar, {
   
 app.use(pinia)
 app.use(router)
+
+app.use(VueNativeSock, 'ws://plandly-haeju-min.koyeb.app/wsTest');
 
 app.mount('#app')

@@ -4,7 +4,9 @@
 </template>
   
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue';
+import { getCurrentInstance, onMounted } from 'vue';
+
+
 import { Calendar } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -29,11 +31,47 @@ const calendarOptions = {
 
 let calendar: Calendar;
 
+
+//import { Client } from '@stomp/stompjs';
+//import * as SockJS from 'sockjs-client';
 onMounted(() => {
   let calendarEl: HTMLElement = document.getElementById('calendar')!;
   calendar = new Calendar(calendarEl, calendarOptions);
   calendar.render();
+
+  // const client = new Client({
+  //   brokerURL: 'ws://plandly-haeju-min.koyeb.app/ws',
+  //   onConnect: () => {
+  //     client.subscribe('/calendar.view', message =>
+  //       console.log(message)
+  //     );
+  //   },
+  // });
+
+  //client.activate();
+
+  var sock = new SockJS('https://plandly-haeju-min.koyeb.app/wsTest');
+  sock.onopen = function() {
+      console.log('open');
+      sock.send('test');
+  };
+
+  sock.onmessage = function (e){
+    console.log(e.data)
+  } 
+
+
+    const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+    proxy.$socket.onmessage = (res: {
+      data: string;
+    }) => {
+      console.log(data);
+    }
 })
+
+
+
+
 </script>
 
 <style>

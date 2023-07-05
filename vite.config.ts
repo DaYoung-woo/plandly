@@ -13,15 +13,15 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  server: {
-    proxy: {
-      '/socket.io': {
-        target: 'http://192.168.0.59:8888',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/socket.io/, '/ws'),
-        secure: false,
-        ws: true
-      }
-    }
-  }
+  // server: {
+  //   proxy: {
+  //     '/wsTest': {
+  //       target: 'https://plandly-haeju-min.koyeb.app',
+  //       changeOrigin: true,
+  //       //rewrite: (path) => path.replace(/^\/socket.io/, '/ws'),
+  //       secure: false,
+  //       ws: true
+  //     }
+  //   }
+  // }
 })
