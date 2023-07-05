@@ -1,62 +1,63 @@
-declare module '@toast-ui/calendar' {
-    // Type definitions for TOAST UI Calendar v1.15.3
-// TypeScript Version: 3.2.1
+declare module "@toast-ui/calendar" {
+  // Type definitions for TOAST UI Calendar v1.15.3
+  // TypeScript Version: 3.2.1
 
-export type DateType = string | Date | TZDate;
-export type EventHandlerType = IEvents[keyof IEvents];
-export type CustomEventType = keyof IEvents;
+  export type DateType = string | Date | TZDate;
+  export type EventHandlerType = IEvents[keyof IEvents];
+  export type CustomEventType = keyof IEvents;
 
-export interface IEventObject {
+  export interface IEventObject {
     schedule: ISchedule;
     changes: ISchedule | null;
     end: TZDate;
     start: TZDate;
     calendar?: ICalendarInfo;
-    triggerEventName?: 'click' | 'dblclick';
-}
+    triggerEventName?: "click" | "dblclick";
+  }
 
-export interface IEventDateObject {
+  export interface IEventDateObject {
     date: string;
-}
+  }
 
-export interface IEventMoreObject {
+  export interface IEventMoreObject {
     date: TZDate;
     target: Element;
-}
+  }
 
-export interface IEventScheduleObject {
+  export interface IEventScheduleObject {
     calendar: ICalendarInfo;
     event: MouseEvent;
     schedule: ISchedule;
-}
+  }
 
-export interface ITimeCreationGuide {
+  export interface ITimeCreationGuide {
     guideElement: HTMLElement;
     guideTimeElement: HTMLElement;
     clearGuideElement: () => void;
-}
+  }
 
-export interface IMonthGuide {
+  export interface IMonthGuide {
     guideElements: HTMLElement[];
     clearGuideElements: () => void;
-}
+  }
 
-export interface IDayGridCreationGuide {
+  export interface IDayGridCreationGuide {
     guideElement: HTMLElement;
     clearGuideElement: () => void;
-}
+  }
 
-export interface IEventWithCreationPopup extends Pick<ISchedule, 'start' | 'end' | 'state' | 'title' | 'location'> {
+  export interface IEventWithCreationPopup
+    extends Pick<ISchedule, "start" | "end" | "state" | "title" | "location"> {
     calendarId: string | number | null;
     useCreationPopup: true;
     isAllDay: boolean;
-}
+  }
 
-export interface IEventWithoutCreationPopup {
+  export interface IEventWithoutCreationPopup {
     start: TZDate;
     end: TZDate;
     isAllDay: boolean;
-    triggerEventName: 'click' | 'dblclick' | 'mouseup';
+    triggerEventName: "click" | "dblclick" | "mouseup";
     /**
      * Depending on the position when creating the schedule creation guide.
      *
@@ -65,86 +66,88 @@ export interface IEventWithoutCreationPopup {
      * - `IMonthGuide`: In Month view, trying to create a schedule with a range of days.
      */
     guide: ITimeCreationGuide | IDayGridCreationGuide | IMonthGuide;
-}
+  }
 
-/**
- * Cast `IEventWithCreationPopup` if you enabled the `useCreationPopup` option.
- *
- * Otherwise use `IEventWithoutCreationPopup`.
- *
- * You might need to implement and use type guard functions to narrow down the type of the event.
- *
- * @example
- * ```
- * const cal = new Calendar({
- *   useCreationPopup: true,
- *   // ...
- * });
- *
- *
- * function isUsingCreationPopup(event: TEventBeforeCreateSchedule): event is IEventWithCreationPopup {
- *   return 'useCreationPopup' in event;
- * }
- * function isMonthViewCreationGuide(guide: IEventWithoutCreationPopup['guide']): guide is IMonthGuide {
- *   return 'guideElements' in guide;
- * }
- *
- * cal.on('beforeCreateSchedule', e => {
- *   if (!isUsingCreationPopup(e)) {
- *     // ...
- *     if (isMonthViewCreationGuide(e.guide)) {
- *       e.guide.clearElements();
- *       // ...
- *     }
- *   }
- * });
- *
- * // or you can just cast it with `as` keyword.
- * cal.on('beforeCreateSchedule', e => {
- *   const event = e as IEventWithCreationPopup;
- * });
- * ```
- */
-export type TEventBeforeCreateSchedule = IEventWithCreationPopup | IEventWithoutCreationPopup;
+  /**
+   * Cast `IEventWithCreationPopup` if you enabled the `useCreationPopup` option.
+   *
+   * Otherwise use `IEventWithoutCreationPopup`.
+   *
+   * You might need to implement and use type guard functions to narrow down the type of the event.
+   *
+   * @example
+   * ```
+   * const cal = new Calendar({
+   *   useCreationPopup: true,
+   *   // ...
+   * });
+   *
+   *
+   * function isUsingCreationPopup(event: TEventBeforeCreateSchedule): event is IEventWithCreationPopup {
+   *   return 'useCreationPopup' in event;
+   * }
+   * function isMonthViewCreationGuide(guide: IEventWithoutCreationPopup['guide']): guide is IMonthGuide {
+   *   return 'guideElements' in guide;
+   * }
+   *
+   * cal.on('beforeCreateSchedule', e => {
+   *   if (!isUsingCreationPopup(e)) {
+   *     // ...
+   *     if (isMonthViewCreationGuide(e.guide)) {
+   *       e.guide.clearElements();
+   *       // ...
+   *     }
+   *   }
+   * });
+   *
+   * // or you can just cast it with `as` keyword.
+   * cal.on('beforeCreateSchedule', e => {
+   *   const event = e as IEventWithCreationPopup;
+   * });
+   * ```
+   */
+  export type TEventBeforeCreateSchedule =
+    | IEventWithCreationPopup
+    | IEventWithoutCreationPopup;
 
-export interface IEvents {
-    'afterRenderSchedule'?: (eventObj: {schedule: ISchedule}) => void;
-    'beforeCreateSchedule'?: (schedule: TEventBeforeCreateSchedule) => void;
-    'beforeDeleteSchedule'?: (eventObj: IEventScheduleObject) => void;
-    'beforeUpdateSchedule'?: (eventObj: IEventObject) => void;
-    'clickDayname'?: (eventObj: IEventDateObject) => void;
-    'clickMore'?: (eventObj: IEventMoreObject) => void;
-    'clickSchedule'?: (eventObj: IEventScheduleObject) => void;
-    'clickTimezonesCollapseBtn'?: (timezonesCollapsed: boolean) => void;
-    'selectDateTime'?: (eventObj: any) => void
-}
+  export interface IEvents {
+    afterRenderSchedule?: (eventObj: { schedule: ISchedule }) => void;
+    beforeCreateSchedule?: (schedule: TEventBeforeCreateSchedule) => void;
+    beforeDeleteSchedule?: (eventObj: IEventScheduleObject) => void;
+    beforeUpdateSchedule?: (eventObj: IEventObject) => void;
+    clickDayname?: (eventObj: IEventDateObject) => void;
+    clickMore?: (eventObj: IEventMoreObject) => void;
+    clickSchedule?: (eventObj: IEventScheduleObject) => void;
+    clickTimezonesCollapseBtn?: (timezonesCollapsed: boolean) => void;
+    selectDateTime?: (eventObj: any) => void;
+  }
 
-export class TZDate {
+  export class TZDate {
     public getTime(): number;
     public toDate(): Date;
     public toUTCString(): string;
-}
+  }
 
-export interface ICalendarColor {
+  export interface ICalendarColor {
     color?: string;
     bgColor?: string;
     dragBgColor?: string;
     borderColor?: string;
-}
+  }
 
-export interface ITimeGridHourLabel {
+  export interface ITimeGridHourLabel {
     hidden: boolean;
     hour: number;
     minutes: number;
-}
+  }
 
-export interface ITimezoneHourMarker {
+  export interface ITimezoneHourMarker {
     hourmarker: TZDate;
     dateDifferenceSign: string;
     dateDifference: number;
-}
+  }
 
-export interface IGridDateModel {
+  export interface IGridDateModel {
     date: string;
     day: number;
     hiddenSchedules: number;
@@ -152,22 +155,22 @@ export interface IGridDateModel {
     isToday: boolean;
     month: number;
     ymd: string;
-}
+  }
 
-export interface IWeekDayNameInfo {
+  export interface IWeekDayNameInfo {
     date: number;
     day: number;
     dayName: string;
     isToday: boolean;
     renderDate: string;
-}
+  }
 
-export interface IMonthDayNameInfo {
+  export interface IMonthDayNameInfo {
     day: number;
     label: string;
-}
+  }
 
-export interface ITemplateConfig {
+  export interface ITemplateConfig {
     milestoneTitle?: () => string;
     milestone?: (schedule: ISchedule) => string;
     taskTitle?: () => string;
@@ -189,7 +192,10 @@ export interface ITemplateConfig {
     dayGridTitle?: (viewName: string) => string;
     schedule?: (schedule: ISchedule) => string;
     collapseBtnTitle?: () => string;
-    timezoneDisplayLabel?: (timezoneOffset: number, displayLabel: string) => string;
+    timezoneDisplayLabel?: (
+      timezoneOffset: number,
+      displayLabel: string
+    ) => string;
     timegridDisplayPrimayTime?: (time: ITimeGridHourLabel) => string;
     timegridDisplayPrimaryTime?: (time: ITimeGridHourLabel) => string;
     timegridDisplayTime?: (time: ITimeGridHourLabel) => string;
@@ -203,7 +209,11 @@ export interface ITemplateConfig {
     endDatePlaceholder?: () => string;
     popupSave?: () => string;
     popupUpdate?: () => string;
-    popupDetailDate?: (isAllDay: boolean, start: DateType, end: DateType) => string;
+    popupDetailDate?: (
+      isAllDay: boolean,
+      start: DateType,
+      end: DateType
+    ) => string;
     popupDetailLocation?: (schedule: ISchedule) => string;
     popupDetailUser?: (schedule: ISchedule) => string;
     popupDetailState?: (schedule: ISchedule) => string;
@@ -211,9 +221,9 @@ export interface ITemplateConfig {
     popupDetailBody?: (schedule: ISchedule) => string;
     popupEdit?: () => string;
     popupDelete?: () => string;
-}
+  }
 
-export interface IWeekOptions {
+  export interface IWeekOptions {
     startDayOfWeek?: number;
     daynames?: string[];
     narrowWeekend?: boolean;
@@ -222,9 +232,9 @@ export interface IWeekOptions {
     timezonesCollapsed?: boolean;
     hourStart?: number;
     hourEnd?: number;
-}
+  }
 
-export interface IMonthOptions {
+  export interface IMonthOptions {
     daynames?: string[];
     startDayOfWeek?: number;
     narrowWeekend?: boolean;
@@ -233,21 +243,21 @@ export interface IMonthOptions {
     workweek?: boolean;
     visibleScheduleCount?: number;
     moreLayerSize?: {
-        width?: string | null;
-        height?: string | null;
+      width?: string | null;
+      height?: string | null;
     };
     grid?: {
-        header?: {
-            height?: number;
-        },
-        footer?: {
-            height?: number;
-        }
+      header?: {
+        height?: number;
+      };
+      footer?: {
+        height?: number;
+      };
     };
     scheduleFilter?: (schedule: ISchedule) => boolean;
-}
+  }
 
-export interface ISchedule {
+  export interface ISchedule {
     id?: string;
     calendarId?: string;
     title?: string;
@@ -274,31 +284,31 @@ export interface ISchedule {
     customStyle?: string;
     raw?: {
       [propName: string]: string | number | boolean | object | null;
-    }
+    };
     state?: string;
-}
+  }
 
-export interface ITimezone {
-    timezoneName: string,
+  export interface ITimezone {
+    timezoneName: string;
     displayLabel?: string;
     tooltip?: string;
     timezoneOffset?: number;
-}
+  }
 
-export interface ICalendarInfo {
+  export interface ICalendarInfo {
     id: string;
     name: string;
     color?: string;
     bgColor?: string;
     dragBgColor?: string;
     borderColor?: string;
-}
+  }
 
-export interface ITheme {
+  export interface ITheme {
     [k: string]: string;
-}
+  }
 
-export interface IOptions {
+  export interface IOptions {
     defaultView?: string;
     taskView?: boolean | string[];
     scheduleView?: boolean | string[];
@@ -311,25 +321,31 @@ export interface IOptions {
     useDetailPopup?: boolean;
     timezones?: ITimezone[];
     timezone?: {
-        zones: ITimezone[];
-        offsetCalculator: (timezoneName: string, timestamp: number) => number;
+      zones: ITimezone[];
+      offsetCalculator: (timezoneName: string, timestamp: number) => number;
     };
     disableDblClick?: boolean;
     disableClick?: boolean;
     isReadOnly?: boolean;
     usageStatistics?: boolean;
-}
+  }
 
-export default class Calendar {
+  export default class Calendar {
     public static setTimezoneOffset(offset: number): void;
-    public static setTimezoneOffsetCallback(callback: (timestamp: number) => void): void;
+    public static setTimezoneOffsetCallback(
+      callback: (timestamp: number) => void
+    ): void;
 
     constructor(container: Element | string, options?: IOptions);
 
     public changeView(newViewName: string, force?: boolean): void;
     public clear(immediately?: boolean): void;
     public createSchedules(schedules: ISchedule[], silent?: boolean): void;
-    public deleteSchedule(scheduleId: string, calendarId: string, silent?: boolean): void;
+    public deleteSchedule(
+      scheduleId: string,
+      calendarId: string,
+      silent?: boolean
+    ): void;
     public destroy(): void;
     public getDate(): TZDate;
     public getDateRangeEnd(): TZDate;
@@ -344,18 +360,36 @@ export default class Calendar {
     public prev(): void;
     public render(immediately?: boolean): void;
     public scrollToNow(): void;
-    public setCalendarColor(calendarId: string, option: ICalendarColor, silent?: boolean): void;
+    public setCalendarColor(
+      calendarId: string,
+      option: ICalendarColor,
+      silent?: boolean
+    ): void;
     public setCalendars(calendars: ICalendarInfo[]): void;
     public setDate(date: Date | string): void;
     public setOptions(options: IOptions, silent?: boolean): void;
     public setTheme(theme: ITheme): string[];
     public today(): void;
-    public toggleSchedules(calendarId: string, toHide: boolean, render?: boolean): void;
+    public toggleSchedules(
+      calendarId: string,
+      toHide: boolean,
+      render?: boolean
+    ): void;
     public toggleScheduleView(enabled: boolean): void;
     public toggleTaskView(enabled: boolean): void;
-    public updateSchedule(scheduleId: string, calendarId: string, scheduleData: ISchedule, silent?: boolean): void;
-    public off(eventName?: string | object | EventHandlerType, handler?: EventHandlerType | string): void;
-    public on(event: CustomEventType | IEvents, handler?: EventHandlerType): void;
-}
+    public updateSchedule(
+      scheduleId: string,
+      calendarId: string,
+      scheduleData: ISchedule,
+      silent?: boolean
+    ): void;
+    public off(
+      eventName?: string | object | EventHandlerType,
+      handler?: EventHandlerType | string
+    ): void;
+    public on(
+      event: CustomEventType | IEvents,
+      handler?: EventHandlerType
+    ): void;
   }
-  
+}

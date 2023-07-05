@@ -1,24 +1,27 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Login from '@/views/LoginView.vue'
-import Calendar from '@/views/CalendarView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import Login from "@/views/LoginView.vue";
+import Calendar from "@/views/CalendarView.vue";
+import Place from "@/views/PlaceView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'Login',
-      component: Login
+      path: "/",
+      name: "Login",
+      component: Login,
     },
     {
-      path: '/calendar',
-      name: 'calendar',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => Calendar
-    }
-  ]
-})
+      path: "/calendar",
+      name: "calendar",
+      component: () => Calendar,
+    },
+    {
+      path: "/place",
+      name: "place",
+      component: () => Place,
+    },
+  ],
+});
 
-export default router
+export default router;

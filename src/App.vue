@@ -1,11 +1,9 @@
 <template>
   <div id="app">
     <q-layout view="hHh lpR fFf">
-
       <q-page-container>
-          <router-view />
+        <router-view />
       </q-page-container>
-
-  </q-layout>
+    </q-layout>
   </div>
 </template>
