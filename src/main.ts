@@ -1,5 +1,6 @@
 import "quasar/dist/quasar.css";
 import "@/assets/styles/index.scss";
+import "core-js";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";

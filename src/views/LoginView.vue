@@ -93,7 +93,7 @@ const googleLogin = () => {
       store.setToken(token ?? "");
 
       router.push({
-        name: "calendar",
+        name: "main",
       });
     }
   });
@@ -118,7 +118,7 @@ getRedirectResult(getAuth()).then((result) => {
     store.setToken(token ?? "");
 
     router.push({
-      name: "Calendar",
+      name: "Main",
     });
   }
 });

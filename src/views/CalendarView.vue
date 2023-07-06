@@ -10,8 +10,10 @@ import { Calendar } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import type { DateClickArg } from "fullcalendar-scheduler/index.js";
-
 let scheduleList: string[] = [];
+
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 const calendarOptions = reactive({
   plugins: [interactionPlugin, dayGridPlugin],
@@ -30,35 +32,24 @@ const calendarOptions = reactive({
 
 let calendar: Calendar;
 
-import { Client } from "@stomp/stompjs";
-//import * as SockJS from 'sockjs-client';
+const msg = {
+  uid: "kjxfVlDsT2QJyYhLKEucQmxntsX2",
+};
+
 onMounted(() => {
+  // 켈린더
   let calendarEl: HTMLElement = document.getElementById("calendar")!;
   calendar = new Calendar(calendarEl, calendarOptions);
   calendar.render();
 
-  const client = new Client({
-    brokerURL: "ws://plandly-haeju-min.koyeb.app/ws",
-    onConnect: () => {
-      const sock = new SockJS("https://plandly-haeju-min.koyeb.app/ws");
-      sock.onopen = function () {
-        console.log("open");
-        sock.send("test");
-        sock.send(
-          "/calendar.view",
-          JSON.stringify({
-            uid: "kjxfVlDsT2QJyYhLKEucQmxntsX2",
-          })
-        );
-      };
+  // 소켓
+  const socket = new SockJS("https://plandly-haeju-min.koyeb.app/ws"); // 소켓 서버 URL에 맞게 수정
+  const stompClient = new Client({ webSocketFactory: () => socket });
 
-      sock.onmessage = function (e: any) {
-        console.log(e.data);
-      };
-    },
+  stompClient.onConnect(() => {
+    console.log("test")
+    stompClient.value.send("/calendar.view", {}, JSON.stringify(msg))
   });
-
-  client.activate();
 });
 </script>
 

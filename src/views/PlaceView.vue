@@ -10,10 +10,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import {ref} from 'vue'
-  let name = ref('')
-  
+import { ref } from "vue";
+let name = ref("");
 </script>
-<style lang="">
-  
-</style>
+<style lang=""></style>
