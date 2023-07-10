@@ -28,7 +28,6 @@
     "pinia-plugin-persistedstate": "^3.1.0",
     "sass": "^1.63.6",
     "sockjs-client": "^1.6.1",
-    "stompjs": "^2.3.3",
     "text-encoding": "^0.7.0",
     "vue": "^3.3.4",
     "vue-native-websocket": "^2.0.15",
@@ -36,7 +35,8 @@
     "vue-router": "^4.2.2",
     "vue-socket.io": "^3.0.10",
     "vue-stomp": "^0.0.5",
-    "webstomp-client": "^1.2.6"
+    "webstomp-client": "^1.2.6",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
@@ -44,6 +44,7 @@
     "@types/jsdom": "^21.1.1",
     "@types/node": "^18.16.17",
     "@types/sockjs-client": "^1.5.1",
+    "@types/stompjs": "^2.3.5",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
