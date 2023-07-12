@@ -1,9 +1,15 @@
 <template>
-  <div id="calendar"></div>
+  <div>
+    <div id="calendar"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, onBeforeMount, ref } from "vue";
+import { ref, onMounted } from "vue";
+
+// 스토어
+import { useUserStore } from "@/stores/user.js";
+const store = useUserStore();
 
 // 타입
 type DateInfo = {
@@ -49,13 +55,19 @@ const calendarOptions = {
   },
 };
 
+onMounted(() => {
+  // 캘린더 El
+  let calendarEl: HTMLElement = document.getElementById("calendar")!;
+  calendar = new Calendar(calendarEl, calendarOptions);
+})
+
+
 // 소켓
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 let stompClient: Client;
 
-
-let loadCount = 0;
+let loadCount = ref(false);
 
 const socket = new SockJS("https://plandly-haeju-min.koyeb.app/ws"); // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket });
@@ -63,36 +75,25 @@ stompClient.activate();
 stompClient.onConnect = () => {
   stompClient.publish({
     destination: "/calendar.view",
-    body: JSON.stringify({
-      uid: store.userInfo.uid,
-    }),
+    body: JSON.stringify({ uid: store.userInfo.uid }),
   });
   stompClient.subscribe('/topic/myCalendar', function (data){
     const eventDateList: DateInfo[] = JSON.parse(data.body)
-    if(loadCount === 0) {
-      eventDateList.map(el => {
+    if(!loadCount.value) {
+      eventDateList.map(({eventDate}) => {
         calendar.addEvent({
-          id: el.eventDate,
-          start: el.eventDate,
+          id: eventDate,
+          start: eventDate,
           display: 'background',
         })
-        scheduleList.push(el.eventDate)
+        scheduleList.push(eventDate)
       })
-      loadCount++
+      loadCount.value = !loadCount.value
+      calendar.render(); 
     }
   });
 }
 
-import { useUserStore } from "@/stores/user.js";
-const store = useUserStore();
-
-
-onMounted(() => {
-  // 캘린더 El
-  let calendarEl: HTMLElement = document.getElementById("calendar")!;
-  calendar = new Calendar(calendarEl, calendarOptions);
-  calendar.render(); 
-});
 
 </script>
 

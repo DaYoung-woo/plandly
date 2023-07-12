@@ -17,6 +17,16 @@
 
 <script setup lang="ts">
 import travelSample from "@/assets/img/travel_sample.svg";
+import { onMounted } from 'vue';
+import { useUserStore } from "@/stores/user.js";
+const store = useUserStore();
+  
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+onMounted(() => {
+  if(!store.accessToken || !store.userInfo ) router.push({name: "login"});
+})
 </script>
 
 <style lang="scss">

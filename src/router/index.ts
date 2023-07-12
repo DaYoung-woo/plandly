@@ -9,8 +9,13 @@ const router = createRouter({
   routes: [
     {
       path: "/",
+      name: "defualt",
+      redirect: '/main'
+    },
+    {
+      path: "/login",
       name: "login",
-      component: Login,
+      component:  () =>Login,
     },
     {
       path: "/calendar",
