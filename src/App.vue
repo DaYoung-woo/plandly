@@ -2,26 +2,26 @@
   <div id="app">
     <q-layout>
       <header v-if="route.name !== 'login'">
-        <q-avatar color="red" text-color="white" rounded size="30px">J</q-avatar>
+        <q-avatar color="red" text-color="white" rounded size="30px">{{store.userInfo.email.substring(0,1)}}</q-avatar>
         <article>
-          <p>iamwooda@naver.com</p>
-          <span>iamwooda@naver.com</span>
+          <p>{{store.userInfo.email}}</p>
+          <span>{{store.userInfo.email}}</span>
         </article>
       </header>
-      <q-page-container class="mt-10">
+      <q-page-container >
         <router-view />
       </q-page-container>
-    <footer v-if="route.name !== 'login'">
-      <q-btn
-        square
-        unelevated
-        v-for="item in imgArr"
-        style="width: 25%"
-        @click="router.push(item.link)"
-      >
-        <img :src="item.img" alt="googloLogo"/>    
-      </q-btn>
-    </footer>
+      <footer v-if="route.name !== 'login'">
+        <q-btn
+          square
+          unelevated
+          v-for="item in imgArr"
+          style="width: 25%"
+          @click="router.push(item.link)"
+        >
+          <img :src="item.img" alt="googloLogo"/>    
+        </q-btn>
+      </footer>
     </q-layout>
   </div>
 </template>
@@ -30,6 +30,9 @@
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
+
+import { useUserStore } from "@/stores/user.js";
+const store = useUserStore();
 
 import menu_icon1 from "@/assets/img/menu_icon1.svg";
 import menu_icon2 from "@/assets/img/menu_icon2.svg";
@@ -62,6 +65,7 @@ const imgArr = [{
     background-color: #fff;
     width: 100%;
     z-index: 1;
+    top: 0;
     article{
       padding-top: 5px;
       padding-left:11px;
@@ -87,5 +91,9 @@ const imgArr = [{
     width: 100%;
     z-index: 1;
     display: flex;
+  }
+  .q-page-container {
+    height: calc(100vh - 100px);
+    margin-top: 50px;
   }
 </style>

@@ -7,8 +7,8 @@
       <div class="travel-info">
         <q-avatar color="blue" text-color="white" size="25px">J</q-avatar>
         <article>
-          <p>iamwooda@naver.com</p>
-          <span>iamwooda@naver.com</span>
+          <p>JUNA의 여행 시작하기!</p>
+          <span><img :src="iconLocation" alt="travelSample" style="height:7px; width: 5px; margin-right: 2px;" />도쿄 나리타 항공 · 50분 전에 수정됨</span>
         </article>
       </div>
     </q-card>
@@ -16,7 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import travelSample from "@/assets/img/travel_sample.svg";
+import travelSample from "@/assets/img/travel_sample.svg"; 
+import iconLocation from "@/assets/img/icon_location.svg";
 import { onMounted } from 'vue';
 import { useUserStore } from "@/stores/user.js";
 const store = useUserStore();
