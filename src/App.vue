@@ -2,10 +2,10 @@
   <div id="app">
     <q-layout>
       <header v-if="route.name !== 'login'">
-        <q-avatar color="red" text-color="white" rounded size="30px">{{store.userInfo.email ? store.userInfo.email.substring(0,1): ''}}</q-avatar>
+        <!-- <q-avatar color="red" text-color="white" rounded size="30px">{{store.userInfo.email ? store.userInfo.email.substring(0,1): ''}}</q-avatar> -->
         <article>
-          <p>{{store.userInfo.email ? store.userInfo.email : ''}}</p>
-          <span>{{store.userInfo.email ? store.userInfo.email : ''}}</span>
+          <!-- <p>{{store.userInfo.email ? store.userInfo.email : ''}}</p>
+          <span>{{store.userInfo.email ? store.userInfo.email : ''}}</span> -->
         </article>
       </header>
       <q-page-container >
