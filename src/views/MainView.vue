@@ -3,15 +3,14 @@
     <h1>나의 여행리스트</h1>
 
     <q-card flat bordered class="travel-card">
-        <img :src="travelSample" alt="travelSample"  />
-        <div class="travel-info">
-            <q-avatar color="blue" text-color="white" size="25px">J</q-avatar>
-                <article>
-                <p>iamwooda@naver.com</p>
-                <span>iamwooda@naver.com</span>
-            </article>
-        </div>
-
+      <img :src="travelSample" alt="travelSample"  />
+      <div class="travel-info">
+        <q-avatar color="blue" text-color="white" size="25px">J</q-avatar>
+        <article>
+          <p>iamwooda@naver.com</p>
+          <span>iamwooda@naver.com</span>
+        </article>
+      </div>
     </q-card>
   </div>
 </template>

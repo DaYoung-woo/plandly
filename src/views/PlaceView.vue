@@ -13,4 +13,3 @@
 import { ref } from "vue";
 let name = ref("");
 </script>
-<style lang=""></style>

@@ -60,9 +60,9 @@ import naverLogo from "@/assets/img/naver_login_logo.svg";
 
 import { auth, provider } from "@/assets/js/firebase";
 import {
-  signInWithRedirect,
   getRedirectResult,
   signInWithPopup,
+  signInWithRedirect,
 } from "firebase/auth";
 import { ref, onMounted } from "vue";
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
@@ -76,32 +76,11 @@ const router = useRouter();
 onMounted(() => {});
 
 const googleLogin = () => {
-  signInWithPopup(auth, provider).then((result) => {
-    if (result) {
-      const { displayName, email, uid, metadata } = result.user;
-      const userInfo = {
-        displayName: displayName ?? "",
-        email: email ?? "",
-        uid,
-        createdAt: metadata.creationTime,
-      };
-      loading.value = true;
-      store.setUserInfo(userInfo);
-
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
-      store.setToken(token ?? "");
-
-      router.push({
-        name: "main",
-      });
-    }
-  });
+  signInWithRedirect(auth, provider)
 };
 const loading = ref(false);
 
 getRedirectResult(getAuth()).then((result) => {
-  console.log(result);
   if (result) {
     const { displayName, email, uid, metadata } = result.user;
     const userInfo = {
@@ -115,10 +94,10 @@ getRedirectResult(getAuth()).then((result) => {
 
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential?.accessToken;
-    store.setToken(token ?? "");
+    store.setToken(token ?? "" , "google");
 
     router.push({
-      name: "Main",
+      name: "main",
     });
   }
 });
