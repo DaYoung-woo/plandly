@@ -2,10 +2,10 @@
   <div id="app">
     <q-layout>
       <header v-if="route.name !== 'login'">
-        <!-- <q-avatar color="red" text-color="white" rounded size="30px">{{store.userInfo.email ? store.userInfo.email.substring(0,1): ''}}</q-avatar> -->
+        <q-avatar color="red" text-color="white" rounded size="30px">{{store.userInfo.email ? store.userInfo.email.substring(0,1): ''}}</q-avatar>
         <article>
-          <!-- <p>{{store.userInfo.email ? store.userInfo.email : ''}}</p>
-          <span>{{store.userInfo.email ? store.userInfo.email : ''}}</span> -->
+          <p>{{store.userInfo.email ? store.userInfo.email : ''}}</p>
+          <span>{{store.userInfo.email ? store.userInfo.email : ''}}</span>
         </article>
       </header>
       <q-page-container >
@@ -27,17 +27,12 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted} from 'vue'
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
 import { useUserStore } from "@/stores/user.js";
 const store = useUserStore();
-
-onMounted(() => {
-  if(route.name !== 'login' && (!store.accessToken || !store.userInfo) ) router.push({name: "login"});
-})
 
 import menu_icon1 from "@/assets/img/menu_icon1.svg";
 import menu_icon2 from "@/assets/img/menu_icon2.svg";
