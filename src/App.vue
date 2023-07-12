@@ -27,12 +27,17 @@
 </template>
 
 <script lang="ts" setup>
+import {onMounted} from 'vue'
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
 import { useUserStore } from "@/stores/user.js";
 const store = useUserStore();
+
+onMounted(() => {
+  if(route.name !== 'login' && (!store.accessToken || !store.userInfo) ) router.push({name: "login"});
+})
 
 import menu_icon1 from "@/assets/img/menu_icon1.svg";
 import menu_icon2 from "@/assets/img/menu_icon2.svg";
@@ -52,6 +57,7 @@ const imgArr = [{
   img: menu_icon4,
   link: '/calendar'
 }]
+
 
 
 </script>
