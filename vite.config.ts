@@ -9,7 +9,7 @@ export default defineConfig({
     vue(),
   ],
   define: {
-    global: 'window',
+    ...(process.env.NODE_ENV === 'development' ? {global: 'window'} : {})
   },
   resolve: {
     alias: {
