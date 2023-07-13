@@ -4,7 +4,7 @@
     <img :src="iconBurger" alt="iconBurger" class="icon_burger"/>
     <div class="appointment_area">
       <div class="user-area">
-        <div class="user-avartar">
+        <div :class="`user-avartar ${open ? 'scroll' : ''}`">
           <q-avatar round size="58px" :class="`first ${open ? 'remove-transition' : ''}`">J</q-avatar>
           <q-avatar circle size="58px" :class="`second ${open ? 'remove-transition' : ''}`"></q-avatar>
           <q-avatar circle size="58px" :class="`third ${open ? 'remove-transition' : ''}`"></q-avatar>
@@ -58,7 +58,7 @@ header{
   .appointment_area{
     height: 230px;
     border-radius: 0px 0px 22px 22px;
-    border: 0.5px solid #8E8E8E;
+    border: 0.5px solid #8E8E8E;  
     margin-top: -6px;
     .user-area{
       height: 60px;
@@ -66,7 +66,6 @@ header{
       perspective: 600px;
       overflow: hidden;
       .user-avartar{
-        display: flex;
         overflow-x: scroll;
         .first{
           z-index: 3;
@@ -100,6 +99,10 @@ header{
   .info-area{
     padding: 0px 20px;
   }
+}
+.scroll{
+  display: flex;
+  overflow: scroll;
 }
 </style>
 
