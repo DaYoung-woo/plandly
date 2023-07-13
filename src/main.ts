@@ -1,6 +1,8 @@
 import "quasar/dist/quasar.css";
 import "@/assets/styles/index.scss";
-import "core-js";
+import "core-js";   
+import iconSet from 'quasar/icon-set/fontawesome-v6'
+
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
@@ -16,6 +18,7 @@ pinia.use(piniaPluginPersistedstate);
 // Quasar css
 app.use(Quasar, {
   plugins: {},
+  iconSet
 });
 
 app.use(pinia);

@@ -8,8 +8,11 @@
           <q-avatar round size="58px" :class="`first ${open ? 'remove-transition' : ''}`">J</q-avatar>
           <q-avatar circle size="58px" :class="`second ${open ? 'remove-transition' : ''}`"></q-avatar>
           <q-avatar circle size="58px" :class="`third ${open ? 'remove-transition' : ''}`"></q-avatar>
+          <q-avatar circle size="58px" color="green" :class="`${open ? 'remove-transition' : 'hidden'}`"></q-avatar>
+          <q-avatar circle size="58px" color="red" :class="`${open ? 'remove-transition' : 'hidden'}`"></q-avatar>
+          <q-avatar circle size="58px" :class="`plus-avartar ${open ? 'remove-transition' : ''}`" text-color="white" @click="open = !open">+</q-avatar>
         </div>
-        <q-avatar circle size="58px" :class="`plus-avartar ${open ? 'remove-transition' : ''}`" text-color="white" @click="open = !open">+</q-avatar>
+        
       </div>
 
       <div class="info-area">
@@ -61,8 +64,10 @@ header{
       height: 60px;
       margin: -26px 24px 0px;
       perspective: 600px;
-      display: flex;
+      overflow: hidden;
       .user-avartar{
+        display: flex;
+        overflow-x: scroll;
         .first{
           z-index: 3;
           background-color: #FFB0B0;
@@ -87,7 +92,7 @@ header{
       }
       .remove-transition{
         transform: none !important;
-        transition: 0.3s;
+        transition: 0.5s;
         margin-right: 10px;
       }
     }
