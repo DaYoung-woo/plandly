@@ -21,11 +21,7 @@
       </div>
       
       <div class="calendar-area">
-      <q-date
-        v-model="date"
-        multiple 
-        class="date"
-      />
+        <flat-pickr v-model="date"/>
     </div>
     </div>
   </header>
@@ -35,10 +31,14 @@
 <script lang="ts" setup>
 import travelSample from "@/assets/img/travel_sample.svg"; 
 import iconBurger from '@/assets/img/icon_burger.svg';
+
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
 import {reactive, ref} from 'vue';
 
+    const date = ref(null);
 const open = ref(false)
-const date = reactive([])
+
 </script>
 
 <style lang="scss" scoped>
@@ -66,7 +66,7 @@ header{
       perspective: 600px;
       overflow: hidden;
       .user-avartar{
-        overflow-x: scroll;
+        //overflow-x: scroll;
         .first{
           z-index: 3;
           background-color: #FFB0B0;
@@ -102,7 +102,7 @@ header{
 }
 .scroll{
   display: flex;
-  overflow: scroll;
+  overflow-x: scroll;
 }
 </style>
 
