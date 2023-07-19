@@ -39,7 +39,7 @@ import menu_icon4 from "@/assets/img/menu_icon4.svg";
 
 const imgArr = [{
   img: menu_icon1,
-  link: '/main'
+  link: '/'
 }, {
   img: menu_icon2,
   link: '/calendar'

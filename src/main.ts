@@ -2,7 +2,7 @@ import "quasar/dist/quasar.css";
 import "@/assets/styles/index.scss";
 import "core-js";   
 import iconSet from 'quasar/icon-set/fontawesome-v6'
-
+import VueDayjs from 'vue3-dayjs-plugin'
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
@@ -23,5 +23,6 @@ app.use(Quasar, {
 
 app.use(pinia);
 app.use(router);
+app.use(VueDayjs) 
 
 app.mount("#app");

@@ -10,12 +10,16 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: "/",
+      redirect: "main"
+    },
+    {
       path: "/login",
       name: "login",
       component:  () =>Login,
     },
     {
-      path: "/",
+      path: "/main",
       component: () => Main,
       children: [
         { path: '', name: 'appointment_list', component: () =>  AppointmentList },
@@ -23,12 +27,10 @@ const router = createRouter({
       ]
     },
     {
-      path: "/appointment/:id",
-      name: 'appointment-parent',
+      path: "/appointment",
       component: () => Appointment,
       children: [
-        { path: '', name: 'vote_list', component:() =>  VoteList },
-        //{ path: '/vote_list', name: 'vote_list', component:() => VoteList },
+        { path: ':id', name: 'vote_list', component:() =>  VoteList }
       ]
     },
   ],
