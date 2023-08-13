@@ -8,23 +8,9 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  define: {
-    ...(process.env.NODE_ENV === 'development' ? {global: 'window'} : {})
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  },
-  // server: {
-  //   proxy: {
-  //     '/wsTest': {
-  //       target: 'https://plandly-haeju-min.koyeb.app',
-  //       changeOrigin: true,
-  //       //rewrite: (path) => path.replace(/^\/socket.io/, '/ws'),
-  //       secure: false,
-  //       ws: true
-  //     }
-  //   }
-  // }
+  }
 })
