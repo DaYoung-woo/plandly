@@ -9,10 +9,11 @@
       <li>탈퇴하기</li>
     </ul>
   </nav>
+
 </template>
     
-<script setup lang='ts'>
-    
+<script setup lang='ts'>  
+
 </script>
     
 <style lang="scss">
