@@ -1,6 +1,6 @@
 <template>
-  <div class="pt-10 text-center">
-    <h5 class="text-2xl text-left">게시판</h5>
+  
+    <h5 class="text-2xl text-left pt-10">게시판</h5>
     <div class="mt-5 p-5 border notice-box">
       <div class="flex justify-between">
         <div>
@@ -34,8 +34,8 @@
       </div>
     </div>
     
-    <button class="border px-5 py-2 mt-5">게시글 더보기</button>
-  </div>
+   
+
 </template>
     
 <script setup lang='ts'>

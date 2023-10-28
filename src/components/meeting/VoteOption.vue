@@ -1,7 +1,7 @@
 <template>
   <div class="mt-2 option-box">
     <div class="flex items-center justify-between">
-      <div class="bg-slate-200 w-20 h-20 text-sm">이미지</div>
+      <div class="bg-slate-200 w-20 h-20 flex items-center justify-center text-sm">이미지</div>
       <div class="meeting-home-detail">
           <p>1992 덮밥&짜글이 강남본점</p>
           항목에 대한 설명이 있다면 여기에
@@ -45,11 +45,11 @@
         p{
           font-size: 14px;
           line-height: normal;
-          margin-bottom: 5px;
         }
         .location{
           margin-top: 5px;
           display: flex;
+          align-items: center;
           span {
             background-color: #eee;
             margin-right: 5px;

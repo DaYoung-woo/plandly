@@ -3,19 +3,18 @@
     <h6>나의 캘린더</h6>
     <div class="calendar-padding">
       <div id="calendar" ></div>
-      
     </div>
     <h6 class="pt-10">나의 모임</h6>
     <div class="meeting-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
    
       <div class="meeting-item" @click="router.push('meeting')">
-          <div class="thumb"></div>
-          <div class="desc">
-            <p>제목</p>
-            <span>최근 업데이트 날짜</span>
-            <span>멤버 수</span>
-            <span>총 게시글</span>
-          </div>
+        <div class="thumb"></div>
+        <div class="desc">
+          <p>제목</p>
+          <span>최근 업데이트 날짜</span>
+          <span>멤버 수</span>
+          <span>총 게시글</span>
+        </div>
       </div>
         <div class="meeting-item" @click="router.push('meeting')">
           <div class="thumb"></div>

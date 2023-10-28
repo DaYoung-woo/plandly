@@ -1,6 +1,5 @@
 <template>
-  <div class="pt-10 text-center">
-    <h5 class="text-2xl text-left">타임라인</h5>
+    <h5 class="pt-10 text-2xl text-left">타임라인</h5>
     <hr class="mt-1"/>
     
     <p class="pt-5 text-xl text-left pb-4">1일차</p>
@@ -11,7 +10,7 @@
 		      <span class="timeline-item-icon | faded-icon"></span>
           <div class="timeline-item-description">
             <div class="meeting-home-detail">
-              <p>타이틀</p>
+              <p class="mb-1">타이틀</p>
               <div class="h-14">설명 영역</div>
               <div class="location">
                 <span class="flex">
@@ -29,7 +28,7 @@
 		      <span class="timeline-item-icon | faded-icon"></span>
           <div class="timeline-item-description">
             <div class="meeting-home-detail">
-              <p>타이틀</p>
+              <p class="mb-1">타이틀</p>
               <div class="h-14">설명 영역</div>
               <div class="location">
                 <span class="flex">
@@ -45,9 +44,7 @@
 
       </ol>
     </div>
-        
-    <button class="border px-5 py-2 mt-5">타임라인 더보기</button>
-  </div> 
+       
 </template>
       
 <script setup lang='ts'>

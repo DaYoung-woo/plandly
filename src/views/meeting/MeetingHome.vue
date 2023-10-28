@@ -17,17 +17,28 @@
     <button class="vfm-btn bg-slate-200 px-4 py-2 text-xs" @click="$emit('closeModal')">달력<br/>열기</button>
   </div>
 
-  <BoardMain />
-  <VoteMain />
-  <TimelineMain />
-  
+  <div class="text-center">
+    <BoardMain />
+    <button class="border px-5 py-2 mt-5" @click="router.push('meeting/detail')">게시글 더보기</button>
+    <VoteMain />
+    <button class="border px-5 py-2 mt-5" @click="router.push('meeting/detail')">투표 더보기</button>
+    <TimelineMain />
+    <button class="border px-5 py-2 mt-5" @click="router.push('meeting/detail')">타임라인 더보기</button>
+    <MemberMain />
+    <button class="border px-5 py-2 mt-5" @click="router.push('meeting/detail')">멤버 모두 보기</button>
+  </div>
+ 
 
 </template>
     
 <script setup lang='ts'>
-  import BoardMain from '@/components/meeting/BoardMain.vue';
-  import VoteMain from '@/components/meeting/MeetingMain.vue'
-  import TimelineMain from '@/components/meeting/TimelineMain.vue';
+  import BoardMain from '@/components/meeting/home/BoardMain.vue';
+  import VoteMain from '@/components/meeting/home/MeetingMain.vue'
+  import TimelineMain from '@/components/meeting/home/TimelineMain.vue';
+  import MemberMain from '@/components/meeting/home/MemberMain.vue';
+
+  import { useRouter } from "vue-router";
+  const router = useRouter();
 
 </script>
     
