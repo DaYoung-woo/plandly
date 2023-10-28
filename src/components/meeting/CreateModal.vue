@@ -28,7 +28,7 @@
             </div>
           </div>
         </div>
-        
+              
         <h5 class="pt-5 pb-1">모임 비밀번호 설정</h5>
         <input type="text" :value="title" class="border border-slate-300 w-full" placeholder="필요하지 않을 시 비워두세요."/>
 
@@ -43,7 +43,7 @@
 </template>
     
 <script setup lang='ts'>
-  import { ref } from 'vue'
+  import { ref } from 'vue'   
   const showModal = ref(true)
   const title = ref('')
 </script>

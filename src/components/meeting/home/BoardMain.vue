@@ -17,7 +17,7 @@
         <span class="bg-slate-200 flex items-center px-2 mr-2">7시간 전</span>
         <span class="bg-slate-200 flex items-center px-2">댓글 20개</span>
       </div>
-    </div>  
+    </div>    
 
     <div class="mt-5 p-5 border notice-box"> 
       <div>
@@ -53,6 +53,13 @@
     .detail{
         font-size: 10px;
         display: flex;
+    }
+  }
+
+  .board-item {
+    .detail {
+      font-size: 10px;
+      display: flex;
     }
   }
 </style>
