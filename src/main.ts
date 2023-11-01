@@ -7,10 +7,13 @@ import App from './App.vue'
 import router from './router'
 //import { vfmPlugin, VfmOptions, VueFinalModalProperty } from 'vue-final-modal'
 import { vfmPlugin } from 'vue-final-modal'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const app = createApp(App)
+const pinia = createPinia()
 
-app.use(createPinia())
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
 app.use(router)
 app.use(vfmPlugin({
     key: '$vfm',
