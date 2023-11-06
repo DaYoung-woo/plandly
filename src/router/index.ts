@@ -4,13 +4,16 @@ import meetingView from '@/views/MeetingView.vue'
 import MeetingHome from '@/views/meeting/MeetingHome.vue'
 import MeetingDetail from '@/views/meeting/MeetingDetail.vue'
 import LoginView from '@/views/LoginView.vue'
+import { useUserStore } from "@/stores/user.js";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { requiresAuth: true }
     },
     {
       path: "/login",
@@ -24,9 +27,22 @@ const router = createRouter({
       children: [
         { path: '', component: MeetingHome, name:'MeetingHome' },
         { path: 'detail', component: MeetingDetail, name:'MeetingDetail' },
-      ]
+      ],
+      meta: { requiresAuth: true }
     }
   ]
 })
 
+
+router.beforeEach((to) => {
+  // ✅ This will work make sure the correct store is used for the
+  // current running app
+  const store = useUserStore();
+  // store.setUserInfo({
+  //   displayName: "",
+  //   email: "",
+  //   uid: "",
+  // });
+  if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
+})
 export default router

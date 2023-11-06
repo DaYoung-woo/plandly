@@ -21,16 +21,4 @@ app.use(vfmPlugin({
     dynamicContainerName: 'ModalsContainer'
   }))
 
-//   Vue.use<VfmOptions>(vfmPlugin({
-//     key: '$vfm',
-//     componentName: 'VueFinalModal',
-//     dynamicContainerName: 'ModalsContainer'
-//   }))
-  
-//   // define the setup options
-//   declare module 'vue/types/vue' {
-//     interface Vue {
-//       $vfm: VueFinalModalProperty
-//     }
-//   }
 app.mount('#app')

@@ -11,39 +11,31 @@
       <pre class="q-mb-lg">간단한 계정 연동으로 바로 시작해보세요!</pre>
   
       <div class="btn-area flex column q-mt-lg">
-        <q-btn
-          square
-          unelevated
+        <button
           color="dark"
-          class="q-pl-xs items-start google"
+          class="items-start google"
           @click="googleLogin"
         >
-          <img :src="googloLogo" alt="googloLogo" class="q-pr-xl" />
+          <img :src="googloLogo" alt="googloLogo" />
           <span class="q-pr-xl">구글로 로그인</span>
-        </q-btn>
+        </button>
+
+
+        <a id="kakao-login-btn" href="javascript:loginWithKakao()">
+          <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
+            alt="카카오 로그인 버튼" />
+        </a>
   
-        <q-btn
-          square
-          unelevated
-          color="indigo"
-          class="q-pl-xs q-mt-sm items-start kakao"
-        >
-          <img :src="kakaoLogo" alt="kakaoLogo" class="q-pr-xl" />
-          <span class="q-pr-xl">카카오로 로그인</span>
-        </q-btn>
-  
-        <q-btn
-          square
-          unelevated
+        <button
           color="indigo"
           class="q-pl-xs q-mt-sm items-start naver"
         >
-          <img :src="naverLogo" alt="naverLogo" class="q-pr-xl" />
-          <span class="q-pr-xl">네이버로 로그인</span>
-        </q-btn>
+          <img :src="naverLogo" alt="naverLogo"  />
+          <span >네이버로 로그인</span>
+        </button>
       </div>
   
-      <pre class="q-mb-lg text-body2 q-pt-lg">로그인에 문제가 있으신가요?</pre>
+      <pre class="text-body2 q-pt-lg">로그인에 문제가 있으신가요?</pre>
     </div>
   
     <div v-else>
@@ -96,11 +88,10 @@
       const token = credential?.accessToken;
       store.setToken(token ?? "" , "google");
   
-      router.push({
-        name: "main",
-      });
+      router.push('/');
     }
   });
+
   </script>
   
   <style lang="scss">

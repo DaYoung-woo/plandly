@@ -43,30 +43,95 @@
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { onMounted } from "vue";
+
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user.js";
+import type { DateClickArg } from "fullcalendar-scheduler/index.js";
+
+// 소켓
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+let stompClient: Client;
+
+const store = useUserStore();
 const router = useRouter();
 
 let calendar: Calendar;
+let scheduleList: string[] = [];
+
+// 타입
+type DateInfo = {
+  calendarId: number, 
+  event: string,
+  eventDate: string,
+  uid: string
+}
+
 // 캘린더 옵션
 const calendarOptions = {
-  plugins: [dayGridPlugin, interactionPlugin],
+  plugins: [interactionPlugin, dayGridPlugin],
   initialView: "dayGridMonth",
   weekends: true,
-  editable: true,
-  selectable: true,
-  handleWindowResize:true,
-  windowResize: function() {
-    calendar.updateSize()
-  }
+  dateClick: function (info: DateClickArg) {
+    stompClient.publish({
+      destination: "/calendar.send",
+      body: JSON.stringify({
+        uid: store.userInfo.uid,
+        eventDate: info.dateStr,
+        event: info.dateStr
+      }),
+    });
+    if (scheduleList.find((el) => el === info.dateStr)) {
+      scheduleList = scheduleList.filter((el) => el !== info.dateStr);
+      calendar.getEventById(info.dateStr)?.remove()
+    } else {
+      scheduleList.push(info.dateStr);
+      calendar.addEvent({
+        id: info.dateStr,
+        start: info.dateStr,
+        display: 'background',
+      })
+      
+    }
+  },
 };
 
 onMounted(() => {
   // 캘린더 El
   let calendarEl: HTMLElement = document.getElementById("calendar")!;
   calendar = new Calendar(calendarEl, calendarOptions);
-  calendar.render(); 
+
 })
+
+
+
+let loadCount = ref(false);
+
+const socket = new SockJS("https://plandly-haeju-min.koyeb.app/ws"); // 소켓 서버 URL에 맞게 수정
+stompClient = new Client({ webSocketFactory: () => socket });
+stompClient.activate();
+stompClient.onConnect = () => {
+  stompClient.publish({
+    destination: "/calendar.view",
+    body: JSON.stringify({ uid: store.userInfo.uid }),
+  });
+  stompClient.subscribe('/topic/myCalendar', function (data){
+    const eventDateList: DateInfo[] = JSON.parse(data.body)
+    if(!loadCount.value) {
+      eventDateList.map(({eventDate}) => {
+        calendar.addEvent({
+          id: eventDate,
+          start: eventDate,
+          display: 'background',
+        })
+        scheduleList.push(eventDate)
+      })
+      loadCount.value = !loadCount.value
+      calendar.render(); 
+    }
+  });
+}
 
 </script>
 
