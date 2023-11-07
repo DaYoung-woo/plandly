@@ -3,6 +3,7 @@
     <h6>나의 캘린더</h6>
     <div class="calendar-padding">
       <div id="calendar" ></div>
+      <div>loading</div>
     </div>
     <h6 class="pt-10">나의 모임</h6>
     <div class="meeting-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -68,12 +69,61 @@ type DateInfo = {
   uid: string
 }
 
-// 캘린더 옵션
-const calendarOptions = {
-  plugins: [interactionPlugin, dayGridPlugin],
-  initialView: "dayGridMonth",
-  weekends: true,
-  dateClick: function (info: DateClickArg) {
+let loadCount = ref(false);
+
+ 
+const socket = new SockJS("https://plandly-haeju-min.koyeb.app/ws"); // 소켓 서버 URL에 맞게 수정
+stompClient = new Client({ webSocketFactory: () => socket });
+
+
+
+
+const setCalendar = async() => {
+  // 캘린더 옵션
+  const calendarOptions = {
+    plugins: [interactionPlugin, dayGridPlugin],
+    initialView: "dayGridMonth",
+    weekends: true,
+  };
+  let calendarEl: HTMLElement = document.getElementById("calendar")!;
+  calendar = new Calendar(calendarEl, calendarOptions);
+}
+
+const activateSocket = () => {
+
+   // 캘린더 El
+  stompClient.activate();
+  stompClient.onConnect = () => {
+    stompClient.publish({
+      destination: "/calendar.view",
+      body: JSON.stringify({ uid: store.userInfo.uid }),
+    });
+    
+    
+    stompClient.subscribe('/topic/myCalendar', function (data){
+    const eventDateList: DateInfo[] = JSON.parse(data.body)
+      if(!loadCount.value) {
+        eventDateList.map(({eventDate}) => {
+          calendar.addEvent({
+            id: eventDate,
+            start: eventDate,
+            display: 'background',
+          })
+          scheduleList.push(eventDate)
+        })
+        loadCount.value = !loadCount.value
+      }
+    });
+    
+  }
+}
+
+onMounted(async () => {
+
+  await setCalendar();
+  calendar.render();  
+  activateSocket();
+  calendar.setOption('dateClick',function (info: DateClickArg) {
     stompClient.publish({
       destination: "/calendar.send",
       body: JSON.stringify({
@@ -94,44 +144,13 @@ const calendarOptions = {
       })
       
     }
-  },
-};
-
-onMounted(() => {
-  // 캘린더 El
-  let calendarEl: HTMLElement = document.getElementById("calendar")!;
-  calendar = new Calendar(calendarEl, calendarOptions);
-
+  })
+ 
 })
 
 
 
-let loadCount = ref(false);
 
-const socket = new SockJS("https://plandly-haeju-min.koyeb.app/ws"); // 소켓 서버 URL에 맞게 수정
-stompClient = new Client({ webSocketFactory: () => socket });
-stompClient.activate();
-stompClient.onConnect = () => {
-  stompClient.publish({
-    destination: "/calendar.view",
-    body: JSON.stringify({ uid: store.userInfo.uid }),
-  });
-  stompClient.subscribe('/topic/myCalendar', function (data){
-    const eventDateList: DateInfo[] = JSON.parse(data.body)
-    if(!loadCount.value) {
-      eventDateList.map(({eventDate}) => {
-        calendar.addEvent({
-          id: eventDate,
-          start: eventDate,
-          display: 'background',
-        })
-        scheduleList.push(eventDate)
-      })
-      loadCount.value = !loadCount.value
-      calendar.render(); 
-    }
-  });
-}
 
 </script>
 
