@@ -45,7 +45,7 @@ import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
-import { ref, onMounted } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user.js";
 import type { DateClickArg } from "fullcalendar-scheduler/index.js";
@@ -76,81 +76,58 @@ const socket = new SockJS("https://plandly-haeju-min.koyeb.app/ws"); // 소켓 �
 stompClient = new Client({ webSocketFactory: () => socket });
 
 
-
-
-const setCalendar = async() => {
-  // 캘린더 옵션
-  const calendarOptions = {
-    plugins: [interactionPlugin, dayGridPlugin],
-    initialView: "dayGridMonth",
-    weekends: true,
-  };
-  let calendarEl: HTMLElement = document.getElementById("calendar")!;
-  calendar = new Calendar(calendarEl, calendarOptions);
-}
-
-const activateSocket = () => {
-
-   // 캘린더 El
-  stompClient.activate();
-  stompClient.onConnect = () => {
-    stompClient.publish({
-      destination: "/calendar.view",
-      body: JSON.stringify({ uid: store.userInfo.uid }),
-    });
-    
-    
-    stompClient.subscribe('/topic/myCalendar', function (data){
-    const eventDateList: DateInfo[] = JSON.parse(data.body)
-      if(!loadCount.value) {
-        eventDateList.map(({eventDate}) => {
-          calendar.addEvent({
-            id: eventDate,
-            start: eventDate,
-            display: 'background',
-          })
-          scheduleList.push(eventDate)
-        })
-        loadCount.value = !loadCount.value
-      }
-    });
-    
-  }
-}
-
-onMounted(async () => {
-
-  await setCalendar();
-  calendar.render();  
-  activateSocket();
-  calendar.setOption('dateClick',function (info: DateClickArg) {
+const calendarOptions = reactive({
+  plugins: [interactionPlugin, dayGridPlugin],
+  initialView: "dayGridMonth",
+  weekends: false,
+  dateClick: function (info: DateClickArg) {
     stompClient.publish({
       destination: "/calendar.send",
       body: JSON.stringify({
-        uid: store.userInfo.uid,
-        eventDate: info.dateStr,
-        event: info.dateStr
+        uid:"c7e1141059a19b218209bc5af7a81a720e39b500",
+        currentMonth: 10,
+        myDate: info.dateStr
       }),
     });
     if (scheduleList.find((el) => el === info.dateStr)) {
       scheduleList = scheduleList.filter((el) => el !== info.dateStr);
-      calendar.getEventById(info.dateStr)?.remove()
+      info.dayEl.style.backgroundColor = "transparent";
     } else {
       scheduleList.push(info.dateStr);
-      calendar.addEvent({
-        id: info.dateStr,
-        start: info.dateStr,
-        display: 'background',
-      })
-      
+      info.dayEl.style.backgroundColor = "#eee";
     }
-  })
- 
-})
+    var msg = {
+    "uId": "c7e1141059a19b218209bc5af7a81a720e39b500", // 사용자 아이디
+    "currentMonth" : "10" // 현재 월
+}
+
+    stompClient.publish({
+      destination: "/myCalendar.view",
+      body: JSON.stringify(msg)
+    })
+  },
+  
+});
+
+const wsSubscribe = () => {
+  stompClient.onConnect = () => {
+    stompClient.subscribe(`/topic/myCalendar/c7e1141059a19b218209bc5af7a81a720e39b500`, function ({body}){
+      console.log(JSON.parse(body))
+    });
+  }
+}
 
 
+onMounted(() => {
+  // 켈린더
+  let calendarEl: HTMLElement = document.getElementById("calendar")!;
+  calendar = new Calendar(calendarEl, calendarOptions);
+  
+  stompClient.activate();
+  wsSubscribe();
+  calendar.render();
 
-
+});
 
 </script>
 
