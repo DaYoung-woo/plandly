@@ -69,26 +69,36 @@ type DateInfo = {
   uid: string
 }
 
+type meetingInfo = {
+  name: string,
+  mid:number,
+}
+
+type myDateInfo = {
+  cId: string,
+  myDate: string,
+}
+
+interface meetingList extends meetingInfo {
+  updateDate: string
+}
+
+interface meetingDetail extends meetingInfo {
+  dates: string[]
+}
+
+
 let loadCount = ref(false);
 
  
 const socket = new SockJS("https://plandly-haeju-min.koyeb.app/ws"); // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket });
 
-
 const calendarOptions = reactive({
   plugins: [interactionPlugin, dayGridPlugin],
   initialView: "dayGridMonth",
-  weekends: false,
+  weekends: true,
   dateClick: function (info: DateClickArg) {
-    stompClient.publish({
-      destination: "/calendar.send",
-      body: JSON.stringify({
-        uid:"c7e1141059a19b218209bc5af7a81a720e39b500",
-        currentMonth: 10,
-        myDate: info.dateStr
-      }),
-    });
     if (scheduleList.find((el) => el === info.dateStr)) {
       scheduleList = scheduleList.filter((el) => el !== info.dateStr);
       info.dayEl.style.backgroundColor = "transparent";
@@ -96,37 +106,82 @@ const calendarOptions = reactive({
       scheduleList.push(info.dateStr);
       info.dayEl.style.backgroundColor = "#eee";
     }
-    var msg = {
-    "uId": "c7e1141059a19b218209bc5af7a81a720e39b500", // 사용자 아이디
-    "currentMonth" : "10" // 현재 월
+    clickDate(info.dateStr)
+  },
+  
+});
+
+const clickDate = (dateStr: string) => {
+  stompClient.publish({
+    destination: "/calendar.send",
+    body: JSON.stringify({
+      uid: "2814129549",
+      currentMonth: new Date().getMonth() + 1,
+      myDate: dateStr
+    }),
+  });
 }
+
+
+const wsSubscribe = () => {
+  stompClient.onConnect = () => {
+
+
+    var msg = {
+      "uId": "2814129549", // 사용자 아이디
+      "currentMonth" : new Date().getMonth() + 1 // 현재 월
+    }
 
     stompClient.publish({
       destination: "/myCalendar.view",
       body: JSON.stringify(msg)
     })
-  },
-  
-});
 
-const wsSubscribe = () => {
-  stompClient.onConnect = () => {
-    stompClient.subscribe(`/topic/myCalendar/c7e1141059a19b218209bc5af7a81a720e39b500`, function ({body}){
-      console.log(JSON.parse(body))
-    });
+    stompClient.subscribe(`/topic/myCalendar/2814129549`, function ({body}){
+      if(JSON.parse(body)) {
+        console.log(JSON.parse(body))
+        JSON.parse(body).forEach((el: myDateInfo) => {
+          const td = document.querySelector(`td[data-date="${el.myDate}"]`)
+          if(td) td.style.backgroundColor = "#eee";
+        })
+      }
+    }); 
+
+    stompClient.subscribe(`/topic/myMeeting/list/2814129549`, function ({body}){
+      const list = JSON.parse(body)
+      if(!list) return;
+    }); 
+
+    stompClient.subscribe(`/topic/myMeeting/2814129549`, function ({body}){
+      const list = JSON.parse(body)
+      if(!list) return;
+      list.forEach((el: meetingDetail ) => {
+        calendar.addEvent({
+          title: el.name,
+          start: el.dates[0],
+          end: el.dates[el.dates.length-1],
+          id:`${el.mid}`,
+          color: 'yellow',   // an option!
+          textColor: 'black' // an option!
+        })
+      })
+      calendar.render()
+    }); 
+
+
+    let calendarEl: HTMLElement = document.getElementById("calendar")!;
+    calendar = new Calendar(calendarEl, calendarOptions);
+    calendar.render();
   }
 }
 
 
 onMounted(() => {
   // 켈린더
-  let calendarEl: HTMLElement = document.getElementById("calendar")!;
-  calendar = new Calendar(calendarEl, calendarOptions);
-  
+
   stompClient.activate();
   wsSubscribe();
-  calendar.render();
-
+  
 });
 
 </script>
