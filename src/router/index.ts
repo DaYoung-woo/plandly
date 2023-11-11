@@ -40,12 +40,12 @@ router.beforeEach((to) => {
   // ✅ This will work make sure the correct store is used for the
   // current running app
   const store = useUserStore();
+  console.log(to.path)
   if(to.path === '/sso') {
-    const query: queryObj = to.query
-    kakaoLogin(query); 
+    kakaoLogin(to.query); 
   }
   if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
-  
+
 })
 
 type queryObj = {
