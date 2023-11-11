@@ -38,11 +38,7 @@ router.beforeEach((to) => {
   // ✅ This will work make sure the correct store is used for the
   // current running app
   const store = useUserStore();
-  // store.setUserInfo({
-  //   displayName: "",
-  //   email: "",
-  //   uid: "",
-  // });
+  console.log(store)
   if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
 })
 export default router
