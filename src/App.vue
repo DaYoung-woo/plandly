@@ -7,8 +7,7 @@ const path = router.currentRoute.value.path
 </script>
 
 <template>
-  <Gnb v-if="path !== '/login'"/>
-  <Lnb class="hidden lg:block" v-if="path !== '/login'"/>
+  <Lnb class="hidden lg:block" v-if="path !== '/'"/>
   <RouterView /> 
 </template>
 

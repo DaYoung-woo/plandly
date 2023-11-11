@@ -39,7 +39,17 @@ router.beforeEach((to) => {
   // ✅ This will work make sure the correct store is used for the
   // current running app
   const store = useUserStore();
-  store.setUserLogout();
+
+  console.log(to.query)
+  if(to.path === '/sso') kakaoLogin(to.query); 
   if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
 })
+
+type queryObj = {
+  code: string
+}
+const kakaoLogin = (query: queryObj) => {
+  console.log(query)
+  if(query.code) window.location.href = `https://plandly-haeju-min.koyeb.app/api/auth/ssoKakao?code=${query.code}`
+}
 export default router
