@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import api from '@/axios/api'
 import HomeView from '@/views/HomeView.vue'
 import meetingView from '@/views/MeetingView.vue'
 import MeetingHome from '@/views/meeting/MeetingHome.vue'
@@ -41,15 +42,20 @@ router.beforeEach((to) => {
   const store = useUserStore();
 
   console.log(to.query)
-  if(to.path === '/sso') kakaoLogin(to.query); 
+  const query: queryObj = to.query
+  if(to.path === '/sso') kakaoLogin(query); 
   if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
 })
 
 type queryObj = {
-  code: string
+  code?: string
 }
 const kakaoLogin = (query: queryObj) => {
-  console.log(query)
-  if(query.code) window.location.href = `https://plandly-haeju-min.koyeb.app/api/auth/ssoKakao?code=${query.code}`
+  if(query.code) {
+    api.kakaoLogin(query.code)
+    .then(res => {
+      console.log(res)
+    })
+  }
 }
 export default router

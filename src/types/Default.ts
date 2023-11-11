@@ -4,4 +4,5 @@ export interface userInfo {
     uid: string;
     createdAt?: string;
     accessToken?: string;
+    refreshToken?: string;
   }

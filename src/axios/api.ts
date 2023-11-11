@@ -9,4 +9,7 @@ export default {
   login: (param: userInfo) => {
     return instance.post("/login", param);
   },
+  kakaoLogin: (code: string) => {
+    return instance.get(`/api/auth/ssoKakao?code=${code}`)
+  }
 };
