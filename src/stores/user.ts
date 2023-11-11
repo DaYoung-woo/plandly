@@ -13,7 +13,23 @@ export const useUserStore = defineStore("user", () => {
   const setUserInfo = (newUserInfo: userInfo) => {
     api.login(newUserInfo).then(() => {
       userInfo.value = newUserInfo;
-    });
+      
+    })
+    .catch(() => {
+      userInfo.value = {
+        displayName: "",
+        email: "",
+        uid: "",
+      }
+    })
+  };
+  const setUserLogout = () => {
+    userInfo.value = {
+      displayName: "",
+      email: "",
+      uid: "",
+    }
+    accessToken.value = ''
   };
 
   const accessToken = ref("");
@@ -28,6 +44,7 @@ export const useUserStore = defineStore("user", () => {
     accessToken,
     setUserInfo,
     setToken,
+    setUserLogout
   };
 },{
   persist: true,

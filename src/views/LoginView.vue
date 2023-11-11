@@ -1,5 +1,5 @@
 <template>
-    <div class="login" v-if="!loading">
+    <div class="login" >
       <div class="logo-area">
         <img :src="logo" lt="planLogo" />
         <p>
@@ -38,10 +38,7 @@
       <pre class="text-body2 q-pt-lg">로그인에 문제가 있으신가요?</pre>
     </div>
   
-    <div v-else>
-      <q-spinner-ios color="primary" size="2em" />
-      <q-tooltip :offset="[0, 8]">QSpinnerIos</q-tooltip>
-    </div>
+
   </template>
   
   <script setup lang="ts">

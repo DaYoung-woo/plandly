@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
 import Gnb from '@/components/frame/GnbFrame.vue'
 import Lnb from '@/components/frame/LnbFrame.vue'
+const router = useRouter();
+const path = router.currentRoute.value.path
 </script>
 
 <template>
-  <Gnb />
-    <Lnb class="hidden lg:block"/>
-    <RouterView /> 
+  <Gnb v-if="path !== '/login'"/>
+  <Lnb class="hidden lg:block" v-if="path !== '/login'"/>
+  <RouterView /> 
 </template>
 
 <style lang="scss">

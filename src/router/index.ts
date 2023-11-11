@@ -18,7 +18,8 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      component:  () => LoginView,
+      component: LoginView,
+      meta: { requiresAuth: false }
     },
     { 
       path: '/meeting', 
@@ -38,8 +39,7 @@ router.beforeEach((to) => {
   // ✅ This will work make sure the correct store is used for the
   // current running app
   const store = useUserStore();
-  console.log(store.accessToken)
-  console.log(store.userInfo.email)
+  store.setUserLogout();
   if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
 })
 export default router
