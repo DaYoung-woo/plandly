@@ -22,6 +22,15 @@ const router = createRouter({
       component: LoginView,
       meta: { requiresAuth: false }
     },
+    {
+      path: '/sso',
+      component: LoginView,
+      beforeEnter: (to) => {
+        // reject the navigation
+        kakaoLogin(to.query); 
+        return false
+      },
+    },
     { 
       path: '/meeting', 
       name: 'meeting', 
@@ -41,7 +50,7 @@ router.beforeEach((to) => {
   // current running app
   const store = useUserStore();
   console.log(to.path)
-  if(to.path === '/sso') {
+  if(to.path === '/sso' || to.path === 'sso') {
     kakaoLogin(to.query); 
   }
   if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
