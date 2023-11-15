@@ -66,7 +66,7 @@ const kakaoLogin = (query: queryObj) => {
     .then(({data}) => {
       console.log(data)
       if(data.code === 0) router.push("/login_setting")
-      elses router.push("/")
+      else router.push("/")
     })
   }
 }
