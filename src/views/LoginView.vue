@@ -71,19 +71,19 @@
   
   getRedirectResult(getAuth()).then((result) => {
     if (result) {
-      const { displayName, email, uid, metadata } = result.user;
-      const userInfo = {
-        displayName: displayName ?? "",
-        email: email ?? "",
-        uid,
-        createdAt: metadata.creationTime,
-      };
-      loading.value = true;
-      store.setUserInfo(userInfo);
+      //const { displayName, email, uid, metadata } = result.user;
+      // const userInfo = {
+      //   displayName: displayName ?? "",
+      //   email: email ?? "",
+      //   uid,
+      //   createdAt: metadata.creationTime,
+      // };
+      // loading.value = true;
+      // store.setUserInfo(userInfo);
   
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
-      store.setToken(token ?? "" , "google");
+      //store.setToken(token ?? "" , "google");
   
       router.push('/');
     }

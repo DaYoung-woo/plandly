@@ -13,7 +13,7 @@
         @click="setEmail"
         >
           <span>기본정보 설정하기</span>
-      </button>
+      </button>);
     </div>
   </div>
 </template>
@@ -22,8 +22,12 @@
   import {ref} from 'vue'
   import api from '@/axios/api'
   import { useUserStore } from "@/stores/user.js";
+  import { useRouter } from "vue-router";
+
   const store = useUserStore();
-  
+  const router = useRouter();
+
+
   const email = ref('')
   const displayName = ref('')
 
@@ -36,6 +40,7 @@
     api.setEmail(param)
     .then(({data}) => {
       console.log(data)
+      if(data.code === 0) router.push('/')
     })
   }
 </script>
