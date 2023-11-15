@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { type userInfo } from "@/types/Default";
+import { type userInfo, type tokenInfo } from "@/types/Default";
 import api from "@/axios/api";
 
 
@@ -9,17 +9,22 @@ export const useUserStore = defineStore("user", () => {
     displayName: "",
     email: "",
     uid: "",
+    accessToken: "",
+    refreshToken: "",
+    jwt: ""
   });
   const setUserInfo = (newUserInfo: userInfo) => {
     api.login(newUserInfo).then(() => {
       userInfo.value = newUserInfo;
-      
     })
     .catch(() => {
       userInfo.value = {
         displayName: "",
         email: "",
         uid: "",
+        accessToken: "",
+        refreshToken: "",
+        jwt: ""
       }
     })
   };
@@ -28,27 +33,30 @@ export const useUserStore = defineStore("user", () => {
       displayName: "",
       email: "",
       uid: "",
+      accessToken: "",
+      refreshToken: "",
+      jwt: ""
     }
-    accessToken.value = ''
-    jwt.value = ''
   };
 
-  const accessToken = ref("");
-  const jwt = ref("");
   const loginType = ref("")
-  const setToken = (newToken: string, type: string) => {
-    accessToken.value = newToken;
+
+
+  
+  const setTokenKaKao = ({accessToken, refreshToken, jwt, uid}: tokenInfo, type: string) => {
+    userInfo.value.accessToken = accessToken
+    userInfo.value.refreshToken = refreshToken
+    userInfo.value.jwt = jwt
+    userInfo.value.uid = uid
     loginType.value = type
   };
   
 
   return {
     userInfo,
-    accessToken,
     setUserInfo,
-    setToken,
     setUserLogout,
-    jwt
+    setTokenKaKao
   };
 },{
   persist: true,
