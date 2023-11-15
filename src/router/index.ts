@@ -6,7 +6,7 @@ import MeetingHome from '@/views/meeting/MeetingHome.vue'
 import MeetingDetail from '@/views/meeting/MeetingDetail.vue'
 import LoginView from '@/views/LoginView.vue'
 import { useUserStore } from "@/stores/user.js";
-
+import loginSettingView from "@/views/LoginSettingView.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,10 +26,13 @@ const router = createRouter({
       path: '/sso',
       component: LoginView,
       beforeEnter: (to) => {
-        // reject the navigation
-        kakaoLogin(to.query); 
-        return false
+        return kakaoLogin(to.query); 
       },
+    },
+    {
+      path: "/login_setting" ,
+      component:loginSettingView,
+      meta: { requiresAuth: false }
     },
     { 
       path: '/meeting', 
@@ -59,8 +62,10 @@ type queryObj = {
 const kakaoLogin = (query: queryObj) => {
   if(query.code) {
     api.kakaoLogin(query.code)
-    .then(res => {
-      console.log(res)
+    .then(({data}) => {
+      console.log(data)
+      if(data.code === 0) return '/home'
+      else return 'login_setting'
     })
   }
 }
