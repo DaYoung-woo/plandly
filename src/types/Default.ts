@@ -5,4 +5,5 @@ export interface userInfo {
     createdAt?: string;
     accessToken?: string;
     refreshToken?: string;
+    jwt?: string;
   }

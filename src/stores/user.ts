@@ -30,21 +30,25 @@ export const useUserStore = defineStore("user", () => {
       uid: "",
     }
     accessToken.value = ''
+    jwt.value = ''
   };
 
   const accessToken = ref("");
+  const jwt = ref("");
   const loginType = ref("")
   const setToken = (newToken: string, type: string) => {
     accessToken.value = newToken;
     loginType.value = type
   };
+  
 
   return {
     userInfo,
     accessToken,
     setUserInfo,
     setToken,
-    setUserLogout
+    setUserLogout,
+    jwt
   };
 },{
   persist: true,

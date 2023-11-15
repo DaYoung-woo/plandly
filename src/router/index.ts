@@ -52,7 +52,7 @@ router.beforeEach((to) => {
   // ✅ This will work make sure the correct store is used for the
   // current running app
   const store = useUserStore();
-  if (to.meta.requiresAuth && !store.accessToken && store.userInfo.email === '') return '/login'
+  if (to.meta.requiresAuth && !(store.jwt || store.accessToken) && store.userInfo.email === '') return '/login'
 
 })
 
@@ -63,9 +63,8 @@ const kakaoLogin = (query: queryObj) => {
   if(query.code) {
     api.kakaoLogin(query.code)
     .then(({data}) => {
-      console.log(data)
       if(data.code === 0) return '/home'
-      else return 'login_setting'
+      else return '/login_setting'
     })
   }
 }
