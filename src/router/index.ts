@@ -25,6 +25,7 @@ const router = createRouter({
     {
       path: '/sso',
       component: LoginView,
+      meta: { requiresAuth: false },
       beforeEnter: (to) => {
         return kakaoLogin(to.query); 
       },
@@ -64,8 +65,8 @@ const kakaoLogin = (query: queryObj) => {
     api.kakaoLogin(query.code)
     .then(({data}) => {
       console.log(data)
-      if(data.code === 0) router.push("/home")
-      else return router.push("/login_setting")
+      if(data.code === 0) router.push("/login_setting")
+      elses router.push("/")
     })
   }
 }
