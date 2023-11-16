@@ -49,7 +49,7 @@
     }
     api.setEmail(param)
     .then(({data}) => {
-      if(data.code === 0) router.push('/')
+      if(data.code === 0) router.push('home')
     })
     .catch((e) => {
       if(e.response.status === 400){
