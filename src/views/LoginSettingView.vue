@@ -13,12 +13,13 @@
       <input type="text" name="email" class="border border-slate-300 w-72 mb-5" v-model="email"/>
       <br/>
       닉네임을 설정해주세요<br/>
-      <input type="text" name="email" class="border border-slate-300 w-72 mb-5" v-model="displayName"/>
+      <input type="text" name="displayName" class="border border-slate-300 w-72 mb-5" v-model="displayName"/>
       <br/>
       <button
         color="indigo"
         class="bg-green-100 p-2 text-sm w-72"
         @click="setEmail"
+        :disabled="!email || !displayName"
         >
           <span>기본정보 설정하기</span>
       </button>
@@ -44,11 +45,10 @@
     const param = {
       email: email.value,
       displayName: displayName.value,
-      uid: store.userInfo.uid
+      uid: store.tempUserInfo.uid
     }
     api.setEmail(param)
     .then(({data}) => {
-      console.log(data)
       if(data.code === 0) router.push('/')
     })
     .catch((e) => {
