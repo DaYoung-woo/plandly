@@ -62,6 +62,7 @@ type queryObj = {
 }
 const kakaoLogin = (query: queryObj) => {
   const store = useUserStore();
+  store.setUserLogout();
   if(query.code) {
     api.kakaoLogin(query.code)
     .then(({data}) => {

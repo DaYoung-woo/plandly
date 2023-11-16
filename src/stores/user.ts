@@ -5,6 +5,14 @@ import api from "@/axios/api";
 
 
 export const useUserStore = defineStore("user", () => {
+  const tempUserInfo = ref({
+    displayName: "",
+    email: "",
+    uid: "",
+    accessToken: "",
+    refreshToken: "",
+    jwt: ""
+  });
   const userInfo = ref({
     displayName: "",
     email: "",
@@ -44,15 +52,16 @@ export const useUserStore = defineStore("user", () => {
 
   
   const setTokenKaKao = ({accessToken, refreshToken, jwt, uid}: tokenInfo, type: string) => {
-    userInfo.value.accessToken = accessToken
-    userInfo.value.refreshToken = refreshToken
-    userInfo.value.jwt = jwt
-    userInfo.value.uid = uid
+    tempUserInfo.value.accessToken = accessToken
+    tempUserInfo.value.refreshToken = refreshToken
+    tempUserInfo.value.jwt = jwt
+    tempUserInfo.value.uid = uid
     loginType.value = type
   };
   
 
   return {
+    tempUserInfo,
     userInfo,
     setUserInfo,
     setUserLogout,
