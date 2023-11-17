@@ -54,8 +54,10 @@ router.beforeEach((to) => {
   // ✅ This will work make sure the correct store is used for the
   // current running app
   const store = useUserStore();
-  if (to.meta.requiresAuth && !store.userInfo.uid && store.userInfo.email === '') return '/login'
-
+  if (to.meta.requiresAuth) {
+    if(!store.userInfo.accessToken) return '/login'
+    else if(!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
+  }
 })
 
 type queryObj = {
@@ -67,10 +69,10 @@ const kakaoLogin = (query: queryObj) => {
   if(query.code) {
     api.kakaoLogin(query.code)
     .then(({data}) => {
-      const {accessToken, refreshToken, jwt, uid, email, displayName} = data
-      store.setTokenKaKao({accessToken, refreshToken, jwt, uid}, 'kakao')
+      const { email, displayName } = data
+      store.setTokenKaKao(data, 'kakao')
       if(!email || !displayName)  return '/login_setting'
-      else  return '/'
+      else return '/'
     })
   }
 }

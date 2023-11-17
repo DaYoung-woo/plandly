@@ -6,6 +6,7 @@ export interface userInfo {
   refreshToken: string;
   jwt: string;
   createdAt?: string;
+  expiryTime: number;
 }
 
 export interface tokenInfo {
@@ -13,4 +14,6 @@ export interface tokenInfo {
   refreshToken: string;
   jwt: string;
   uid: string;
+  email: string;
+  displayName: string;
 }
