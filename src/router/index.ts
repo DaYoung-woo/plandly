@@ -17,12 +17,6 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/home',
-      name: 'home',
-      component: HomeView,
-      meta: { requiresAuth: true }
-    },
-    {
       path: "/login",
       name: "login",
       component: LoginView,
@@ -75,7 +69,7 @@ const kakaoLogin = (query: queryObj) => {
       const {accessToken, refreshToken, jwt, uid, email, displayName} = data
       store.setTokenKaKao({accessToken, refreshToken, jwt, uid}, 'kakao')
       if(!email || !displayName)router.push("/login_setting")
-      else router.push("/home")
+      else router.go(0);
     })
   }
 }
