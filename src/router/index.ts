@@ -32,6 +32,7 @@ const router = createRouter({
     },
     {
       path: "/login_setting" ,
+      name: 'login_setting', 
       component:loginSettingView,
       meta: { requiresAuth: false }
     },
@@ -68,8 +69,8 @@ const kakaoLogin = (query: queryObj) => {
     .then(({data}) => {
       const {accessToken, refreshToken, jwt, uid, email, displayName} = data
       store.setTokenKaKao({accessToken, refreshToken, jwt, uid}, 'kakao')
-      if(!email || !displayName)router.push("/login_setting")
-      else router.go(0);
+      if(!email || !displayName) router.push("login_setting")
+      else router.push('/')
     })
   }
 }
