@@ -71,8 +71,9 @@ const kakaoLogin = (query: queryObj) => {
     .then(({data}) => {
       const { email, displayName } = data
       store.setTokenKaKao(data, 'kakao')
-      if(!email || !displayName)  return '/login_setting'
-      else return '/'
+      console.log(!email || !displayName)
+      if(!email || !displayName) router.push('login_setting')
+      else return router.push('home')
     })
   }
 }
