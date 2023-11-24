@@ -1,4 +1,6 @@
 <template>
+  <Lnb class="hidden lg:block" />
+  <Gnb />
   <main class="meeting-main">
     <div class="thumb"></div>
     <RouterView/>
@@ -7,6 +9,8 @@
     
 <script setup lang='ts'>
   import { RouterView } from 'vue-router'
+  import Lnb from '@/components/frame/LnbFrame.vue'
+import Gnb from '@/components/frame/GnbFrame.vue'
 </script>
     
 <style lang="scss">

@@ -1,4 +1,6 @@
 <template>
+  <Lnb class="hidden lg:block" />
+  <Gnb />
   <main>
     <h6>나의 캘린더</h6>
     <div class="calendar-padding">
@@ -40,6 +42,9 @@
 </template>
 
 <script setup lang="ts">
+import Lnb from '@/components/frame/LnbFrame.vue'
+import Gnb from '@/components/frame/GnbFrame.vue'
+
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -138,7 +143,6 @@ const wsSubscribe = () => {
 
     stompClient.subscribe(`/topic/myCalendar/2814129549`, function ({body}){
       if(JSON.parse(body)) {
-        console.log(JSON.parse(body))
         JSON.parse(body).forEach((el: myDateInfo) => {
           const td = document.querySelector(`td[data-date="${el.myDate}"]`)
           if(td) td.style.backgroundColor = "#eee";
