@@ -45,7 +45,7 @@
     const param = {
       email: email.value,
       displayName: displayName.value,
-      uid: store.tempUserInfo.uid
+      uid: store.userInfo.uid
     }
     api.setEmail(param)
     .then(({data}) => {

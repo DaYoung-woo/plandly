@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { type userInfo, type tokenInfo } from "@/types/Default";
-import api from "@/axios/api";
+import { type userInfo } from "@/types/Default";
+//import api from "@/axios/api";
 
 
 export const useUserStore = defineStore("user", () => {
