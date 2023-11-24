@@ -41,11 +41,16 @@ export const useUserStore = defineStore("user", () => {
     loginType.value = type
   };
   
+  const setEmailAndDisplayName= (email: string, displayName: string) => {
+    userInfo.value.email = email
+    userInfo.value.displayName = displayName
+  }
 
   return {
     userInfo,
     setUserLogout,
-    setTokenKaKao
+    setTokenKaKao,
+    setEmailAndDisplayName
   };
 },{
   persist: true,

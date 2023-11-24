@@ -49,7 +49,10 @@
     }
     api.setEmail(param)
     .then(({data}) => {
-      if(data.code === 0) router.push('home')
+      if(data.code === 0) {
+        store.setEmailAndDisplayName(email.value, displayName.value)
+        router.push('home')
+      }
     })
     .catch((e) => {
       if(e.response.status === 400){
