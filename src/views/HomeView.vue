@@ -228,4 +228,7 @@ onMounted(() => {
     }
   }
 }
+.calendar-padding{
+  min-height: 520px;
+}
 </style>
