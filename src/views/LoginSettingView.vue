@@ -54,8 +54,8 @@ const setEmail = () => {
   api
     .setEmail(param)
     .then(({ data }) => {
-      console.log(data.code)
       if (data.code === 0) {
+        console.log(store.userInfo)
         store.setEmailAndDisplayName(email.value, displayName.value)
         router.push('home')
       }
