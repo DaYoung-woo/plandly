@@ -115,7 +115,7 @@ const calendarOptions = reactive({
   
 });
 
-const clickDate = (dateStr: string) => {
+const clickDate = (   dateStr: string) => {
   stompClient.publish({
     destination: "/calendar.send",
     body: JSON.stringify({
