@@ -11,14 +11,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
   {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: HomeView,
       meta: { requiresAuth: true }
     },
     {
-      path: '/home',
-      redirect: '/'
+      path: '/',
+      redirect: '/home'
     },
     {
       path: "/login",
@@ -75,7 +75,6 @@ const kakaoLogin = (query: queryObj) => {
     .then(({data}) => {
       const { email, displayName } = data
       store.setTokenKaKao(data, 'kakao')
-      console.log(!email || !displayName)
       if(!email || !displayName) router.push('login_setting')
       else return router.push('home')
     })
