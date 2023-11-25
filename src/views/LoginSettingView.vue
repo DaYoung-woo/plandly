@@ -55,7 +55,7 @@ const setEmail = () => {
     .setEmail(param)
     .then(({ data }) => {
       if (data.code === 0) {
-        console.log(store.userInfo)
+        store.setTokenKaKao(data, 'kakao')
         store.setEmailAndDisplayName(email.value, displayName.value)
         router.push('home')
       }
