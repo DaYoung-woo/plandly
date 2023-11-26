@@ -60,13 +60,13 @@ const router = useRouter();
 onMounted(() => {});
 
 const googleLogin = () => {
-	signInWithRedirect(auth, provider);
+	signInWithRedirect(auth, prㄴovider);
 };
 const loading = ref(false);
 
 getRedirectResult(getAuth()).then(result => {
 	if (result) {
-		//const { displayName, email, uid, metadata } = result.user;
+		//const { displayName, email, uid, metadaㄴta } = result.user;
 		// const userInfo = {
 		//   displayName: displayName ?? "",
 		//   email: email ?? "",

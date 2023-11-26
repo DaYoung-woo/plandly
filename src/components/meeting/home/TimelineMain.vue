@@ -1,60 +1,65 @@
 <template>
-    <h5 class="pt-10 text-2xl text-left">타임라인</h5>
-    <hr class="mt-1"/>
-    
-    <p class="pt-5 text-xl text-left pb-4">1일차</p>
-    <div class="timeline-box">
-      <ol class="timeline">
+	<h5 class="pt-10 text-2xl text-left">타임라인</h5>
+	<hr class="mt-1" />
 
-        <li class="timeline-item">
-		      <span class="timeline-item-icon | faded-icon"></span>
-          <div class="timeline-item-description">
-            <div class="meeting-home-detail">
-              <p class="mb-1">타이틀</p>
-              <div class="h-14">설명 영역</div>
-              <div class="location">
-                <span class="flex">
-                    <img :src="iconLocation" alt="iconLocation" class="w-2 h-4">
-                    강남구 강남대로 84길 6 1층
-                </span>
-                <a href="#">구글 지도로 바로가기</a>
-                </div>
-            </div>
-            <div class="bg-slate-200 w-28 h-28 flex items-center justify-center text-sm">이미지</div>
-          </div>
-	      </li>
+	<p class="pt-5 text-xl text-left pb-4">1일차</p>
+	<div class="timeline-box">
+		<ol class="timeline">
+			<li class="timeline-item">
+				<span class="timeline-item-icon | faded-icon"></span>
+				<div class="timeline-item-description">
+					<div class="meeting-home-detail">
+						<p class="mb-1">타이틀</p>
+						<div class="h-14">설명 영역</div>
+						<div class="location">
+							<span class="flex">
+								<img :src="iconLocation" alt="iconLocation" class="w-2 h-4" />
+								강남구 강남대로 84길 6 1층
+							</span>
+							<a href="#">구글 지도로 바로가기</a>
+						</div>
+					</div>
+					<div
+						class="bg-slate-200 w-28 h-28 flex items-center justify-center text-sm"
+					>
+						이미지
+					</div>
+				</div>
+			</li>
 
-        <li class="timeline-item">
-		      <span class="timeline-item-icon | faded-icon"></span>
-          <div class="timeline-item-description">
-            <div class="meeting-home-detail">
-              <p class="mb-1">타이틀</p>
-              <div class="h-14">설명 영역</div>
-              <div class="location">
-                <span class="flex">
-                    <img :src="iconLocation" alt="iconLocation" class="w-2 h-4">
-                    강남구 강남대로 84길 6 1층
-                </span>
-                <a href="#">구글 지도로 바로가기</a>
-                </div>
-            </div>
-            <div class="bg-slate-200 w-28 h-28 flex items-center justify-center text-sm">이미지</div>
-          </div>
-	      </li>
-
-      </ol>
-    </div>
-       
+			<li class="timeline-item">
+				<span class="timeline-item-icon | faded-icon"></span>
+				<div class="timeline-item-description">
+					<div class="meeting-home-detail">
+						<p class="mb-1">타이틀</p>
+						<div class="h-14">설명 영역</div>
+						<div class="location">
+							<span class="flex">
+								<img :src="iconLocation" alt="iconLocation" class="w-2 h-4" />
+								강남구 강남대로 84길 6 1층
+							</span>
+							<a href="#">구글 지도로 바로가기</a>
+						</div>
+					</div>
+					<div
+						class="bg-slate-200 w-28 h-28 flex items-center justify-center text-sm"
+					>
+						이미지
+					</div>
+				</div>
+			</li>
+		</ol>
+	</div>
 </template>
-      
-<script setup lang='ts'>
-  import iconLocation from '@/assets/img/icon_location.svg'
+
+<script setup lang="ts">
+import iconLocation from '@/assets/img/icon_location.svg';
 </script>
-    
+
 <style lang="scss">
 .timeline {
 	width: 100%;
-  margin-right: auto;  
+	margin-right: auto;
 	display: flex;
 	flex-direction: column;
 	padding: 0px 0 32px 32px;
@@ -94,15 +99,15 @@
 	margin-top: -6px;
 	gap: 8px;
 	color: #000;
-  width: 100%;
-  justify-content: space-between;
-  text-align: left;
-  font-size: 12px;
-  p {
-    font-size: 16px;
-    line-height: normal;
-    margin-bottom: 5px;
-    margin-bottom: 10px;
-  }
+	width: 100%;
+	justify-content: space-between;
+	text-align: left;
+	font-size: 12px;
+	p {
+		font-size: 16px;
+		line-height: normal;
+		margin-bottom: 5px;
+		margin-bottom: 10px;
+	}
 }
 </style>
