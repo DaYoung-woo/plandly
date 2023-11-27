@@ -2,39 +2,39 @@
   <div class="tab-area">
     <div class="tab-div">
       <span @click="changeTab(0)">타임라인</span>
-      <span @click="changeTab(1)">게시판</span>
-      <span @click="changeTab(2)">투표</span>
-      <span @click="changeTab(3)">멤버</span>
-      <span @click="changeTab(4)">앨범</span>
+      <span @click="changeTab(1)">투표</span>
+      <span @click="changeTab(2)">멤버</span>
+      <span @click="changeTab(3)">앨범</span>
     </div>
     <div>
       <button class="w-12 h-12">공유</button>
-      <button class="w-28 h-12" v-if="activeIdx === 0">게시글 생성</button>
-      <button class="w-28 h-12" v-if="activeIdx === 1">새게시글 추가</button>
+      <button class="w-28 h-12" v-if="activeIdx === 0" @click="timelineEditMode = true">
+        게시글 생성
+      </button>
       <button class="w-28 h-12" v-if="activeIdx === 2">새멤버 추가</button>
     </div>
   </div>
   <hr class="tab-border" id="tab-border" />
 
   <div>
-    <TiemlineTab v-if="activeIdx === 0" />
-    <BoardTab v-if="activeIdx === 1" />
-    <VoteTab v-if="activeIdx === 2" />
-    <MemberTab v-if="activeIdx === 3" />
-    <AlbumTab v-if="activeIdx === 4" />
+    <TiemlineTab v-if="activeIdx === 0 && !timelineEditMode" />
+    <TimelineEditTab v-if="activeIdx === 0 && timelineEditMode" />
+    <VoteTab v-if="activeIdx === 1" />
+    <MemberTab v-if="activeIdx === 2" />
+    <AlbumTab v-if="activeIdx === 3" />
   </div>
 </template>
 
 <script setup lang="ts">
 import TiemlineTab from '@/components/meeting/tabs/TimelineTab.vue'
+import TimelineEditTab from '@/components/meeting/tabs/TimelineEditTab.vue'
 import MemberTab from '@/components/meeting/tabs/MemberTab.vue'
 import AlbumTab from '@/components/meeting/tabs/AlbumTab.vue'
 import VoteTab from '@/components/meeting/tabs/VoteTab.vue'
-import BoardTab from '@/components/meeting/tabs/BoardTab.vue'
 import { ref } from 'vue'
 
 const activeIdx = ref(0)
-
+const timelineEditMode = ref(false)
 const changeTab = (order: number) => {
   activeIdx.value = order
   // active 바 위치 변경
@@ -49,6 +49,8 @@ const changeTab = (order: number) => {
   // 현재 활성화시킬 탭에 active 클래스 추가
   const tabItem = document.querySelector(`.tab-div :nth-child(${order + 1})`) as HTMLElement
   tabItem.classList.add('active')
+
+  timelineEditMode.value = false
 }
 </script>
 
