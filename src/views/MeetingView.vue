@@ -2,8 +2,10 @@
   <Lnb class="hidden lg:block" />
   <Gnb />
   <main class="meeting-main">
-    <div class="thumb" />
-    <RouterView />
+    <div style="max-width: 1024px; margin: 0 auto">
+      <div class="thumb" style="margin-left: -1000px; margin-right: -1000px" />
+      <RouterView />
+    </div>
   </main>
 </template>
 
