@@ -2,37 +2,39 @@
   <Lnb class="hidden lg:block" />
   <Gnb />
   <main>
-    <h6>나의 캘린더</h6>
-    <div class="calendar-padding">
-      <div id="calendar"></div>
-    </div>
-    <h6 class="pt-10">나의 모임</h6>
-    <div class="meeting-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-      <div class="meeting-item" @click="router.push('meeting')">
-        <div class="thumb"></div>
-        <div class="desc">
-          <p>제목</p>
-          <span>최근 업데이트 날짜</span>
-          <span>멤버 수</span>
-          <span>총 게시글</span>
-        </div>
+    <div style="max-width: 1024px; margin: 0 auto">
+      <h6>나의 캘린더</h6>
+      <div class="calendar-padding">
+        <div id="calendar"></div>
       </div>
-      <div class="meeting-item" @click="router.push('meeting')">
-        <div class="thumb" />
-        <div class="desc">
-          <p>제목</p>
-          <span>최근 업데이트 날짜</span>
-          <span>멤버 수</span>
-          <span>총 게시글</span>
+      <h6 class="pt-10">나의 모임</h6>
+      <div class="meeting-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div class="meeting-item" @click="router.push('meeting')">
+          <div class="thumb"></div>
+          <div class="desc">
+            <p>제목</p>
+            <span>최근 업데이트 날짜</span>
+            <span>멤버 수</span>
+            <span>총 게시글</span>
+          </div>
         </div>
-      </div>
-      <div class="meeting-item" @click="router.push('meeting')">
-        <div class="thumb"></div>
-        <div class="desc">
-          <p>제목</p>
-          <span>최근 업데이트 날짜</span>
-          <span>멤버 수</span>
-          <span>총 게시글</span>
+        <div class="meeting-item" @click="router.push('meeting')">
+          <div class="thumb" />
+          <div class="desc">
+            <p>제목</p>
+            <span>최근 업데이트 날짜</span>
+            <span>멤버 수</span>
+            <span>총 게시글</span>
+          </div>
+        </div>
+        <div class="meeting-item" @click="router.push('meeting')">
+          <div class="thumb"></div>
+          <div class="desc">
+            <p>제목</p>
+            <span>최근 업데이트 날짜</span>
+            <span>멤버 수</span>
+            <span>총 게시글</span>
+          </div>
         </div>
       </div>
     </div>
@@ -90,6 +92,8 @@ interface meetingDetail extends meetingInfo {
 }
 
 let loadCount = ref(false)
+let currentMonth = ref(new Date().getMonth() + 1)
+let myCalendarList: myDateInfo[] = reactive([])
 
 const socket = new SockJS('https://plandly-haeju-min.koyeb.app/ws') // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket })
@@ -102,39 +106,55 @@ const calendarOptions = reactive({
     if (scheduleList.find((el) => el === info.dateStr)) {
       scheduleList = scheduleList.filter((el) => el !== info.dateStr)
       info.dayEl.style.backgroundColor = 'transparent'
+      deleteDate(info.dateStr)
     } else {
       scheduleList.push(info.dateStr)
       info.dayEl.style.backgroundColor = '#eee'
+      addDate(info.dateStr)
     }
-    clickDate(info.dateStr)
   }
 })
 
-const clickDate = (dateStr: string) => {
+const addDate = (dateStr: string) => {
   stompClient.publish({
     destination: '/calendar.send',
     body: JSON.stringify({
-      uid: '2814129549',
-      currentMonth: new Date().getMonth() + 1,
-      myDate: dateStr
+      uId: store.userInfo.uid,
+      myDate: dateStr,
+      currentMonth: currentMonth.value
     })
   })
 }
 
+const deleteDate = (dateStr: string) => {
+  stompClient.publish({
+    destination: '/calendar.delete',
+    body: JSON.stringify({
+      uId: store.userInfo.uid,
+      currentMonth: currentMonth.value,
+      cId: myCalendarList.filter((el) => el.myDate === dateStr)[0].cId
+    })
+  })
+
+  Object.assign(
+    myCalendarList,
+    myCalendarList.filter((el) => el.myDate !== dateStr)
+  )
+}
+
 const wsSubscribe = () => {
   stompClient.onConnect = () => {
-    var msg = {
-      uId: '2814129549', // 사용자 아이디
-      currentMonth: new Date().getMonth() + 1 // 현재 월
-    }
-
     stompClient.publish({
       destination: '/myCalendar.view',
-      body: JSON.stringify(msg)
+      body: JSON.stringify({
+        uId: store.userInfo.uid, // 사용자 아이디
+        currentMonth: currentMonth.value // 현재 월
+      })
     })
 
-    stompClient.subscribe(`/topic/myCalendar/2814129549`, function ({ body }) {
+    stompClient.subscribe(`/topic/myCalendar/${store.userInfo.uid}`, function ({ body }) {
       if (JSON.parse(body)) {
+        Object.assign(myCalendarList, JSON.parse(body))
         JSON.parse(body).forEach((el: myDateInfo) => {
           const td = document.querySelector(`td[data-date="${el.myDate}"]`)
           if (td) td.style.backgroundColor = '#eee'
@@ -142,12 +162,16 @@ const wsSubscribe = () => {
       }
     })
 
-    stompClient.subscribe(`/topic/myMeeting/list/2814129549`, function ({ body }) {
+    stompClient.subscribe(`/topic/myMeeting/list/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       if (!list) return
     })
 
-    stompClient.subscribe(`/topic/myMeeting/2814129549`, function ({ body }) {
+    stompClient.subscribe('/topic/myCalendar/failed', function (data) {
+      console.log(data)
+    })
+
+    stompClient.subscribe(`/topic/myMeeting/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       if (!list) return
       list.forEach((el: meetingDetail) => {
