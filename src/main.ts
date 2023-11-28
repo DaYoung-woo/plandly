@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './assets/styles/main.scss'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -15,10 +15,12 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 app.use(router)
-app.use(vfmPlugin({
+app.use(
+  vfmPlugin({
     key: '$vfm',
     componentName: 'VueFinalModal',
     dynamicContainerName: 'ModalsContainer'
-  }))
+  })
+)
 
 app.mount('#app')

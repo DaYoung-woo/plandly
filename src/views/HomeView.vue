@@ -204,6 +204,7 @@ onMounted(() => {
 <style lang="scss">
 main {
   padding: 30px 0px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 @media (min-width: 500px) {
   main {
