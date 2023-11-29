@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import logo from '@/assets/img/common/logo.png';
+import logo from '@/assets/img/common/logo.svg'
 import { ref } from 'vue';
 import api from '@/axios/api';
 import { useUserStore } from '@/stores/user.js';
