@@ -1,8 +1,18 @@
 import axios from 'axios'
 import { type userInfo, type meeingInfo } from '@/types/Default'
+import { useUserStore } from '@/stores/user.js'
 
 const instance = axios.create({
   baseURL: 'https://plandly-haeju-min.koyeb.app'
+})
+
+instance.interceptors.request.use((config) => {
+  const userStore = useUserStore()
+  if (config.headers) {
+    const { accessToken } = userStore.userInfo
+    config.headers['Authorization'] = !!accessToken ? `Bearer ${accessToken}` : ''
+  }
+  return config
 })
 
 export default {

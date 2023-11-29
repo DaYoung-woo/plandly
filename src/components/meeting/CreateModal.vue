@@ -13,10 +13,10 @@
     <div class="pb-10">
       <form>
         <h5 class="pt-5 pb-1">모임 제목</h5>
-        <input type="text" :v-model="name" class="border border-slate-300 w-full" />
+        <input type="text" v-model="name" class="border border-slate-300 w-full" />
 
         <h5 class="pt-5 pb-1">모임 설명</h5>
-        <textarea :v-model="description" class="border border-slate-300 w-full" />
+        <textarea v-model="description" class="border border-slate-300 w-full" />
 
         <h5 class="pt-5 pb-1">대표 프로필 이미지</h5>
         <div class="flex">
@@ -73,12 +73,17 @@ const getFile = (files: File[]) => {
   Object.assign(fileList, files)
 }
 
+const makeBlob = (target) => {
+  return new Blob([JSON.stringify(target)], { type: 'application/json' })
+}
+
 const submitForm = () => {
   const data = new FormData()
+
   data.append('uid', store.userInfo.uid)
   data.append('name', name.value)
   data.append('description', description.value)
-  data.append('mainPicture', fileList[0] as File, fileList[0]?.name)
+  data.append('mainPicture', fileList[0] as File)
   api.createMeeting(data).then((res) => {
     console.log(res)
   })
