@@ -92,7 +92,7 @@ const submitForm = () => {
 
 <style lang="scss">
 .meeting-create-modal {
-  width: 533px;
+  max-width: 572px;
   .profile-area {
     width: 92px;
     height: 92px;

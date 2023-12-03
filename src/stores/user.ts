@@ -49,11 +49,17 @@ export const useUserStore = defineStore(
       userInfo.value.displayName = displayName
     }
 
+    const refreshToken = (tokens: Pick<userInfo, 'accessToken' | 'refreshToken'>) => {
+      userInfo.value.accessToken = tokens.accessToken
+      userInfo.value.refreshToken = tokens.refreshToken
+    }
+
     return {
       userInfo,
       setUserLogout,
       setTokenKaKao,
-      setEmailAndDisplayName
+      setEmailAndDisplayName,
+      refreshToken
     }
   },
   {
