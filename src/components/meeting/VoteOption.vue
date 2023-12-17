@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import iconLocation from '@/assets/img/icon_location.svg'
+import iconLocation from '@/assets/img/common/icon_location.svg'
 defineProps<{
   checkbox?: Boolean
 }>()
