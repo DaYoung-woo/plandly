@@ -9,8 +9,8 @@ import { RouterView } from 'vue-router'
 <style lang="scss">
 header {
   width: 100vw;
-  height: 48px;
-  border-bottom: 1px solid #9f9f9f;
+  height: 54px;
+  border-bottom: 1px solid #cacaca;
   //position: fixed;
   //top: 0;
   //left:0;
@@ -18,14 +18,14 @@ header {
 }
 nav {
   width: 295px;
-  height: calc(100vh - 48px);
-  border-right: 1px solid #9f9f9f;
+  height: calc(100vh - 54px);
+  border-right: 1px solid #cacaca;
   position: fixed;
-  top: 48px;
+  top: 54px;
   left: 0;
 }
 main {
-  height: calc(100vh - 48px);
+  height: calc(100vh - 54px);
   width: 100vw;
   overflow-y: scroll;
 }
@@ -34,7 +34,7 @@ main {
   main {
     width: calc(100vw - 295px);
     position: fixed;
-    top: 48px;
+    top: 54px;
     left: 295px;
   }
 }

@@ -1,5 +1,5 @@
 import { type userInfo, type meeingInfo } from '@/types/Default'
-import instance from '@/axios/axios'
+import instance from '@/axios/Axios'
 
 export default {
   login: (param: userInfo) => {
@@ -39,5 +39,5 @@ export const createMeeting = (param: FormData) => {
 //토큰 갱신 API
 //https://www.notion.so/API-8346fc26cffa49eea7af0ab2926e69f9
 export const tokenRefresh = (param: Pick<userInfo, 'accessToken' | 'refreshToken'>) => {
-  return instance.post(`/api/create/meeting`, param)
+  return instance.post(`/api/auth/refresh`, param)
 }

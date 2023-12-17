@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useUserStore } from '@/stores/user.js'
+import { useRouter } from 'vue-router'
 import { tokenRefresh } from '@/axios/api'
 const instance = axios.create({
   baseURL: 'https://plandly-haeju-min.koyeb.app'
@@ -44,6 +45,12 @@ instance.interceptors.response.use(
     const originalRequest = error.config
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
+        if (error.response.status === 401 && isRefreshing) {
+          const userStore = useUserStore()
+          userStore.setUserLogout()
+          const router = useRouter()
+          router.push('login')
+        }
         return new Promise((resolve, reject) => {
           pengingQueue.push({ resolve, reject })
         })
@@ -61,21 +68,20 @@ instance.interceptors.response.use(
 
         const { accessToken, refreshToken } = userStore.userInfo
         const param = { accessToken, refreshToken }
-
         tokenRefresh(param)
           .then(({ data }) => {
             userStore.refreshToken(data)
-
             originalRequest.headers.Authorization = `Bearer ${userStore.userInfo.accessToken}`
-
             processQueue(null, `Bearer ${userStore.userInfo.accessToken}`)
             resolve(axios(originalRequest))
           })
           .catch((e) => {
-            // 오류가 생긴경우
-            alert('test')
-            location.href('/login')
-            EventMsg(errMsg)
+            // 오류가 생긴경우8*87-
+            alert(e.response)
+            const userStore = useUserStore()
+            userStore.setUserLogout()
+            const router = useRouter()
+            router.push('login')
             processQueue(e, null)
             reject(e)
           })

@@ -1,14 +1,18 @@
 <template>
-  <header class="flex items-center justify-between p-4">
-    <div class="logo" @click="router.push('/')">PLANDLY</div>
+  <header class="flex items-center justify-between px-8">
+    <div class="logo" @click="router.push('/')">
+      <img :src="logo" class="pt-3 pb-3" />
+    </div>
     <div class="flex items-center">
-      <div class="inline-block h-10 w-10 rounded-full bg-slate-100 text-xs text-center pt-3">
-        사용자
-      </div>
-      <button class="rounded-full bg-slate-100 ml-3 p-2 text-sm" @click="showModal = true">
+      <button
+        class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm"
+        @click="showModal = true"
+      >
         새 모임 만들기
       </button>
-      <button class="bg-slate-100 ml-3 p-2 text-sm" @click="logout()">로그아웃</button>
+      <button class="rounded-full border border-gray ml-2 px-6 py-2 text-sm" @click="logout()">
+        로그아웃
+      </button>
     </div>
     <CreateModal v-if="showModal" @closeModal="closeModal" />
   </header>
@@ -16,6 +20,7 @@
 
 <script setup lang="ts">
 import CreateModal from '../meeting/CreateModal.vue'
+import logo from '@/assets/img/logo.svg'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.js'
