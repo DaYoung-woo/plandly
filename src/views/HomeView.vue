@@ -8,30 +8,21 @@
         <div id="calendar"></div>
       </div>
       <h6 class="pt-10">나의 모임</h6>
-      <div class="meeting-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        <div class="meeting-item" @click="router.push('meeting')">
-          <div class="thumb"></div>
-          <div class="desc">
-            <p>제목</p>
-            <span>최근 업데이트 날짜</span>
-            <span>멤버 수</span>
-            <span>총 게시글</span>
+      <div
+        class="meeting-list pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4"
+      >
+        <div
+          class="meeting-item"
+          @click="router.push('meeting')"
+          v-for="item in meetings"
+          :key="item.mid"
+        >
+          <div class="thumb">
+            <img :src="`${apiUrl}${item.mainPicture}`" v-if="item.mainPicture" />
           </div>
-        </div>
-        <div class="meeting-item" @click="router.push('meeting')">
-          <div class="thumb" />
           <div class="desc">
-            <p>제목</p>
-            <span>최근 업데이트 날짜</span>
-            <span>멤버 수</span>
-            <span>총 게시글</span>
-          </div>
-        </div>
-        <div class="meeting-item" @click="router.push('meeting')">
-          <div class="thumb"></div>
-          <div class="desc">
-            <p>제목</p>
-            <span>최근 업데이트 날짜</span>
+            <p>{{ item.name }}</p>
+            <span>{{ item.updateDate.split(' ')[0] }}</span>
             <span>멤버 수</span>
             <span>총 게시글</span>
           </div>
@@ -65,6 +56,7 @@ const router = useRouter()
 let calendar: Calendar
 let scheduleList: string[] = []
 
+const apiUrl = import.meta.env.VITE_APP_API_URL
 // 타입
 type DateInfo = {
   calendarId: number
@@ -83,8 +75,9 @@ type myDateInfo = {
   myDate: string
 }
 
-interface meetingList extends meetingInfo {
+interface meeting extends meetingInfo {
   updateDate: string
+  mainPicture: string
 }
 
 interface meetingDetail extends meetingInfo {
@@ -94,7 +87,7 @@ interface meetingDetail extends meetingInfo {
 let loadCount = ref(false)
 let currentMonth = ref(new Date().getMonth() + 1)
 let myCalendarList: myDateInfo[] = reactive([])
-
+const meetings: meeting[] = reactive([])
 const socket = new SockJS('https://plandly-haeju-min.koyeb.app/ws') // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket })
 
@@ -156,7 +149,7 @@ const wsSubscribe = () => {
       if (JSON.parse(body)) {
         Object.assign(myCalendarList, JSON.parse(body))
         JSON.parse(body).forEach((el: myDateInfo) => {
-          const td = document.querySelector(`td[data-date="${el.myDate}"]`)
+          const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
           if (td) td.style.backgroundColor = '#eee'
         })
       }
@@ -164,6 +157,7 @@ const wsSubscribe = () => {
 
     stompClient.subscribe(`/topic/myMeeting/list/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
+      Object.assign(meetings, list)
       if (!list) return
     })
 

@@ -7,7 +7,7 @@
     :click-to-close="false"
   >
     <span class="mr-8 text-xl font-bold">
-      <img :src="iconClose" alt="iconClose" class="mb-12 w-3 h-3" />
+      <img :src="iconClose" alt="iconClose" class="mb-12 w-3 h-3" @click="showModal = false" />
       <slot name="title">새 모임 만들기</slot>
     </span>
 
@@ -69,7 +69,6 @@ import api from '@/axios/api'
 import { useUserStore } from '@/stores/user.js'
 import iconClose from '@/assets/img/common/icon_close.svg'
 const showModal = ref(true)
-const title = ref('')
 const name = ref('')
 const description = ref('')
 const password = ref('')
@@ -94,8 +93,11 @@ const submitForm = () => {
   data.append('name', name.value)
   data.append('description', description.value)
   data.append('mainPicture', fileList[0] as File)
-  api.createMeeting(data).then((res) => {
-    console.log(res)
+  api.createMeeting(data).then(({ data }) => {
+    if (data.code === 0) alert('생성되었습니다.')
+    else alert('서버오류')
+
+    showModal.value = false
   })
 }
 </script>
