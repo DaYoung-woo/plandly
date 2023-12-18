@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-logo-area">
-      <img :src="logo" lt="planLogo" />
+      <img :src="logo" alt="planLogo" />
       <p>시작하기</p>
     </div>
 

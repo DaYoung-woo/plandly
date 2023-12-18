@@ -5,6 +5,7 @@ import meetingView from '@/views/MeetingView.vue'
 import MeetingHome from '@/views/meeting/MeetingHome.vue'
 import MeetingDetail from '@/views/meeting/MeetingDetail.vue'
 import LoginView from '@/views/LoginView.vue'
+import KakaoLogin from '@/views/KakaoLogin.vue'
 import { useUserStore } from '@/stores/user.js'
 import loginSettingView from '@/views/LoginSettingView.vue'
 const router = createRouter({
@@ -28,7 +29,7 @@ const router = createRouter({
     },
     {
       path: '/sso',
-      component: LoginView,
+      component: KakaoLogin,
       meta: { requiresAuth: false },
       beforeEnter: (to) => {
         return kakaoLogin(to.query)
@@ -70,13 +71,20 @@ const kakaoLogin = (query: queryObj) => {
   const store = useUserStore()
 
   if (query.code) {
-    api.kakaoLogin(query.code).then(({ data }) => {
-      store.setTokenKaKao(data, 'kakao')
-      const { email, displayName } = data
-      console.log(data)
-      if (!email || !displayName) router.push('login_setting')
-      else return router.push('home')
-    })
+    api
+      .kakaoLogin(query.code)
+      .then(({ data }) => {
+        store.setTokenKaKao(data, 'kakao')
+        alert(data.email)
+        alert(data.displayName)
+        const { email, displayName } = data
+
+        if (!email || !displayName) router.push('login_setting')
+        else return router.push('home')
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 }
 export default router

@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-logo-area">
-      <img :src="logo" lt="planLogo" />
+      <img :src="logo" alt="planLogo" />
       <p>시작하기</p>
       <pre>플랜들리. 모임을 더 편하게 관리하세요.</pre>
     </div>
