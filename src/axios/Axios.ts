@@ -11,7 +11,7 @@ instance.interceptors.request.use(
     const userStore = useUserStore()
     if (config.headers) {
       const { accessToken } = userStore.userInfo
-      if (!accessToken) {
+      if (!accessToken && !config.url?.includes('/api/auth/ssoKakao')) {
         window.location.href = '/login'
         return config
       }

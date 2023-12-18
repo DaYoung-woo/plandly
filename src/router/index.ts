@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import api from '@/axios/api'
+
 import HomeView from '@/views/HomeView.vue'
 import meetingView from '@/views/MeetingView.vue'
 import MeetingHome from '@/views/meeting/MeetingHome.vue'
@@ -29,11 +30,9 @@ const router = createRouter({
     },
     {
       path: '/sso',
+      name: 'KakaoLogin',
       component: KakaoLogin,
-      meta: { requiresAuth: false },
-      beforeEnter: (to) => {
-        return kakaoLogin(to.query)
-      }
+      meta: { requiresAuth: false }
     },
     {
       path: '/login_setting',
@@ -60,31 +59,12 @@ router.beforeEach((to) => {
   const store = useUserStore()
   if (to.meta.requiresAuth) {
     if (!store.userInfo.accessToken) return '/login'
-    else if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
+    if (!!store.userInfo.accessToken && to.path === '/login') return '/home'
+    if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
   }
 })
 
 type queryObj = {
   code?: string | undefined
-}
-const kakaoLogin = (query: queryObj) => {
-  const store = useUserStore()
-
-  if (query.code) {
-    api
-      .kakaoLogin(query.code)
-      .then(({ data }) => {
-        store.setTokenKaKao(data, 'kakao')
-        alert(data.email)
-        alert(data.displayName)
-        const { email, displayName } = data
-
-        if (!email || !displayName) router.push('login_setting')
-        else return router.push('home')
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
 }
 export default router
