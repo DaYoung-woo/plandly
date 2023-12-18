@@ -15,6 +15,7 @@ onMounted(() => {
   if (!route.query.code) return
   kakaoLogin()
 })
+const router = useRouter()
 
 const kakaoLogin = () => {
   const { code } = route.query
@@ -23,7 +24,7 @@ const kakaoLogin = () => {
     .then(({ data }) => {
       store.setTokenKaKao(data, 'kakao')
       const { email, displayName } = data
-      const router = useRouter()
+
       if (!email || !displayName) router.push('login_setting')
       else return router.push('home')
     })
