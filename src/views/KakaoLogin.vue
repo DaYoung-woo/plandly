@@ -21,12 +21,11 @@ const kakaoLogin = () => {
   api
     .kakaoLogin(String(code))
     .then(({ data }) => {
-      alert(data)
-      //   store.setTokenKaKao(data, 'kakao')
-      //   const { email, displayName } = data
-      //   const router = useRouter()
-      //   if (!email || !displayName) router.push('login_setting')
-      //   else return router.push('home')
+      store.setTokenKaKao(data, 'kakao')
+      const { email, displayName } = data
+      const router = useRouter()
+      if (!email || !displayName) router.push('login_setting')
+      else return router.push('home')
     })
     .catch((e) => {
       alert(e)
