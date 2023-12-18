@@ -1,11 +1,11 @@
 <template>
-  <header class="flex items-center justify-between px-8">
+  <header class="flex items-center justify-between md:px-8 sm:px-4">
     <div class="logo" @click="router.push('/')">
       <img :src="logo" class="pt-3 pb-3" />
     </div>
     <div class="flex items-center">
       <button
-        class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm"
+        class="rounded-full bg-main text-white ml-3 md:px-6 md:py-2 text-sm"
         @click="showModal = true"
       >
         새 모임 만들기

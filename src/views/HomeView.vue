@@ -8,6 +8,7 @@
         <div id="calendar"></div>
       </div>
       <h6 class="pt-10">나의 모임</h6>
+
       <div
         class="meeting-list pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4"
       >
@@ -18,7 +19,7 @@
           :key="item.mid"
         >
           <div class="thumb">
-            <img :src="`${apiUrl}${item.mainPicture}`" v-if="item.mainPicture" />
+            <img :src="`${item.mainPicture}`" v-if="item.mainPicture" />
           </div>
           <div class="desc">
             <p>{{ item.name }}</p>
@@ -158,6 +159,7 @@ const wsSubscribe = () => {
     stompClient.subscribe(`/topic/myMeeting/list/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       Object.assign(meetings, list)
+      console.log(list)
       if (!list) return
     })
 
