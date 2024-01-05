@@ -11,9 +11,6 @@ header {
   width: 100vw;
   height: 54px;
   border-bottom: 1px solid #cacaca;
-  //position: fixed;
-  //top: 0;
-  //left:0;
   font-size: 16px;
 }
 nav {

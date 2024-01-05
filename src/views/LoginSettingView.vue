@@ -50,6 +50,7 @@ const setEmail = () => {
     displayName: displayName.value,
     uid: store.userInfo.uid
   }
+
   api
     .setEmail(param)
     .then(({ data }) => {
