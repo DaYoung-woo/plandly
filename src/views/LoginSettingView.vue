@@ -1,0 +1,96 @@
+<template>
+  <div class="login">
+    <div class="login-logo-area">
+      <img :src="logo" alt="planLogo" />
+      <p>시작하기</p>
+    </div>
+
+    <div class="login-setting w-full">
+      <p>이메일을 입력해주세요</p>
+      <input
+        type="text"
+        name="email"
+        class="border border-slate-300 w-full py-1 px-3 mt-1 rounded-md h-12 mb-8"
+        placeholder="이메일 입력"
+        v-model="email"
+      />
+
+      <p>닉네임을 입력해주세요</p>
+      <input
+        type="text"
+        name="email"
+        class="border border-slate-300 w-full py-1 px-3 mt-1 rounded-md h-12 mb-8"
+        placeholder="닉네임 입력"
+        v-model="displayName"
+      />
+
+      <button class="p-2 text-sm w-full h-12" @click="setEmail" :disabled="!email || !displayName">
+        <span>기본정보 설정하기</span>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import logo from '@/assets/img/common/logo.svg'
+import { ref } from 'vue'
+import api from '@/axios/api'
+import { useUserStore } from '@/stores/user.js'
+import { useRouter } from 'vue-router'
+
+const store = useUserStore()
+const router = useRouter()
+
+const email = ref('')
+const displayName = ref('')
+
+const setEmail = () => {
+  const param = {
+    email: email.value,
+    displayName: displayName.value,
+    uid: store.userInfo.uid
+  }
+
+  api
+    .setEmail(param)
+    .then(({ data }) => {
+      if (data.code === 0) {
+        store.setTokenKaKao(data, 'kakao')
+        store.setEmailAndDisplayName(email.value, displayName.value)
+        router.push('home')
+      }
+    })
+    .catch((e) => {
+      if (e.response.status === 400) {
+        if (e.response.data.code === 2) alert('이미 사용되고 있는 email입니다.')
+        else alert('Server Error')
+      } else {
+        alert('Server Error')
+      }
+    })
+}
+</script>
+
+<style lang="scss" scoped>
+.login-setting {
+  p {
+    font-family: Noto Sans;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  input {
+    font-family: Noto Sans;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  button {
+    border-radius: 5px;
+    background: #00785b;
+    color: #fff;
+  }
+}
+</style>
