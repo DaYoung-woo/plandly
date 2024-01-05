@@ -51,7 +51,7 @@
             hidden
             id="upload-image"
             accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
-            @change="getFile($event.target.files)"
+            @change="getFile($event)"
           />
         </div>
       </form>
@@ -73,17 +73,24 @@ const name = ref('')
 const description = ref('')
 const password = ref('')
 const previewImage = ref()
-const fileList: File[] = reactive([])
+const image = ref<File | null>(null)
 const store = useUserStore()
 
-const getFile = (files: File[]) => {
-  Object.assign(fileList, files)
-  const reader = new FileReader()
-  const file = files[0]
-  reader.onload = (e) => {
-    previewImage.value = e.target?.result
+const getFile = (e: Event) => {
+  const files = (e.target as HTMLInputElement).files
+
+  if (files) {
+    const file = files[0]
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const result = (event.target as FileReader)?.result as string
+      if (result) previewImage.value = result
+    }
+    reader.readAsDataURL(file)
+
+    // Add the file to the fileList
+    image.value = file
   }
-  reader.readAsDataURL(file)
 }
 
 const submitForm = () => {
@@ -92,7 +99,8 @@ const submitForm = () => {
   data.append('uid', store.userInfo.uid)
   data.append('name', name.value)
   data.append('description', description.value)
-  data.append('mainPicture', fileList[0] as File)
+  data.append('mainPicture', image.value as File) // Access value of ref
+
   api.createMeeting(data).then(({ data }) => {
     if (data.code === 0) alert('생성되었습니다.')
     else alert('서버오류')
