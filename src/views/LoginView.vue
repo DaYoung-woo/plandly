@@ -8,7 +8,7 @@
 
 		<div class="btn-area w-full">
 			<a
-				href="https://kauth.kakao.com/oauth/authorize?client_id=40fd2744b02c2e3bb1e4a8ab990e6c3e&redirect_uri=https://frame--candid-mooncake-a908ef.netlify.app/sso&response_type=code?mid=0000"
+				href="https://kauth.kakao.com/oauth/authorize?client_id=40fd2744b02c2e3bb1e4a8ab990e6c3e&redirect_uri=https://frame--candid-mooncake-a908ef.netlify.app/sso&response_type=code&mid=0000"
 				class="flex items-center w-full kakao h-12 rounded-md px-3"
 			>
 				<img :src="kakaoLogo" alt="googloLogo" />
