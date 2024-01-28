@@ -1,7 +1,7 @@
 <template>
   <header class="flex items-center justify-between md:px-8 sm:px-4">
     <div class="logo" @click="router.push('/')">
-      <img :src="logo" class="pt-3 pb-3" />
+      <Logo />
     </div>
     <div class="flex items-center">
       <button
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import CreateModal from '../meeting/CreateModal.vue'
-import logo from '@/assets/img/logo.svg'
+import Logo from '@/assets/img/logo.svg'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.js'

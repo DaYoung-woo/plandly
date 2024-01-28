@@ -1,5 +1,5 @@
 <template>
-	<PageLoading />
+	<PageLoading width="60px" />
 </template>
 
 <script setup lang="ts">

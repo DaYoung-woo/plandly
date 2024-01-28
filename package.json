@@ -26,6 +26,7 @@
     "sass": "^1.65.1",
     "sockjs-client": "^1.6.1",
     "tw-elements": "^1.0.0-beta3",
+    "vite-svg-loader": "^5.1.0",
     "vue": "^3.3.4",
     "vue-final-modal": "^3.4.11",
     "vue-nav-tabs": "^0.5.7",

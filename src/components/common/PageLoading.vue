@@ -1,23 +1,28 @@
 <template>
-	<div class="modal-back">
+	<div :class="`${isBlack && 'modal-back'} h-full`" >
 		<div class="flex items-center h-full w-full justify-center flex-col">
 			<div class="droplet_spinner">
 				<div class="droplet"></div>
 				<div class="droplet"></div>
 				<div class="droplet"></div>
 			</div>
-			<img :src="LogoIcon" />
+			<img :src="LogoIcon" :style="`width:${width}`"/>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import LogoIcon from '@/assets/img/logo_icon.svg';
+
+defineProps<{
+  isBlack?: Boolean,
+	width:String
+}>()
+
 </script>
 
 <style>
 .modal-back {
-	height: 100vh;
 	background: rgba(0, 0, 0, 0.7);
 }
 .droplet_spinner {
