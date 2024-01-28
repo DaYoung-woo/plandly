@@ -4,9 +4,10 @@
   <main>
     <div style="max-width: 840px; margin: 0 auto">
      
-      <div class="calendar-padding">
-        <div id="calendar"></div>
+      <div class="calendar-padding" v-if="showLoading">
+        <PageLoading width="45px" />        
       </div>
+      <div id="calendar"></div>
       <h6 class="pt-10">나의 모임</h6>
 
       <div
@@ -36,6 +37,7 @@
 <script setup lang="ts">
 import Lnb from '@/components/frame/LnbFrame.vue'
 import Gnb from '@/components/frame/GnbFrame.vue'
+import PageLoading from '@/components/common/PageLoading.vue'
 
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -213,12 +215,14 @@ const wsSubscribe = () => {
     let calendarEl: HTMLElement = document.getElementById('calendar')!
     calendar = new Calendar(calendarEl, calendarOptions)
     calendar.render()
+    showLoading.value = false;
   }
 }
 
+let showLoading = ref(true)
+
 onMounted(() => {
   // 켈린더
-
   stompClient.activate()
   wsSubscribe()
 })
@@ -269,6 +273,9 @@ main {
 }
 .calendar-padding {
   min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 // .fc-theme-standard td, .fc-theme-standard th {
@@ -403,5 +410,8 @@ main {
   }
 }
 
+.fc-daygrid-day-frame{
+ cursor: pointer;
+}
 
 </style>
