@@ -2,8 +2,8 @@
   <Lnb class="hidden lg:block" />
   <Gnb />
   <main>
-    <div style="max-width: 1024px; margin: 0 auto">
-      <h6>나의 캘린더</h6>
+    <div style="max-width: 840px; margin: 0 auto">
+     
       <div class="calendar-padding">
         <div id="calendar"></div>
       </div>
@@ -27,7 +27,7 @@
             <span>멤버 수</span>
             <span>총 게시글</span>
           </div>
-        </div>
+        </div>  
       </div>
     </div>
   </main>
@@ -96,14 +96,40 @@ const calendarOptions = reactive({
   plugins: [interactionPlugin, dayGridPlugin],
   initialView: 'dayGridMonth',
   weekends: true,
+  contentHeight: 850,
+  //titleFormat: {year: "numeric", month: 'numeric'},
+  titleFormat: function(date) {
+    return `${date.date.year}.${String(date.date.month + 1).length === 1 ? `0${date.date.month + 1}` : date.date.month + 1}`
+  },
+  dayHeaderFormat:function(date) {
+    switch (date.date.day) {
+      case 4:
+        return 'SUN'
+      case 5:
+        return 'MON'
+      case 6:
+        return 'TUE'
+      case 7:
+        return 'WED'
+      case 8: 
+        return 'THU'
+      case 9:
+        return 'FRI'
+      case 10:
+        return 'SAT'
+      default:
+        return date.date.day
+    }
+  },
+  buttonText: {today: 'Today'},
   dateClick: function (info: DateClickArg) {
-    if (scheduleList.find((el) => el === info.dateStr)) {
+    if (myCalendarList.find((el) => el.myDate === info.dateStr)) {
+      info.dayEl.children[0].style.backgroundColor = '#fff'
       scheduleList = scheduleList.filter((el) => el !== info.dateStr)
-      info.dayEl.style.backgroundColor = 'transparent'
       deleteDate(info.dateStr)
     } else {
       scheduleList.push(info.dateStr)
-      info.dayEl.style.backgroundColor = '#eee'
+      info.dayEl.children[0].style.backgroundColor = '#D5E6E2'
       addDate(info.dateStr)
     }
   }
@@ -150,8 +176,12 @@ const wsSubscribe = () => {
       if (JSON.parse(body)) {
         Object.assign(myCalendarList, JSON.parse(body))
         JSON.parse(body).forEach((el: myDateInfo) => {
+          console.log(el)
           const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
-          if (td) td.style.backgroundColor = '#eee'
+          if (td) {
+            td.children[0].style.backgroundColor = '#D5E6E2'
+            td.children[0].style.color = '#00785B'
+          }
         })
       }
     })
@@ -159,7 +189,6 @@ const wsSubscribe = () => {
     stompClient.subscribe(`/topic/myMeeting/list/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       Object.assign(meetings, list)
-      console.log(list)
       if (!list) return
     })
 
@@ -176,8 +205,6 @@ const wsSubscribe = () => {
           start: el.dates[0],
           end: el.dates[el.dates.length - 1],
           id: `${el.mid}`,
-          color: 'yellow', // an option!
-          textColor: 'black' // an option!
         })
       })
       calendar.render()
@@ -243,4 +270,138 @@ main {
 .calendar-padding {
   min-height: 520px;
 }
+
+// .fc-theme-standard td, .fc-theme-standard th {
+//   border: none;
+//   border-radius: 30px;
+// }
+
+// .fc-theme-standard .fc-scrollgrid {
+//   border: none;
+//   border-radius: 30px;
+// }
+
+
+// .fc-daygrid-day-frame{
+//   min-height: 125px;
+//   height: 125px;
+// }
+
+@media (min-width: 735px) {
+
+  .fc-theme-standard td, .fc-theme-standard th {
+    border: none;
+    border-radius: 30px;
+  }
+
+  .fc-theme-standard .fc-scrollgrid {
+    border: none;
+    border-radius: 30px;
+  }
+  
+  td.fc-day  {
+    padding: 2px;
+    .fc-daygrid-day-frame{
+      border-radius: 20px;
+    }
+  }
+
+  .fc .fc-daygrid-day-top {
+    flex-direction: row;  
+    margin: 8px 0px 0px 12px;
+    font-size: 14px;
+  }
+  
+}
+
+.fc .fc-toolbar-title{
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.fc .fc-button, .fc .fc-button-primary:disabled {
+  background-color: #fff;
+  color: #00785B;
+  border-radius: 25.5px;
+  border: 1px solid #00785B;
+  opacity: 1;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 11px 17px
+}
+
+.fc .fc-button:hover,  .fc .fc-button-primary:disabled:hover {
+  background-color: #00785B;
+  color: #fff;
+  border-color: #00785B;
+}
+
+.fc .fc-button:active,  .fc .fc-button-primary:disabled:active {
+  background-color: #000;
+  color: #fff;
+}
+
+.fc-icon.fc-icon-chevron-left::before{
+  width: 15px;
+}
+
+.fc .fc-col-header-cell-cushion{
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+.fc-dayGridMonth-view{
+  background-color: #F4F6F6;
+  border-radius: 15px;
+}
+
+.fc-daygrid-day-frame {
+  background: #fff;
+}
+.fc-day-other .fc-daygrid-day-frame {
+  background: #F4F6F6;
+}
+.fc-col-header-cell.fc-day-sun .fc-col-header-cell-cushion{
+  color: #EA0000;
+}
+.fc-day-sun .fc-daygrid-day-number{
+  color: #EA0000;
+}
+.fc-col-header-cell.fc-day-sat .fc-col-header-cell-cushion{
+  color: #0035F0
+}
+
+.fc .fc-button .fc-icon{
+  font-size: 15px;
+}
+
+.fc .fc-daygrid-day.fc-day-today{
+  background-color: transparent;
+  color: #00785B;
+  .fc-daygrid-day-top{
+    a{
+      background-color: #00785B;
+      border-radius: 100px;
+      width: 31px;
+      height: 31px;
+      text-align: center;
+      color: #fff;
+    } 
+  }
+}
+
+
 </style>
