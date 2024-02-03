@@ -6,7 +6,7 @@
         <div class="droplet"></div>
         <div class="droplet"></div>
       </div>
-      <img :src="LogoIcon" :style="`width:${width}`" />
+      <LogoIcon />
     </div>
   </div>
 </template>
