@@ -59,8 +59,8 @@ router.beforeEach((to) => {
   const store = useUserStore()
   if (to.meta.requiresAuth) {
     if (!!store.userInfo.accessToken && to.path === '/login') return '/home'
-    if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
     if (!store.userInfo.accessToken) return '/login'
+    if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
   }
 })
 
