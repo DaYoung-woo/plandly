@@ -13,7 +13,7 @@
             <div class="h-14">설명 영역</div>
             <div class="location">
               <span class="flex">
-                <img :src="iconLocation" alt="iconLocation" class="w-2 h-4" />
+                <IconLocation class="w-2 h-4" />
                 강남구 강남대로 84길 6 1층
               </span>
               <a href="#">구글 지도로 바로가기</a>
@@ -31,7 +31,7 @@
             <div class="h-14">설명 영역</div>
             <div class="location">
               <span class="flex">
-                <img :src="iconLocation" alt="iconLocation" class="w-2 h-4" />
+                <IconLocation class="w-2 h-4" />
                 강남구 강남대로 84길 6 1층
               </span>
               <a href="#">구글 지도로 바로가기</a>
@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import iconLocation from '@/assets/img/common/icon_location.svg'
+import IconLocation from '@/assets/img/common/icon_location.svg'
 </script>
 
 <style lang="scss">

@@ -7,7 +7,7 @@
     :click-to-close="false"
   >
     <span class="mr-8 text-xl font-bold">
-      <img :src="iconClose" alt="iconClose" class="mb-12 w-3 h-3" @click="showModal = false" />
+      <IconClose class="mb-12 w-3 h-3" @click="showModal = false"/>
       <slot name="title">새 모임 만들기</slot>
     </span>
 
@@ -67,7 +67,7 @@
 import { ref, reactive } from 'vue'
 import api from '@/axios/api'
 import { useUserStore } from '@/stores/user.js'
-import iconClose from '@/assets/img/common/icon_close.svg'
+import IconClose from '@/assets/img/common/icon_close.svg'
 const showModal = ref(true)
 const name = ref('')
 const description = ref('')
