@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-logo-area">
-      <img :src="logo" alt="planLogo" />
+      <IconLogo />
       <p>시작하기</p>
     </div>
 
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import logo from '@/assets/img/common/logo.svg'
+import IconLogo from '@/assets/img/common/logo.svg'
 import { ref } from 'vue'
 import api from '@/axios/api'
 import { useUserStore } from '@/stores/user.js'

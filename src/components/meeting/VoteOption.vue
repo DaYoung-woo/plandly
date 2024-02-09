@@ -8,7 +8,7 @@
           항목에 대한 설명이 있다면 여기에
           <div class="location">
             <span class="flex">
-              <img :src="iconLocation" alt="iconLocation" />
+              <IconLocation/>
               강남구 강남대로 84길 6 1층
             </span>
             <a href="#">구글 지도로 바로가기</a>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import iconLocation from '@/assets/img/common/icon_location.svg'
+import IconLocation from '@/assets/img/common/icon_location.svg'
 defineProps<{
   checkbox?: Boolean
 }>()
