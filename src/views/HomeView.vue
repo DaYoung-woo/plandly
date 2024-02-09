@@ -3,11 +3,11 @@
   <Gnb />
   <main>
     <div style="max-width: 840px; margin: 0 auto">
-      <div class="calendar-padding">
+      <div class="calendar-padding" v-if="showLoading">
         <PageLoading width="45px" />
       </div>
       <div id="calendar"></div>
-      <h6 class="pt-10">나의 모임</h6>
+      <h5 class="pt-10">나의 모임</h5>
 
       <div
         class="meeting-list pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4"
@@ -29,23 +29,29 @@
           </div>
         </div>
       </div>
+      <div class="no-data-box mt-2" v-if="!meetings.length">생성된 모임이 없습니다. 모임을 생성해보세요!</div>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
+// 프레임
 import Lnb from '@/components/frame/LnbFrame.vue'
 import Gnb from '@/components/frame/GnbFrame.vue'
+
+// 달력 로딩
 import PageLoading from '@/components/common/PageLoading.vue'
 
+// 캘린더 설정
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import type { DateClickArg } from 'fullcalendar-scheduler/index.js'
 
+// 변수 설정
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.js'
-import type { DateClickArg } from 'fullcalendar-scheduler/index.js'
 
 // 소켓
 import { Client } from '@stomp/stompjs'
@@ -57,6 +63,8 @@ const router = useRouter()
 
 let calendar: Calendar
 let scheduleList: string[] = []
+let showLoading = ref(true)
+
 
 const apiUrl = import.meta.env.VITE_APP_API_URL
 // 타입
@@ -135,6 +143,23 @@ const calendarOptions = reactive({
       info.dayEl.children[0].style.backgroundColor = '#D5E6E2'
       addDate(info.dateStr)
     }
+  },
+  customButtons:{
+    prev: {
+      click: function() {
+        calendar.prev()
+        const month = calendar.getDate().getMonth()
+        if(month === 0) changeMonth(12)
+        else changeMonth(month)
+      }
+    },
+    next: {
+      click: function() {
+        calendar.next()
+        const month = calendar.getDate().getMonth() + 2
+        changeMonth(month)
+      }
+    },
   }
 })
 
@@ -178,8 +203,8 @@ const wsSubscribe = () => {
     stompClient.subscribe(`/topic/myCalendar/${store.userInfo.uid}`, function ({ body }) {
       if (JSON.parse(body)) {
         Object.assign(myCalendarList, JSON.parse(body))
+        console.log(myCalendarList)
         JSON.parse(body).forEach((el: myDateInfo) => {
-          console.log(el)
           const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
           if (td) {
             td.children[0].style.backgroundColor = '#D5E6E2'
@@ -220,7 +245,15 @@ const wsSubscribe = () => {
   }
 }
 
-let showLoading = ref(true)
+const changeMonth = (month: number): void => {
+  stompClient.publish({
+    destination: '/myCalendar.view',
+    body: JSON.stringify({
+      uId: store.userInfo.uid, // 사용자 아이디
+      currentMonth: month // 현재 월
+    })
+  })
+}
 
 onMounted(() => {
   // 켈린더
@@ -278,21 +311,6 @@ main {
   align-items: center;
   justify-content: center;
 }
-
-// .fc-theme-standard td, .fc-theme-standard th {
-//   border: none;
-//   border-radius: 30px;
-// }
-
-// .fc-theme-standard .fc-scrollgrid {
-//   border: none;
-//   border-radius: 30px;
-// }
-
-// .fc-daygrid-day-frame{
-//   min-height: 125px;
-//   height: 125px;
-// }
 
 @media (min-width: 735px) {
   .fc-theme-standard td,

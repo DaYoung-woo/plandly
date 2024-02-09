@@ -6,17 +6,17 @@
         <div class="droplet"></div>
         <div class="droplet"></div>
       </div>
-      <LogoIcon />
+      <img :src="logoIcon" alt="logoIcon" :style="width ? `width: ${width}`: ''"/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import LogoIcon from '@/assets/img/logo_icon.svg'
+import logoIcon from '@/assets/img/logo_icon.svg?url'
 
 defineProps<{
   isBlack?: Boolean
-  width: String
+  width?: String
 }>()
 </script>
 
