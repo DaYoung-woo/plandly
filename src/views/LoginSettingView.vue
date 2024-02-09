@@ -24,7 +24,7 @@
         v-model="displayName"
       />
 
-      <button class="p-2 text-sm w-full h-12" @click="setEmail" :disabled="!email || !displayName">
+      <button class="p-2 text-sm w-full h-12" @click="saveEmail" :disabled="!email || !displayName">
         <span>기본정보 설정하기</span>
       </button>
     </div>
@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import IconLogo from '@/assets/img/common/logo.svg'
 import { ref } from 'vue'
-import api from '@/axios/api'
+import { setEmail } from '@/axios/api'
 import { useUserStore } from '@/stores/user.js'
 import { useRouter } from 'vue-router'
 
@@ -44,15 +44,14 @@ const router = useRouter()
 const email = ref('')
 const displayName = ref('')
 
-const setEmail = () => {
+const saveEmail = () => {
   const param = {
     email: email.value,
     displayName: displayName.value,
     uid: store.userInfo.uid
   }
 
-  api
-    .setEmail(param)
+  setEmail(param)
     .then(({ data }) => {
       if (data.code === 0) {
         store.setTokenKaKao(data, 'kakao')

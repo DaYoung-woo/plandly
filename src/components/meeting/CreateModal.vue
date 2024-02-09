@@ -7,7 +7,7 @@
     :click-to-close="false"
   >
     <span class="mr-8 text-xl font-bold">
-      <IconClose class="mb-12 w-3 h-3" @click="showModal = false"/>
+      <IconClose class="mb-12 w-3 h-3" @click="showModal = false" />
       <slot name="title">새 모임 만들기</slot>
     </span>
 
@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import api from '@/axios/api'
+import { createMeeting } from '@/axios/api'
 import { useUserStore } from '@/stores/user.js'
 import IconClose from '@/assets/img/common/icon_close.svg'
 const showModal = ref(true)
@@ -101,7 +101,7 @@ const submitForm = () => {
   data.append('description', description.value)
   data.append('mainPicture', image.value as File) // Access value of ref
 
-  api.createMeeting(data).then(({ data }) => {
+  createMeeting(data).then(({ data }) => {
     if (data.code === 0) alert('생성되었습니다.')
     else alert('서버오류')
 

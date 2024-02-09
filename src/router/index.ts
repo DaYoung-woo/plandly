@@ -40,7 +40,7 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
     {
-      path: '/meeting/:meetingNo',
+      path: '/meeting/:mId',
       name: 'meeting',
       component: meetingView,
       children: [
@@ -57,10 +57,9 @@ router.beforeEach((to) => {
   // current running app
   const store = useUserStore()
 
- 
   if (to.meta.requiresAuth) {
     if (!!store.userInfo.accessToken && to.path === '/login') return '/home'
-    if (!store.userInfo.accessToken && to.params.meetingNo) return `/login?state=${to.params.meetingNo}`
+    if (!store.userInfo.accessToken && to.params.mId) return `/login?state=${to.params.mId}`
     if (!store.userInfo.accessToken) return '/login'
     if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
   }

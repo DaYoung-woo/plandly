@@ -14,9 +14,9 @@
       >
         <div
           class="meeting-item"
-          @click="router.push('meeting')"
+          @click="router.push(`meeting/${item.mId}`)"
           v-for="item in meetings"
-          :key="item.mid"
+          :key="item.mId"
         >
           <div class="thumb">
             <img :src="`${item.mainPicture}`" v-if="item.mainPicture" />
@@ -29,7 +29,9 @@
           </div>
         </div>
       </div>
-      <div class="no-data-box mt-2" v-if="!meetings.length">생성된 모임이 없습니다. 모임을 생성해보세요!</div>
+      <div class="no-data-box mt-2" v-if="!meetings.length">
+        생성된 모임이 없습니다. 모임을 생성해보세요!
+      </div>
     </div>
   </main>
 </template>
@@ -65,34 +67,7 @@ let calendar: Calendar
 let scheduleList: string[] = []
 let showLoading = ref(true)
 
-
 const apiUrl = import.meta.env.VITE_APP_API_URL
-// 타입
-type DateInfo = {
-  calendarId: number
-  event: string
-  eventDate: string
-  uid: string
-}
-
-type meetingInfo = {
-  name: string
-  mid: number
-}
-
-type myDateInfo = {
-  cId: string
-  myDate: string
-}
-
-interface meeting extends meetingInfo {
-  updateDate: string
-  mainPicture: string
-}
-
-interface meetingDetail extends meetingInfo {
-  dates: string[]
-}
 
 let loadCount = ref(false)
 let currentMonth = ref(new Date().getMonth() + 1)
@@ -144,22 +119,22 @@ const calendarOptions = reactive({
       addDate(info.dateStr)
     }
   },
-  customButtons:{
+  customButtons: {
     prev: {
-      click: function() {
+      click: function () {
         calendar.prev()
         const month = calendar.getDate().getMonth()
-        if(month === 0) changeMonth(12)
+        if (month === 0) changeMonth(12)
         else changeMonth(month)
       }
     },
     next: {
-      click: function() {
+      click: function () {
         calendar.next()
         const month = calendar.getDate().getMonth() + 2
         changeMonth(month)
       }
-    },
+    }
   }
 })
 
@@ -232,7 +207,7 @@ const wsSubscribe = () => {
           title: el.name,
           start: el.dates[0],
           end: el.dates[el.dates.length - 1],
-          id: `${el.mid}`
+          id: `${el.mId}`
         })
       })
       calendar.render()

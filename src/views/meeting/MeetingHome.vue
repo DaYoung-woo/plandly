@@ -1,13 +1,15 @@
 <template>
-  <div class="flex text-right justify-items-end justify-end mt-2">
-    <button class="vfm-btn bg-slate-200 px-4 py-2 text-xs" @click="$emit('closeModal')">
-      공유<br />버튼
+  <div class="flex text-right justify-items-end justify-end mt-8">
+    <button class="vfm-btn bg-slate-200 text-xs mr-2" @click="$emit('closeModal')">
+      <IconShare />
     </button>
-    <button class="vfm-btn bg-slate-200 px-4 py-2 text-xs ml-2" @click="$emit('closeModal')">
-      모임 전용 <br />
-      메뉴
+
+    <button class="vfm-btn bg-slate-200 text-xs ml-2" @click="$emit('closeModal')">
+      <IconMore />
     </button>
   </div>
+
+  <div class="meeting-avartar"></div>
 
   <div>
     <h6 class="pt-5">모임 타이틀</h6>
@@ -45,25 +47,62 @@
 </template>
 
 <script setup lang="ts">
+// api
+import { getMeetingInfo } from '@/axios/api'
+// 게시판
 import BoardMain from '@/components/meeting/home/BoardMain.vue'
+// 투표
 import VoteMain from '@/components/meeting/home/MeetingMain.vue'
+// 타임라인
 import TimelineMain from '@/components/meeting/home/TimelineMain.vue'
+// 멤버
 import MemberMain from '@/components/meeting/home/MemberMain.vue'
 
+// 공유 아이콘
+import IconShare from '@/assets/img/common/icon_share.svg'
+// 더보기 아이콘
+import IconMore from '@/assets/img/common/icon_more.svg'
+
+// 라우터
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
+// 스토어
+import { useUserStore } from '@/stores/user.js'
+const store = useUserStore()
+
 // param
-const meetingNo = route.params.meetingNo;
+const mId = route.params.mId as string
+
+// 마운트
+import { onMounted } from 'vue'
+onMounted(() => {
+  loadMeetingInfo()
+})
+
+// 모임 홈 정보 조회
+const loadMeetingInfo = async () => {
+  try {
+    const param = {
+      mId,
+      uId: store.userInfo.uid
+    }
+    const res = getMeetingInfo(param)
+    console.log(res)
+  } catch (e) {
+    console.log(e)
+  }
+}
 </script>
 
 <style>
 .meeting-avartar {
   width: 100px;
   height: 100px;
-  position: absolute;
-  top: 150px;
-  background-color: #ccc;
+  position: static;
+  margin-top: -100px;
+  background-color: #b9b9b9;
+  border-radius: 20px;
 }
 </style>
