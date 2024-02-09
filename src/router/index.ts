@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import api from '@/axios/api'
 
 import HomeView from '@/views/HomeView.vue'
 import meetingView from '@/views/MeetingView.vue'
@@ -41,7 +40,7 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
     {
-      path: '/meeting',
+      path: '/meeting/:meetingNo',
       name: 'meeting',
       component: meetingView,
       children: [
@@ -57,8 +56,11 @@ router.beforeEach((to) => {
   // ✅ This will work make sure the correct store is used for the
   // current running app
   const store = useUserStore()
+
+ 
   if (to.meta.requiresAuth) {
     if (!!store.userInfo.accessToken && to.path === '/login') return '/home'
+    if (!store.userInfo.accessToken && to.params.meetingNo) return `/login?state=${to.params.meetingNo}`
     if (!store.userInfo.accessToken) return '/login'
     if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
   }

@@ -50,8 +50,12 @@ import VoteMain from '@/components/meeting/home/MeetingMain.vue'
 import TimelineMain from '@/components/meeting/home/TimelineMain.vue'
 import MemberMain from '@/components/meeting/home/MemberMain.vue'
 
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
+const route = useRoute()
+
+// param
+const meetingNo = route.params.meetingNo;
 </script>
 
 <style>
