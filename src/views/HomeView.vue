@@ -7,7 +7,7 @@
         <PageLoading width="45px" />
       </div>
       <div id="calendar"></div>
-      <h5 class="pt-10">나의 모임</h5>
+      <h2 class="pt-10">나의 모임</h2>
 
       <div
         class="meeting-list pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4"

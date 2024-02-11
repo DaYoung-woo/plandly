@@ -1,5 +1,5 @@
 <template>
-  <h5 class="pt-10 text-2xl text-left">타임라인</h5>
+  <h2 class="pt-10 text-2xl text-left">타임라인</h2>
   <hr class="mt-1" />
 
   <p class="pt-5 text-xl text-left pb-4">1일차</p>

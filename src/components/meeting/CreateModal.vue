@@ -13,7 +13,7 @@
 
     <div class="mt-10 pb-10">
       <form>
-        <h5 class="mb-2">모임 제목</h5>
+        <h2 class="mb-2">모임 제목</h2>
         <input
           type="text"
           v-model="name"
@@ -22,7 +22,7 @@
         />
         <p class="text-right">{{ name.length }}/24</p>
 
-        <h5 class="pt-5 pb-1">모임 설명</h5>
+        <h2 class="pt-5 pb-1">모임 설명</h2>
         <textarea
           v-model="description"
           class="border border-slate-300 w-full px-4 py-3"
@@ -30,7 +30,7 @@
         />
         <p class="text-right">{{ description.length }}/24</p>
 
-        <h5 class="pt-5 mb-2">모임 비밀번호 설정</h5>
+        <h2 class="pt-5 mb-2">모임 비밀번호 설정</h2>
         <input
           type="password"
           v-model="password"
@@ -38,7 +38,7 @@
           class="border border-slate-300 w-full px-4 py-3"
         />
 
-        <h5 class="pt-9 pb-1">대표 프로필 이미지</h5>
+        <h2 class="pt-9 pb-1">대표 프로필 이미지</h2>
         <span class="img-desc">모임을 대표할 수 있는 사진을 등록해주세요.</span>
         <div class="flex mt-3">
           <label for="upload-image">
@@ -127,7 +127,7 @@ const submitForm = () => {
     padding: 5px 10px;
   }
 
-  h5 {
+  h2 {
     color: #000;
     font-family: Noto Sans KR;
     font-size: 16px;

@@ -47,7 +47,7 @@ const router = createRouter({
         { path: '', component: MeetingHome, name: 'MeetingHome' },
         { path: 'detail', component: MeetingDetail, name: 'MeetingDetail' }
       ],
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: false }
     }
   ]
 })

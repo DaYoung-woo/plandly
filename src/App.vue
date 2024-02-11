@@ -42,10 +42,5 @@ main {
 	}
 }
 
-h6 {
-	font-size: 30px;
-	font-style: normal;
-	font-weight: 700;
-	line-height: normal;
-}
+
 </style>
