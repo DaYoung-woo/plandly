@@ -3,7 +3,11 @@
     <h2>게시판</h2>
     <IconMore />
   </div>
-  <div class="mt-5 p-5 board-box">
+
+  <div class="no-data-box mt-5" v-if="!boardList.length">
+    생성된 게시글이 없습니다. 게시글을 생성해보세요!
+  </div>
+  <div class="mt-5 p-5 board-box" v-else>
     <div class="board-area">
       <div>
         <h4>공지 타이틀</h4>
@@ -29,4 +33,9 @@
 import IconMore from '@/assets/img/common/icon_more.svg'
 // 채팅 아이콘
 import IconChat from '@/assets/img/common/icon_chat.svg'
+
+// props
+defineProps<{
+  boardList: Array<boolean>
+}>()
 </script>

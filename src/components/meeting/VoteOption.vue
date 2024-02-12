@@ -12,10 +12,7 @@
             <a href="#">구글 지도로 바로가기</a>
           </div>
         </div>
-
-        <div class="checkbox-area">
-          <input type="checkbox" />
-        </div>
+        <input type="checkbox" />
       </div>
     </div>
   </label>

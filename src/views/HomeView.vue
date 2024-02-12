@@ -69,7 +69,6 @@ let showLoading = ref(true)
 
 const apiUrl = import.meta.env.VITE_APP_API_URL
 
-let loadCount = ref(false)
 let currentMonth = ref(new Date().getMonth() + 1)
 let myCalendarList: myDateInfo[] = reactive([])
 const meetings: meeting[] = reactive([])
@@ -80,6 +79,7 @@ const calendarOptions = reactive({
   plugins: [interactionPlugin, dayGridPlugin],
   initialView: 'dayGridMonth',
   weekends: true,
+  fixedWeekCount: false,
   contentHeight: 850,
   //titleFormat: {year: "numeric", month: 'numeric'},
   titleFormat: function (date) {
