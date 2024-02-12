@@ -4,9 +4,15 @@
     <IconMore />
   </div>
 
-  <div class="no-data-box mt-5" v-if="!boardList.length">
-    생성된 게시글이 없습니다. 게시글을 생성해보세요!
+  <!-- 게시글이 없는 경우 -->
+  <div class="no-data-box mt-5 py-12" v-if="!boardList.length">
+    생성된 게시글이 없습니다. 게시글을 생성해보세요!{{ meetingNo }}
+    <router-link :to="`/meeting/${meetingNo}/board/0`">
+      <button class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm mt-4">게시글 추가</button>
+    </router-link>
   </div>
+
+  <!-- 게시글이 있는 경우 -->
   <div class="mt-5 p-5 board-box" v-else>
     <div class="board-area">
       <div>
@@ -19,7 +25,7 @@
       <div class="user-info">
         <div class="profile"></div>
         <div class="text ml-1">
-          <div>이준아</div>
+          <p>이준아</p>
           <span>16시간 전</span>
         </div>
       </div>
@@ -33,6 +39,14 @@
 import IconMore from '@/assets/img/common/icon_more.svg'
 // 채팅 아이콘
 import IconChat from '@/assets/img/common/icon_chat.svg'
+
+// 라우터
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
+// param
+const meetingNo = route.params.meetingNo as string
+
 
 // props
 defineProps<{

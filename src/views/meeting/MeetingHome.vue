@@ -48,9 +48,12 @@
   <div class="text-center">
     <!-- 게시판 -->
     <BoardMain :boardList="[]"/>
+    <!-- 투표 -->
     <VoteMain :voteList="[]"/>
+    <!-- 타임라인 -->
     <TimelineMain v-if="false"/>
-    <MemberMain />
+    <!-- 멤버 -->
+    <MemberMain :memberList="[]"/>
   </div>
 </template>
 

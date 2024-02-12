@@ -2,9 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 import MeetingView from '@/views/MeetingView.vue'
+import SimpleFrame from '@/views/SimpleFrame.vue'
 import MeetingHome from '@/views/meeting/MeetingHome.vue'
 import MeetingDetail from '@/views/meeting/MeetingDetail.vue'
 import MeetingBoardDetail from '@/views/meeting/board/DetailForm.vue'
+import MeetingBoardCreate from '@/views/meeting/board/CreateForm.vue'
 import LoginView from '@/views/LoginView.vue'
 import loginSettingView from '@/views/LoginSettingView.vue'
 import KakaoLogin from '@/views/KakaoLogin.vue'
@@ -54,9 +56,19 @@ const router = createRouter({
     {
       path: '/meeting/:meetingNo/board/:boardNo',
       name: 'board',
-      component: MeetingBoardDetail,
-      meta: { requiresAuth: false }
-    }
+      component: SimpleFrame,
+      meta: { requiresAuth: false },
+      children: [
+        { path: '', component: MeetingBoardCreate, name: 'MeetingBoardCreate' },
+        { path: 'detail', component: MeetingBoardDetail, name: 'MeetingBoardDetail' },
+      ],
+    },
+    // {
+    //   path: '/meeting/:meetingNo/board/:boardNo/view',
+    //   name: 'board',
+    //   component: MeetingBoardDetail,
+    //   meta: { requiresAuth: false }
+    // }
   ]
 })
 

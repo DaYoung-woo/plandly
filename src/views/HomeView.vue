@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="no-data-box mt-2" v-if="!meetings.length">
+      <div class="no-data-box mt-2 py-12" v-if="!meetings.length">
         생성된 모임이 없습니다. 모임을 생성해보세요!
       </div>
     </div>

@@ -4,8 +4,9 @@
     <IconMore />
   </div>
 
-  <div class="no-data-box mt-5" v-if="!voteList.length">
+  <div class="no-data-box mt-5 py-12" v-if="!voteList.length">
     생성된 투표가 없습니다. 투표를 생성해보세요!
+    <button class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm mt-4">투표 추가</button>
   </div>
   <div class="mt-5 vote-box active" v-else>
     <div class="flex justify-between">
