@@ -1,73 +1,55 @@
 <template>
-	<h5 class="text-2xl text-left pt-10">게시판</h5>
-	<div class="mt-5 p-5 border notice-box">
-		<div class="flex justify-between">
-			<div>
-				<h4 class="text-xl text-left">공지 타이틀</h4>
-				<div class="desc text-left">
-					공지의 내용. 공지가 아니라도 메모로 남기고 싶은 것들을 남길 수 있음.
-				</div>
-			</div>
-			<div class="bg-slate-200 w-32 flex items-center justify-center">사진</div>
-		</div>
-		<div class="detail">
-			<div
-				class="inline-block h-8 w-8 rounded-full ring-2 ring-slate-200 bg-slate-200 flex items-center text-center mr-2"
-			>
-				작성자
-			</div>
-			<span class="bg-slate-200 flex items-center px-2 mr-2"
-				>작성자 닉네임</span
-			>
-			<span class="bg-slate-200 flex items-center px-2 mr-2">7시간 전</span>
-			<span class="bg-slate-200 flex items-center px-2">댓글 20개</span>
-		</div>
-	</div>
+  <div class="mt-20 mx-4 flex items-center justify-between">
+    <h2>게시판</h2>
+    <IconMore />
+  </div>
 
-	<div class="mt-5 p-5 border notice-box">
-		<div>
-			<div>
-				<h4 class="text-xl text-left">공지 타이틀</h4>
-				<div class="desc text-left">
-					공지의 내용. 공지가 아니라도 메모로 남기고 싶은 것들을 남길 수 있음.
-				</div>
-			</div>
-		</div>
-		<div class="detail">
-			<div
-				class="inline-block h-8 w-8 rounded-full ring-2 ring-slate-200 bg-slate-200 flex items-center text-center mr-2"
-			>
-				작성자
-			</div>
-			<span class="bg-slate-200 flex items-center px-2 mr-2"
-				>작성자 닉네임</span
-			>
-			<span class="bg-slate-200 flex items-center px-2 mr-2">7시간 전</span>
-			<span class="bg-slate-200 flex items-center px-2">댓글 20개</span>
-		</div>
-	</div>
+  <!-- 게시글이 없는 경우 -->
+  <div class="no-data-box mt-5 py-12" v-if="!boardList.length">
+    생성된 게시글이 없습니다. 게시글을 생성해보세요!{{ meetingNo }}
+    <router-link :to="`/meeting/${meetingNo}/board/0`">
+      <button class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm mt-4">게시글 추가</button>
+    </router-link>
+  </div>
+
+  <!-- 게시글이 있는 경우 -->
+  <div class="mt-5 p-5 board-box" v-else>
+    <div class="board-area">
+      <div>
+        <h4>공지 타이틀</h4>
+        <span> 조사를 한번 해봤는데 카드를 배치하면 너무 예쁘더라구요ㅎㅎ </span>
+      </div>
+      <div class="img"></div>
+    </div>
+    <div class="user-area">
+      <div class="user-info">
+        <div class="profile"></div>
+        <div class="text ml-1">
+          <p>이준아</p>
+          <span>16시간 전</span>
+        </div>
+      </div>
+      <button class="chat-btn mt-2"><IconChat /> <span>0</span></button>
+    </div>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// 더보기 아이콘
+import IconMore from '@/assets/img/common/icon_more.svg'
+// 채팅 아이콘
+import IconChat from '@/assets/img/common/icon_chat.svg'
 
-<style lang="scss">
-.notice-box {
-	min-height: 200px;
-	.desc {
-		font-size: 12px;
-		padding-top: 20px;
-		min-height: 100px;
-	}
-	.detail {
-		font-size: 10px;
-		display: flex;
-	}
-}
+// 라우터
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
-.board-item {
-	.detail {
-		font-size: 10px;
-		display: flex;
-	}
-}
-</style>
+// param
+const meetingNo = route.params.meetingNo as string
+
+
+// props
+defineProps<{
+  boardList: Array<boolean>
+}>()
+</script>

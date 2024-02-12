@@ -3,7 +3,6 @@
   <Gnb />
   <main class="meeting-main">
     <div style="max-width: 1024px; margin: 0 auto">
-      <div class="thumb" />
       <RouterView />
     </div>
   </main>

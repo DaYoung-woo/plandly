@@ -1,24 +1,19 @@
 <template>
   <label>
-    <div class="mt-2 mb-5 option-box">
-      <div class="flex items-center justify-between">
-        <div class="bg-slate-200 w-20 h-20 flex items-center justify-center text-sm">이미지</div>
-        <div class="meeting-home-detail">
+    <div class="my-5 vote-option-box">
+      <div class="img"></div>
+      <div class="option-detail">
+        <div>
           <p>1992 덮밥&짜글이 강남본점</p>
           항목에 대한 설명이 있다면 여기에
-          <div class="location">
-            <span class="flex">
-              <IconLocation/>
-              강남구 강남대로 84길 6 1층
-            </span>
+          <div class="flex items-center">
+            <IconLocation class="mr-1" />
+            <span>강남구 강남대로 84길 6 1층</span>
             <a href="#">구글 지도로 바로가기</a>
           </div>
         </div>
+        <input type="checkbox" />
       </div>
-      <div class="checkbox-area" v-if="checkbox">
-        <input type="radio" class="checked:bg-blue-500" />
-      </div>
-      <div class="count-area" v-else>3/5</div>
     </div>
   </label>
 </template>
@@ -31,19 +26,6 @@ defineProps<{
 </script>
 
 <style lang="scss">
-.vote-box {
-  padding: 20px;
-  .option-box {
-    display: flex;
-    height: 70px;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 4px;
-    .checkbox-area {
-      width: 30px;
-    }
-  }
-}
 .meeting-home-detail {
   padding: 5px;
   text-align: left;

@@ -2,8 +2,10 @@ import axios from 'axios'
 import { useUserStore } from '@/stores/user.js'
 import { useRouter } from 'vue-router'
 import { tokenRefresh } from '@/axios/api'
+
+const baseURL = import.meta.env.VITE_APP_API_URL
 const instance = axios.create({
-  baseURL: 'https://plandly-haeju-min.koyeb.app'
+  baseURL
 })
 
 instance.interceptors.request.use(

@@ -1,25 +1,6 @@
 import { type userInfo, type meeingInfo } from '@/types/Default'
 import instance from '@/axios/Axios'
 
-export default {
-  login: (param: userInfo) => {
-    return instance.post('/login', param)
-  },
-  kakaoLogin: (code: string) => {
-    return instance.get(`/api/auth/ssoKakao?code=${code}`)
-  },
-  setEmail: (param: object) => {
-    return instance.post(`/api/auth/update/userInfo`, param)
-  },
-  createMeeting: (param: FormData) => {
-    return instance.post(`/api/create/meeting`, param, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-  }
-}
-
 export const login = (param: userInfo) => {
   return instance.post('/login', param)
 }
@@ -40,4 +21,14 @@ export const createMeeting = (param: FormData) => {
 //https://www.notion.so/API-8346fc26cffa49eea7af0ab2926e69f9
 export const tokenRefresh = (param: Pick<userInfo, 'accessToken' | 'refreshToken'>) => {
   return instance.post(`/api/auth/refresh`, param)
+}
+
+type meetingParam = {
+  mId: string
+  uId: string
+}
+
+// 모임 홈 화면 - 모임 정보 조회 API
+export const getMeetingInfo = (param: meetingParam) => {
+  return instance.post(`/api/meeting/home`, param)
 }

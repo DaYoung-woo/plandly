@@ -1,36 +1,35 @@
 <template>
-	<PageLoading width="60px" />
+  <PageLoading width="60px" />
 </template>
 
 <script setup lang="ts">
-import PageLoading from '@/components/common/PageLoading.vue';
-import api from '@/axios/api';
+import PageLoading from '@/components/common/PageLoading.vue'
+import { kakaoLogin } from '@/axios/api'
 
-import { useRoute, useRouter } from 'vue-router';
-const route = useRoute();
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
 
-import { useUserStore } from '@/stores/user.js';
-const store = useUserStore();
-import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/user.js'
+const store = useUserStore()
+import { onMounted } from 'vue'
 onMounted(() => {
-	if (!route.query.code) return;
-	kakaoLogin();
-});
-const router = useRouter();
+  if (!route.query.code) return
+  loginWithKakao()
+})
+const router = useRouter()
 
-const kakaoLogin = () => {
-	const { code } = route.query;
-	api
-		.kakaoLogin(String(code))
-		.then(({ data }) => {
-			store.setTokenKaKao(data, 'kakao');
-			const { email, displayName } = data;
+const loginWithKakao = () => {
+  const { code } = route.query
+  kakaoLogin(String(code))
+    .then(({ data }) => {
+      store.setTokenKaKao(data, 'kakao')
+      const { email, displayName } = data
 
-			if (!email || !displayName) router.push('login_setting');
-			else return router.push('home');
-		})
-		.catch(e => {
-			alert(e);
-		});
-};
+      if (!email || !displayName) router.push('login_setting')
+      else return router.push('home')
+    })
+    .catch((e) => {
+      alert(e)
+    })
+}
 </script>
