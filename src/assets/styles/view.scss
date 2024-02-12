@@ -80,8 +80,12 @@ h5 {
   transform: rotate(90deg);
 }
 
-.notice-box {
-  .notice-area {
+.board-box {
+  border: 1px solid #c7c7c7;
+  padding: 28px;
+  border-radius: 20px;
+  min-height: 200px;
+  .board-area {
     display: flex;
     justify-content: space-between;
     min-height: 100px;
@@ -93,12 +97,6 @@ h5 {
     span {
       font-size: 14px;
       text-align: left;
-    }
-    .img {
-      background-color: #ddd;
-      width: 85px;
-      height: 85px;
-      border-radius: 20px;
     }
   }
 
@@ -119,10 +117,12 @@ h5 {
   }
   .text {
     text-align: left;
+    display: grid;
     div {
       font-size: 10px;
       font-weight: 700;
       line-height: 10px;
+      margin-bottom: 2px;
     }
     span {
       font-size: 10px;
@@ -143,4 +143,63 @@ h5 {
     font-size: 10px;
     line-height: 10px;
   }
+}
+
+.vote-box {
+  border: 1px solid #c7c7c7;
+  border-radius: 20px;
+  padding: 28px;
+  .option-box {
+    display: flex;
+    height: 70px;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 4px;
+    .checkbox-area {
+      width: 30px;
+    }
+  }
+
+  .vote-option-box {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    .img {
+      background-color: #ddd;
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+    }
+    .option-detail {
+      display: flex;
+      text-align: left;
+      justify-content: space-between;
+      font-size: 12px;
+      padding-left: 16px;
+      p {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      span {
+        color: #7d7d7d;
+        font-size: 10px;
+        line-height: 10px;
+      }
+      a {
+        color: #7d7d7d;
+        font-size: 10px;
+        line-height: 10px;
+        margin-left: 10px;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.font-green-info {
+  color: #00785b;
+  font-size: 14px;
+}
+
+input[type='checkbox'] {
+  background-color: #00785b;
 }

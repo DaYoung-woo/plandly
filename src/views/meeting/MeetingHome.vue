@@ -36,9 +36,7 @@
   <div class="text-center">
     <BoardMain />
     <VoteMain />
-    <button class="border px-5 py-2 mt-5" @click="router.push('meeting/detail')">
-      투표 더보기
-    </button>
+
     <TimelineMain />
     <button class="border px-5 py-2 mt-5" @click="router.push('meeting/detail')">
       타임라인 더보기
@@ -56,7 +54,7 @@ import { getMeetingInfo } from '@/axios/api'
 // 게시판
 import BoardMain from '@/components/meeting/home/BoardMain.vue'
 // 투표
-import VoteMain from '@/components/meeting/home/MeetingMain.vue'
+import VoteMain from '@/components/meeting/home/VoteMain.vue'
 // 타임라인
 import TimelineMain from '@/components/meeting/home/TimelineMain.vue'
 // 멤버
