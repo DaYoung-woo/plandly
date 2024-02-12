@@ -134,8 +134,9 @@ const meetings: meeting[] = reactive([])
 // 소캣 설정
 import { Client } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
+const apiUrl = import.meta.env.VITE_APP_API_URL
 let stompClient: Client
-const socket = new SockJS('https://plandly-haeju-min.koyeb.app/ws') // 소켓 서버 URL에 맞게 수정
+const socket = new SockJS(`${apiUrl}/ws`) // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket })
 
 // 캘린더의 현재 달 변경

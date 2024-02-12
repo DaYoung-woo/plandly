@@ -72,7 +72,7 @@ const apiUrl = import.meta.env.VITE_APP_API_URL
 let currentMonth = ref(new Date().getMonth() + 1)
 let myCalendarList: myDateInfo[] = reactive([])
 const meetings: meeting[] = reactive([])
-const socket = new SockJS('https://plandly-haeju-min.koyeb.app/ws') // 소켓 서버 URL에 맞게 수정
+const socket = new SockJS(`${apiUrl}/ws`) // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket })
 
 const calendarOptions = reactive({
