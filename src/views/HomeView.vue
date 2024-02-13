@@ -123,7 +123,7 @@ const calendarOptions = reactive({
     prev: {
       click: function () {
         calendar.prev()
-        const month = calendar.getDate().getMonth()
+        const month = calendar.getDate().getMonth() + 1
         if (month === 0) changeMonth(12)
         else changeMonth(month)
       }
@@ -132,9 +132,19 @@ const calendarOptions = reactive({
       click: function () {
         calendar.next()
         const month = calendar.getDate().getMonth() + 2
+        if (month === 0) changeMonth(12)
         changeMonth(month)
       }
     }
+  },
+  datesSet: function () {
+    myCalendarList.forEach((el: myDateInfo) => {
+      const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
+      if (td) {
+        td.children[0].style.backgroundColor = '#D5E6E2'
+        td.children[0].style.color = '#00785B'
+      }
+    })
   }
 })
 
@@ -179,7 +189,7 @@ const wsSubscribe = () => {
       if (JSON.parse(body)) {
         Object.assign(myCalendarList, JSON.parse(body))
         console.log(myCalendarList)
-        JSON.parse(body).forEach((el: myDateInfo) => {
+        myCalendarList.forEach((el: myDateInfo) => {
           const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
           if (td) {
             td.children[0].style.backgroundColor = '#D5E6E2'
@@ -202,7 +212,7 @@ const wsSubscribe = () => {
     stompClient.subscribe(`/topic/myMeeting/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       if (!list) return
-      list.forEach((el: meetingDetail) => {
+      list.forEach((el: meetingDateInfo) => {
         calendar.addEvent({
           title: el.name,
           start: el.dates[0],
@@ -221,6 +231,8 @@ const wsSubscribe = () => {
 }
 
 const changeMonth = (month: number): void => {
+  currentMonth.value = month
+  console.log(month)
   stompClient.publish({
     destination: '/myCalendar.view',
     body: JSON.stringify({

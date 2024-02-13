@@ -24,8 +24,8 @@ export const tokenRefresh = (param: Pick<userInfo, 'accessToken' | 'refreshToken
 }
 
 type meetingParam = {
-  mId: string
-  uId: string
+  mid: string
+  uid: string
 }
 
 // 모임 홈 화면 - 모임 정보 조회 API

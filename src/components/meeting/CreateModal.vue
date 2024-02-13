@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { createMeeting } from '@/axios/api'
 import { useUserStore } from '@/stores/user.js'
 import IconClose from '@/assets/img/common/icon_close.svg'
