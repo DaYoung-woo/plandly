@@ -57,6 +57,9 @@
 </template>
 
 <script setup lang="ts">
+// axios 타입
+import { AxiosError, type AxiosResponse } from 'axios'
+// vue
 import { ref, reactive } from 'vue'
 // api
 import { getMeetingInfo } from '@/axios/api'
@@ -79,8 +82,9 @@ import IconUser from '@/assets/img/common/icon_user.svg'
 import IconArrowLeft from '@/assets/img/common/icon_arrow_left.svg'
 
 // 라우터
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
+const router = useRouter()
 
 // 스토어
 import { useUserStore } from '@/stores/user.js'
@@ -98,7 +102,6 @@ onMounted(() => {
 
 // 모임 정보
 const meeting = ref({})
-
 // 모임 홈 정보 조회
 const loadMeetingInfo = async () => {
   try {
@@ -106,11 +109,12 @@ const loadMeetingInfo = async () => {
       mid,
       uid: store.userInfo.uid
     }
-    const { data } = await getMeetingInfo(param)
+    const { data }: AxiosResponse<meetingDetail> = await getMeetingInfo(param)
     meeting.value = { ...data }
-    console.log(data)
-  } catch (e) {
-    console.log(e)
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err?.response?.status === 400) router.push(`/meeting/${mid}/join`)
+    }
   }
 }
 
@@ -125,9 +129,7 @@ const changeCalendarOpen = (state: boolean) => {
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { DateClickArg } from 'fullcalendar-scheduler/index.js'
 let calendar: Calendar
-let scheduleList: string[] = []
 let currentMonth = ref(new Date().getMonth() + 1)
 let myCalendarList: myDateInfo[] = reactive([])
 const meetings: meeting[] = reactive([])

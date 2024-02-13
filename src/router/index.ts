@@ -7,6 +7,7 @@ import MeetingHome from '@/views/meeting/MeetingHome.vue'
 import MeetingDetail from '@/views/meeting/MeetingDetail.vue'
 import MeetingBoardDetail from '@/views/meeting/board/DetailForm.vue'
 import MeetingBoardCreate from '@/views/meeting/board/CreateForm.vue'
+import MeetingJoin from '@/views/meeting/board/MeetingJoin.vue'
 import LoginView from '@/views/LoginView.vue'
 import loginSettingView from '@/views/LoginSettingView.vue'
 import KakaoLogin from '@/views/KakaoLogin.vue'
@@ -49,39 +50,48 @@ const router = createRouter({
       component: MeetingView,
       children: [
         { path: '', component: MeetingHome, name: 'MeetingHome' },
-        { path: 'detail', component: MeetingDetail, name: 'MeetingDetail' },
+        { path: 'detail', component: MeetingDetail, name: 'MeetingDetail' }
       ],
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/meeting/:meetingNo/board/:boardNo',
       name: 'board',
       component: SimpleFrame,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
       children: [
         { path: '', component: MeetingBoardCreate, name: 'MeetingBoardCreate' },
-        { path: 'detail', component: MeetingBoardDetail, name: 'MeetingBoardDetail' },
-      ],
+        { path: 'detail', component: MeetingBoardDetail, name: 'MeetingBoardDetail' }
+      ]
     },
-    // {
-    //   path: '/meeting/:meetingNo/board/:boardNo/view',
-    //   name: 'board',
-    //   component: MeetingBoardDetail,
-    //   meta: { requiresAuth: false }
-    // }
+    {
+      path: '/meeting/:meetingNo/join',
+      name: 'meetingJoin',
+      component: SimpleFrame,
+      children: [{ path: '', component: MeetingJoin, name: 'MeetingJoin' }],
+      meta: { requiresAuth: true }
+    }
   ]
 })
 
 router.beforeEach((to) => {
-  // ✅ This will work make sure the correct store is used for the
-  // current running app
+  // 스토어
   const store = useUserStore()
 
- 
+  // 로그인 권한이 필요한 경우
   if (to.meta.requiresAuth) {
+    // 로그인된 유저가 로그인 화면 진입할 경우
     if (!!store.userInfo.accessToken && to.path === '/login') return '/home'
-    if (!store.userInfo.accessToken && to.params.meetingNo) return `/login?state=${to.params.meetingNo}`
+
+    // 로그인 안한 유저가 미팅관련 화면에 진입할 경우
+    if (!store.userInfo.accessToken && to.params.meetingNo) {
+      return `/login?state=${to.params.meetingNo}`
+    }
+
+    // 로그인 안한 경우
     if (!store.userInfo.accessToken) return '/login'
+
+    // 로그인되어 있고 이메일/닉네임을 세팅 안 한 경우
     if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
   }
 })
