@@ -262,7 +262,7 @@ const wsSubscribe = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .meeting-avartar {
   width: 100px;
   height: 100px;
