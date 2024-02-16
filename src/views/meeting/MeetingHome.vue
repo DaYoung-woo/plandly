@@ -14,10 +14,10 @@
   <div class="meeting-avartar"></div>
 
   <div>
-    <h1 class="pt-5">모임 타이틀</h1>
-    <div class="desc pt-1">모임에 대한 간단한 설명</div>
+    <h1 class="pt-5">{{ meeting.name }}</h1>
+    <div class="desc pt-1">{{ meeting.description }}</div>
   </div>
-  
+
   <!-- 다음 모임 정보 -->
   <div class="meeting-calendar-area" v-if="!calendarOpen">
     <div class="flex items-center">
@@ -40,24 +40,26 @@
 
   <!-- 캘린더 영역 -->
   <div v-else>
-    <div id="calendar" class="mt-10" ></div>
-    <IconArrowLeft/>
+    <div id="calendar" class="mt-10"></div>
+    <IconArrowLeft />
   </div>
-  
 
   <div class="text-center">
     <!-- 게시판 -->
-    <BoardMain :boardList="[]"/>
+    <BoardMain :boardList="[]" />
     <!-- 투표 -->
-    <VoteMain :voteList="[]"/>
+    <VoteMain :voteList="[]" />
     <!-- 타임라인 -->
-    <TimelineMain v-if="false"/>
+    <TimelineMain v-if="false" />
     <!-- 멤버 -->
-    <MemberMain :memberList="[]"/>
+    <MemberMain :memberList="[]" />
   </div>
 </template>
 
 <script setup lang="ts">
+// axios 타입
+import { AxiosError, type AxiosResponse } from 'axios'
+// vue
 import { ref, reactive } from 'vue'
 // api
 import { getMeetingInfo } from '@/axios/api'
@@ -76,40 +78,43 @@ import IconShare from '@/assets/img/common/icon_share.svg'
 import IconMore from '@/assets/img/common/icon_more.svg'
 // 인간 아이콘
 import IconUser from '@/assets/img/common/icon_user.svg'
-  // < 아이콘
-import IconArrowLeft from "@/assets/img/common/icon_arrow_left.svg"
+// < 아이콘
+import IconArrowLeft from '@/assets/img/common/icon_arrow_left.svg'
 
 // 라우터
-import { useRouter, useRoute } from 'vue-router'
-const router = useRouter()
+import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
+const router = useRouter()
 
 // 스토어
 import { useUserStore } from '@/stores/user.js'
 const store = useUserStore()
 
 // param
-const mId = route.params.mId as string
+const mid = route.params.meetingNo as string
 
 // 마운트
 import { onMounted } from 'vue'
 onMounted(() => {
-  //loadMeetingInfo()
+  loadMeetingInfo()
   stompClient.activate()
- 
 })
 
+// 모임 정보
+const meeting = ref({})
 // 모임 홈 정보 조회
 const loadMeetingInfo = async () => {
   try {
     const param = {
-      mId,
-      uId: store.userInfo.uid
+      mid,
+      uid: store.userInfo.uid
     }
-    const res = getMeetingInfo(param)
-    console.log(res)
-  } catch (e) {
-    console.log(e)
+    const { data }: AxiosResponse<meetingDetail> = await getMeetingInfo(param)
+    meeting.value = { ...data }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err?.response?.status === 400) router.push(`/meeting/${mid}/join`)
+    }
   }
 }
 
@@ -124,9 +129,7 @@ const changeCalendarOpen = (state: boolean) => {
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { DateClickArg } from 'fullcalendar-scheduler/index.js'
 let calendar: Calendar
-let scheduleList: string[] = []
 let currentMonth = ref(new Date().getMonth() + 1)
 let myCalendarList: myDateInfo[] = reactive([])
 const meetings: meeting[] = reactive([])
@@ -241,7 +244,7 @@ const wsSubscribe = () => {
     stompClient.subscribe(`/topic/myMeeting/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       if (!list) return
-      list.forEach((el: meetingDetail) => {
+      list.forEach((el: meetingDateInfo) => {
         calendar.addEvent({
           title: el.name,
           start: el.dates[0],
@@ -257,11 +260,9 @@ const wsSubscribe = () => {
     calendar.render()
   }
 }
-
-
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .meeting-avartar {
   width: 100px;
   height: 100px;
@@ -302,5 +303,4 @@ const wsSubscribe = () => {
   background-color: #ffffff;
   border-radius: 15px;
 }
-
 </style>

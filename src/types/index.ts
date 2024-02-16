@@ -1,4 +1,3 @@
-// 타입
 type DateInfo = {
   calendarId: number
   event: string
@@ -6,21 +5,40 @@ type DateInfo = {
   uid: string
 }
 
-type meetingInfo = {
-  name: string
-  mId: number
-}
-
 type myDateInfo = {
   cId: string
   myDate: string
 }
 
-interface meeting extends meetingInfo {
+interface meeting {
+  name: string
+  mId: number
   updateDate: string
   mainPicture: string
 }
 
-interface meetingDetail extends meetingInfo {
+interface meetingDateInfo {
+  name: string
+  mId: number
   dates: string[]
+}
+
+interface meetingDetail {
+  name: string
+  description: string
+  updateDate: Date
+  createAuth: number
+  adminAuth: number
+  editAuth: number
+  dateList: Date[]
+  uid: number
+  mid: number
+}
+
+interface CustomError extends Error {
+  response?: {
+    data: any
+    status: number
+    headers: string
+  }
 }

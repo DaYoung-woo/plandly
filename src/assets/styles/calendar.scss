@@ -1,0 +1,121 @@
+@media (min-width: 735px) {
+  .fc-theme-standard td,
+  .fc-theme-standard th {
+    border: none;
+    border-radius: 30px;
+  }
+
+  .fc-theme-standard .fc-scrollgrid {
+    border: none;
+    border-radius: 30px;
+  }
+
+  td.fc-day {
+    padding: 2px;
+    .fc-daygrid-day-frame {
+      border-radius: 20px;
+    }
+  }
+
+  .fc .fc-daygrid-day-top {
+    flex-direction: row;
+    margin: 8px 0px 0px 12px;
+    font-size: 14px;
+  }
+}
+
+.fc .fc-toolbar-title {
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.fc .fc-button,
+.fc .fc-button-primary:disabled {
+  background-color: #fff;
+  color: #00785b;
+  border-radius: 25.5px;
+  border: 1px solid #00785b;
+  opacity: 1;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 11px 17px;
+}
+
+.fc .fc-button:hover,
+.fc .fc-button-primary:disabled:hover {
+  background-color: #00785b;
+  color: #fff;
+  border-color: #00785b;
+}
+
+.fc .fc-button:active,
+.fc .fc-button-primary:disabled:active {
+  background-color: #000;
+  color: #fff;
+}
+
+.fc-icon.fc-icon-chevron-left::before {
+  width: 15px;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+.fc-dayGridMonth-view {
+  background-color: #f4f6f6;
+  border-radius: 15px;
+}
+
+.fc-daygrid-day-frame {
+  background: #fff;
+}
+.fc-day-other .fc-daygrid-day-frame {
+  background: #f4f6f6;
+}
+.fc-col-header-cell.fc-day-sun .fc-col-header-cell-cushion {
+  color: #ea0000;
+}
+.fc-day-sun .fc-daygrid-day-number {
+  color: #ea0000;
+}
+.fc-col-header-cell.fc-day-sat .fc-col-header-cell-cushion {
+  color: #0035f0;
+}
+
+.fc .fc-button .fc-icon {
+  font-size: 15px;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: transparent;
+  color: #00785b;
+  .fc-daygrid-day-top {
+    a {
+      background-color: #00785b;
+      border-radius: 100px;
+      width: 31px;
+      height: 31px;
+      text-align: center;
+      color: #fff;
+    }
+  }
+}
+
+.fc-daygrid-day-frame {
+  cursor: pointer;
+}
