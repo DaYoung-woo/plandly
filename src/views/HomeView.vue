@@ -2,7 +2,7 @@
   <Lnb class="hidden lg:block" />
   <Gnb />
   <main>
-    <div style="max-width: 840px; margin: 0 auto">
+    <div class="home-main">
       <div class="calendar-padding" v-if="showLoading">
         <PageLoading width="45px" />
       </div>

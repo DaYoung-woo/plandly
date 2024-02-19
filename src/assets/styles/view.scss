@@ -21,38 +21,30 @@ nav {
 }
 
 main {
-  height: calc(100vh - 54px);
-  width: 100vw;
   overflow-y: scroll;
 }
 @media (min-width: 1024px) {
   main {
+    height: calc(100vh - 54px);
     width: calc(100vw - 295px);
-    max-width: 840px;
-    position: fixed;
-    top: 54px;
-    left: 295px;
+    padding: 60px 90px;
+    margin-left: 295px;
+    .home-main {
+      margin: 0 auto;
+      width: calc(100vw - 295px);
+      max-width: 840px;
+    }
   }
 }
-@media (min-width: 500px) {
-  main {
-    padding: 40px 40px;
-  }
-}
-
 @media (min-width: 800px) {
-  main {
+  main .meeting-main {
+    width: calc(100vh - 54px);
     padding: 60px 90px;
   }
 }
-
-main.meeting-main {
-  padding-top: 0px;
-  .thumb {
-    height: 200px;
-    background-color: #ddd;
-    margin-left: -90px;
-    margin-right: -90px;
+@media (min-width: 500px) {
+  main .meeting-main {
+    padding: 40px 40px;
   }
 }
 
