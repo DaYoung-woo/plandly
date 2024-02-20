@@ -62,7 +62,7 @@ import { AxiosError, type AxiosResponse } from 'axios'
 // vue
 import { ref, reactive } from 'vue'
 // api
-import { getMeetingInfo } from '@/axios/api'
+import { getMeetingInfo, meetingInviting, meetingInvitingCheck } from '@/axios/api'
 // 게시판
 import BoardMain from '@/components/meeting/home/BoardMain.vue'
 // 투표
@@ -96,9 +96,44 @@ const mid = route.params.meetingNo as string
 // 마운트
 import { onMounted } from 'vue'
 onMounted(() => {
+  checkMeetingAuth()
+})
+
+// 모임 권한 확인
+const checkMeetingAuth = async () => {
+  if (!store.userInfo.accessToken) router.push(`/meeting/${mid}/join`)
+  try {
+    const { data }: AxiosResponse<meetingAuth> = await meetingInvitingCheck(mid, store.userInfo.uid)
+    if (data.code === 1) loadDefaultApis()
+    if (data.password === 'Y') router.push(`/meeting/${mid}/join`)
+    if (data.password === 'N') router.push(`/meeting/${mid}/join`)
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      alert('모임이 존재하지 않습니다.')
+      router.back()
+    }
+  }
+}
+
+// 모임 가입
+const inviteMeeing = async () => {
+  try {
+    const param = {
+      uid: store.userInfo.uid,
+      state: mid
+    }
+    const { data }: AxiosResponse<meetingAuth> = await meetingInviting(param)
+    if (data) loadDefaultApis()
+  } catch (e) {
+    alert('에러가 발생했습니다.')
+  }
+}
+
+// 모임 정보/소켓
+const loadDefaultApis = () => {
   loadMeetingInfo()
   stompClient.activate()
-})
+}
 
 // 모임 정보
 const meeting = ref({})
@@ -112,10 +147,10 @@ const loadMeetingInfo = async () => {
       currentMonth: currentMonth.value
     }
     const { data }: AxiosResponse<meetingDetail> = await getMeetingInfo(param)
-    meeting.value = { ...data }
   } catch (err) {
     if (err instanceof AxiosError) {
-      if (err?.response?.status === 400) router.push(`/meeting/${mid}/join`)
+      alert('모임이 존재하지 않습니다.')
+      router.back()
     }
   }
 }

@@ -10,6 +10,10 @@ type myDateInfo = {
   myDate: string
 }
 
+interface apiResponse {
+  code: number
+  message: string
+}
 interface meeting {
   name: string
   mId: number
@@ -41,4 +45,14 @@ interface CustomError extends Error {
     status: number
     headers: string
   }
+}
+
+interface meetingAuth extends apiResponse {
+  password: 'Y' | 'N'
+}
+
+interface meetingInviteParam {
+  uid: string
+  state: string
+  password?: string
 }
