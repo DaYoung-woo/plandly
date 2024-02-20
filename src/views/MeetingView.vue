@@ -2,8 +2,8 @@
   <Lnb class="hidden lg:block" />
   <Gnb />
   <main>
-    <div class="home-main">
-      <div class="thumb" />
+    <div class="home-meeting-bg" />
+    <div class="home-main pt-12">
       <RouterView />
     </div>
   </main>
