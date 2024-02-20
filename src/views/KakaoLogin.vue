@@ -23,7 +23,7 @@ onMounted(() => {
 })
 
 // param
-const state = route.params.meetingNo as string
+const state = route.params.state as string
 
 // 토큰 세팅
 const loginWithKakao = () => {
