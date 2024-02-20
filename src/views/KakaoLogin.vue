@@ -22,6 +22,10 @@ onMounted(() => {
   loginWithKakao()
 })
 
+// param
+const state = route.params.meetingNo as string
+
+// 토큰 세팅
 const loginWithKakao = () => {
   const { code } = route.query
   kakaoLogin(String(code))
@@ -29,8 +33,11 @@ const loginWithKakao = () => {
       store.setTokenKaKao(data, 'kakao')
       const { email, displayName } = data
 
-      if (!email || !displayName) router.push('login_setting')
-      else return router.push('home')
+      if (!email || !displayName) router.push(`login_setting?state=${state}`)
+      else {
+        if (state) router.push(`meeting/${state}`)
+        else router.push('home')
+      }
     })
     .catch((e) => {
       alert(e)
