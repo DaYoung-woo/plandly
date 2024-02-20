@@ -30,5 +30,5 @@ type meetingParam = {
 
 // 모임 홈 화면 - 모임 정보 조회 API
 export const getMeetingInfo = (param: meetingParam) => {
-  return instance.post(`/api/meeting/home`, param)
+  return instance.post(`/api/meeting/userDate`, param)
 }

@@ -102,12 +102,14 @@ onMounted(() => {
 
 // 모임 정보
 const meeting = ref({})
-// 모임 홈 정보 조회
+
+// 모임 정보 조회
 const loadMeetingInfo = async () => {
   try {
     const param = {
       mid,
-      uid: store.userInfo.uid
+      uid: store.userInfo.uid,
+      currentMonth: currentMonth.value
     }
     const { data }: AxiosResponse<meetingDetail> = await getMeetingInfo(param)
     meeting.value = { ...data }
