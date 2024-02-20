@@ -101,12 +101,15 @@ onMounted(() => {
 
 // 모임 권한 확인
 const checkMeetingAuth = async () => {
-  if (!store.userInfo.accessToken) router.push(`/meeting/${mid}/join`)
+  if (!store.userInfo.accessToken) {
+    alert('로그인이 필요합니다.')
+    router.push(`/meeting/${mid}/join`)
+  }
   try {
     const { data }: AxiosResponse<meetingAuth> = await meetingInvitingCheck(mid, store.userInfo.uid)
     if (data.code === 1) loadDefaultApis()
     if (data.password === 'Y') router.push(`/meeting/${mid}/join`)
-    if (data.password === 'N') router.push(`/meeting/${mid}/join`)
+    if (data.password === 'N') inviteMeeing()
   } catch (err) {
     if (err instanceof AxiosError) {
       alert('모임이 존재하지 않습니다.')
