@@ -7,11 +7,8 @@
     </div>
 
     <div class="btn-area w-full">
-      <a
-        href="https://kauth.kakao.com/oauth/authorize?client_id=40fd2744b02c2e3bb1e4a8ab990e6c3e&redirect_uri=https://plandly.netlify.app/sso&response_type=code&state=0000"
-        class="flex items-center w-full kakao h-12 rounded-md px-3"
-      >
-        <img :src="kakaoLogo" alt="KakaoLogo"/>
+      <a :href="kakaoUrl" class="flex items-center w-full kakao h-12 rounded-md px-3">
+        <img :src="kakaoLogo" alt="KakaoLogo" />
         <div class="button-font">카카오로 시작하기</div>
       </a>
 
@@ -19,7 +16,7 @@
         href="https://kauth.kakao.com/oauth/authorize?client_id=40fd2744b02c2e3bb1e4a8ab990e6c3e&redirect_uri=https://plandly.netlify.app/sso&response_type=code"
         class="flex items-center w-full google h-12 rounded-md px-3 mt-5"
       >
-        <img :src="googleLogo" alt="GoogleLogo"/>
+        <img :src="googleLogo" alt="GoogleLogo" />
         <div class="button-font">구글로 시작하기</div>
       </a>
 
@@ -27,7 +24,7 @@
         href="https://kauth.kakao.com/oauth/authorize?client_id=40fd2744b02c2e3bb1e4a8ab990e6c3e&redirect_uri=https://plandly.netlify.app/sso&response_type=code"
         class="flex items-center w-full naver h-12 rounded-md px-3 mt-5"
       >
-        <img :src="naverLogo" alt="NaverLogo"/>
+        <img :src="naverLogo" alt="NaverLogo" />
         <div class="button-font">네이버로 시작하기</div>
       </a>
     </div>
@@ -39,6 +36,18 @@ import Logo from '@/assets/img/common/logo.svg'
 import kakaoLogo from '@/assets/img/login/kakao_logo.svg?url'
 import googleLogo from '@/assets/img/login/google_logo.svg?url'
 import naverLogo from '@/assets/img/login/naver_logo.svg?url'
+
+// 라우터
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
+// param
+const mid = route.params.meetingNo as string
+
+// kakao 로그인 url
+const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?client_id=40fd2744b02c2e3bb1e4a8ab990e6c3e&redirect_uri=https://plandly.netlify.app/sso&response_type=code${
+  mid ? '&state=${mid}' : ''
+}`
 </script>
 
 <style lang="scss" scoped>

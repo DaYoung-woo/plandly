@@ -6,17 +6,21 @@
 import PageLoading from '@/components/common/PageLoading.vue'
 import { kakaoLogin } from '@/axios/api'
 
+// 라우터
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
+const router = useRouter()
 
+//스토어
 import { useUserStore } from '@/stores/user.js'
 const store = useUserStore()
+
+// mount
 import { onMounted } from 'vue'
 onMounted(() => {
   if (!route.query.code) return
   loginWithKakao()
 })
-const router = useRouter()
 
 const loginWithKakao = () => {
   const { code } = route.query
