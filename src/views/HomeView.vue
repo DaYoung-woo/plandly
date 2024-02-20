@@ -72,7 +72,6 @@ let showLoading = ref(true)
 
 // 캘린더
 let calendar: Calendar
-let scheduleList: string[] = []
 
 // 내 일정 리스트
 let myCalendarList: myDateInfo[] = reactive([])
@@ -118,10 +117,8 @@ const calendarOptions = reactive({
   dateClick: function (info: DateClickArg) {
     if (myCalendarList.find((el) => el.myDate === info.dateStr)) {
       info.dayEl.children[0].style.backgroundColor = '#fff'
-      scheduleList = scheduleList.filter((el) => el !== info.dateStr)
       deleteDate(info.dateStr)
     } else {
-      scheduleList.push(info.dateStr)
       info.dayEl.children[0].style.backgroundColor = '#D5E6E2'
       addDate(info.dateStr)
     }
