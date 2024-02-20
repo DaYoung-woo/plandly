@@ -42,7 +42,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 // param
-const state = route.params.state as string
+const state = route.query.state as string
 
 // kakao 로그인 url
 const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?client_id=40fd2744b02c2e3bb1e4a8ab990e6c3e&redirect_uri=https://plandly.netlify.app/sso&response_type=code${
