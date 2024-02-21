@@ -46,7 +46,7 @@
 
   <div class="text-center">
     <!-- 게시판 -->
-    <BoardMain :boardList="[]" />
+    <BoardMain :boardList="[]" :mid="mid"/>
     <!-- 투표 -->
     <VoteMain :voteList="[]" />
     <!-- 타임라인 -->
@@ -300,6 +300,8 @@ const wsSubscribe = () => {
     calendar.render()
   }
 }
+
+
 </script>
 
 <style lang="scss" scoped>

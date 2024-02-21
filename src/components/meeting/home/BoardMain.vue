@@ -1,7 +1,7 @@
 <template>
   <div class="mt-20 mx-4 flex items-center justify-between">
     <h2>게시판</h2>
-    <IconMore />
+    <IconMore class="rotate-180" @click="moveVoteList"/>
   </div>
 
   <!-- 게시글이 없는 경우 -->
@@ -36,20 +36,27 @@
 
 <script setup lang="ts">
 // 더보기 아이콘
-import IconMore from '@/assets/img/common/icon_arror_right.svg'
+import IconMore from '@/assets/img/common/icon_arrow_left.svg'
 // 채팅 아이콘
 import IconChat from '@/assets/img/common/icon_chat.svg'
 
 // 라우터
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
+const router = useRouter()
 
 // param
 const meetingNo = route.params.meetingNo as string
 
 
 // props
-defineProps<{
+const props = defineProps<{
   boardList: Array<boolean>
+  mid: String
 }>()
+
+// 게시판 상세 이동
+const moveVoteList = () => {
+  router.push(`/meeting/${props.mid}/detail?state=vote`)
+}
 </script>
