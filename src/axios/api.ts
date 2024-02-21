@@ -30,5 +30,15 @@ type meetingParam = {
 
 // 모임 홈 화면 - 모임 정보 조회 API
 export const getMeetingInfo = (param: meetingParam) => {
-  return instance.post(`/api/meeting/home`, param)
+  return instance.post(`/api/meeting/userDate`, param)
+}
+
+// 모임 가입 여부 체크 API
+export const meetingInvitingCheck = (mid: string, uid: string) => {
+  return instance.get(`/api/auth/meeting/invite/${mid}/${uid}`)
+}
+
+// 모임 가입 API
+export const meetingInviting = (param: meetingInviteParam) => {
+  return instance.post(`/api/inviteMeeting`, param)
 }

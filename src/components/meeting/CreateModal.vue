@@ -65,17 +65,20 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+// api
 import { createMeeting } from '@/axios/api'
+// 스토어
 import { useUserStore } from '@/stores/user.js'
+// 라우터
+import { useRouter } from 'vue-router'
+// 닫기 아이콘
 import IconClose from '@/assets/img/common/icon_close.svg'
-const showModal = ref(true)
-const name = ref('')
-const description = ref('')
-const password = ref('')
-const previewImage = ref()
-const image = ref<File | null>(null)
-const store = useUserStore()
 
+// 미리보기 이미지
+const previewImage = ref()
+// 이미지
+const image = ref<File | null>(null)
+// 이미지 설정 이벤트
 const getFile = (e: Event) => {
   const files = (e.target as HTMLInputElement).files
 
@@ -93,6 +96,19 @@ const getFile = (e: Event) => {
   }
 }
 
+// 스토어
+const store = useUserStore()
+// 라우터
+const router = useRouter()
+// 모달 표시 유무
+const showModal = ref(true)
+// 모임명
+const name = ref('')
+// 모임 설명
+const description = ref('')
+// 모임 비밀번호
+const password = ref('')
+// 모임 저장 버튼 클릭 이벤트
 const submitForm = () => {
   const data = new FormData()
 
@@ -102,8 +118,10 @@ const submitForm = () => {
   data.append('mainPicture', image.value as File) // Access value of ref
 
   createMeeting(data).then(({ data }) => {
-    if (data.code === 0) alert('생성되었습니다.')
-    else alert('서버오류')
+    if (data.code === 0) {
+      alert('생성되었습니다.')
+      router.push(`/meeting/${data.mid}`)
+    } else alert('서버오류')
 
     showModal.value = false
   })

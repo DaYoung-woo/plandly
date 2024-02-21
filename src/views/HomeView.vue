@@ -2,7 +2,7 @@
   <Lnb class="hidden lg:block" />
   <Gnb />
   <main>
-    <div style="max-width: 840px; margin: 0 auto">
+    <div class="home-main">
       <div class="calendar-padding" v-if="showLoading">
         <PageLoading width="45px" />
       </div>
@@ -55,26 +55,32 @@ import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.js'
 
+//소켓 api url
+const apiUrl = import.meta.env.VITE_APP_API_URL
 // 소켓
 import { Client } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 let stompClient: Client
+const socket = new SockJS(`${apiUrl}/ws`) // 소켓 서버 URL에 맞게 수정
+stompClient = new Client({ webSocketFactory: () => socket })
 
 const store = useUserStore()
 const router = useRouter()
 
-let calendar: Calendar
-let scheduleList: string[] = []
+// 캘린더 로드 대기 화면 show 여부
 let showLoading = ref(true)
 
-const apiUrl = import.meta.env.VITE_APP_API_URL
+// 캘린더
+let calendar: Calendar
 
-let currentMonth = ref(new Date().getMonth() + 1)
+// 내 일정 리스트
 let myCalendarList: myDateInfo[] = reactive([])
-const meetings: meeting[] = reactive([])
-const socket = new SockJS(`${apiUrl}/ws`) // 소켓 서버 URL에 맞게 수정
-stompClient = new Client({ webSocketFactory: () => socket })
+// 현재 월
+let currentMonth = ref(new Date().getMonth())
+// 현재 년도
+let currentYear = ref(new Date().getFullYear())
 
+// 캘린더 옵션
 const calendarOptions = reactive({
   plugins: [interactionPlugin, dayGridPlugin],
   initialView: 'dayGridMonth',
@@ -111,10 +117,8 @@ const calendarOptions = reactive({
   dateClick: function (info: DateClickArg) {
     if (myCalendarList.find((el) => el.myDate === info.dateStr)) {
       info.dayEl.children[0].style.backgroundColor = '#fff'
-      scheduleList = scheduleList.filter((el) => el !== info.dateStr)
       deleteDate(info.dateStr)
     } else {
-      scheduleList.push(info.dateStr)
       info.dayEl.children[0].style.backgroundColor = '#D5E6E2'
       addDate(info.dateStr)
     }
@@ -123,17 +127,16 @@ const calendarOptions = reactive({
     prev: {
       click: function () {
         calendar.prev()
-        const month = calendar.getDate().getMonth() + 1
-        if (month === 0) changeMonth(12)
-        else changeMonth(month)
+        if (currentMonth.value === 1) {
+          changeDate(12, currentYear.value - 1)
+        } else changeDate(currentMonth.value - 1, currentYear.value)
       }
     },
     next: {
       click: function () {
         calendar.next()
-        const month = calendar.getDate().getMonth() + 2
-        if (month === 0) changeMonth(12)
-        changeMonth(month)
+        if (currentMonth.value === 12) changeDate(1, currentYear.value + 1)
+        else changeDate(currentYear.value + 1, currentYear.value)
       }
     }
   },
@@ -175,6 +178,10 @@ const deleteDate = (dateStr: string) => {
   )
 }
 
+//  나의 모임 리스트
+const meetings: meeting[] = reactive([])
+
+// 소켓 연결
 const wsSubscribe = () => {
   stompClient.onConnect = () => {
     stompClient.publish({
@@ -188,7 +195,6 @@ const wsSubscribe = () => {
     stompClient.subscribe(`/topic/myCalendar/${store.userInfo.uid}`, function ({ body }) {
       if (JSON.parse(body)) {
         Object.assign(myCalendarList, JSON.parse(body))
-        console.log(myCalendarList)
         myCalendarList.forEach((el: myDateInfo) => {
           const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
           if (td) {
@@ -202,7 +208,6 @@ const wsSubscribe = () => {
     stompClient.subscribe(`/topic/myMeeting/list/${store.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       Object.assign(meetings, list)
-      console.log(list)
       if (!list) return
     })
 
@@ -231,14 +236,14 @@ const wsSubscribe = () => {
   }
 }
 
-const changeMonth = (month: number): void => {
+const changeDate = (month: number, year: number): void => {
   currentMonth.value = month
-  console.log(month)
   stompClient.publish({
     destination: '/myCalendar.view',
     body: JSON.stringify({
       uId: store.userInfo.uid, // 사용자 아이디
-      currentMonth: month // 현재 월
+      currentMonth: month, // 현재 월
+      currenYear: year // 현재 년도
     })
   })
 }

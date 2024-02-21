@@ -1,9 +1,9 @@
 <template>
   <Lnb class="hidden lg:block" />
   <Gnb />
-  <main class="meeting-main">
-    <div style="max-width: 1024px; margin: 0 auto">
-      <div class="thumb" />
+  <main>
+    <div class="home-meeting-bg" />
+    <div class="home-main pt-12">
       <RouterView />
     </div>
   </main>

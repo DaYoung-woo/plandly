@@ -36,13 +36,21 @@ import IconLogo from '@/assets/img/common/logo.svg'
 import { ref } from 'vue'
 import { setEmail } from '@/axios/api'
 import { useUserStore } from '@/stores/user.js'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
+// 스토어
 const store = useUserStore()
+// 라우터
 const router = useRouter()
+const route = useRoute()
 
+// 이메일
 const email = ref('')
+// 닉네임
 const displayName = ref('')
+
+// param
+const state = route.query.state as string
 
 const saveEmail = () => {
   const param = {
@@ -56,7 +64,8 @@ const saveEmail = () => {
       if (data.code === 0) {
         store.setTokenKaKao(data, 'kakao')
         store.setEmailAndDisplayName(email.value, displayName.value)
-        router.push('home')
+        if (state) router.push(`meeting/${state}`)
+        else router.push('home')
       }
     })
     .catch((e) => {

@@ -1,6 +1,6 @@
 <template>
   <!-- 페이지 네비게이션 -->
-  <router-link :to="`/meeting/${meetingNo}`" class="path_navi mt-20">
+  <router-link :to="`/meeting/${meetingNo}`" class="path_navi mt-10">
     <IconArrowLeft class="mr-1" />게시판
   </router-link>
 
