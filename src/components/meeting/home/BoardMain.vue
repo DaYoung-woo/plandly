@@ -6,7 +6,7 @@
 
   <!-- 게시글이 없는 경우 -->
   <div class="no-data-box mt-5 py-12" v-if="!boardList.length">
-    생성된 게시글이 없습니다. 게시글을 생성해보세요!{{ meetingNo }}
+    생성된 게시글이 없습니다. 게시글을 생성해보세요!
     <router-link :to="`/meeting/${meetingNo}/board/0`">
       <button class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm mt-4">게시글 추가</button>
     </router-link>
@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 // 더보기 아이콘
-import IconMore from '@/assets/img/common/icon_more.svg'
+import IconMore from '@/assets/img/common/icon_arror_right.svg'
 // 채팅 아이콘
 import IconChat from '@/assets/img/common/icon_chat.svg'
 

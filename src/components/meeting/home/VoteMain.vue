@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 // 더보기 아이콘
-import IconMore from '@/assets/img/common/icon_more.svg'
+import IconMore from '@/assets/img/common/icon_arror_right.svg'
 // 투표 옵션 컴포넌트
 import VoteOption from '@/components/meeting/VoteOption.vue'
 

@@ -2,6 +2,7 @@ html,
 body,
 #app {
   height: 100vh;
+  overflow: hidden;
 }
 
 header {
@@ -22,10 +23,15 @@ nav {
 
 main {
   overflow-y: scroll;
+  height: calc(100vh - 54px);
+  .home-meeting-bg {
+    height: 200px;
+    width: 100vw;
+    background-color: #ddd;
+  }
 }
 @media (min-width: 1024px) {
   main {
-    height: calc(100vh - 54px);
     width: calc(100vw - 295px);
     padding: 60px 90px;
     margin-left: 295px;
@@ -35,22 +41,35 @@ main {
       max-width: 840px;
     }
     .home-meeting-bg {
-      height: 200px;
-      width: 100vw;
-      background-color: #ddd;
       margin: -60px -90px;
     }
   }
 }
 @media (min-width: 800px) {
-  main .meeting-main {
-    width: calc(100vh - 54px);
+  main {
     padding: 60px 90px;
+    .home-meeting-bg {
+      margin: -40px;
+    }
   }
 }
 @media (min-width: 500px) {
-  main .meeting-main {
-    padding: 40px 40px;
+  main {
+    padding: 40px;
+    .home-meeting-bg {
+      margin: -40px;
+    }
+  }
+}
+@media (max-width: 500px) {
+  main {
+    padding-top: 20px;
+    .home-meeting-bg {
+      margin-top: -20px;
+    }
+    .home-main {
+      padding: 0;
+    }
   }
 }
 

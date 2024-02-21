@@ -20,7 +20,7 @@
 // 멤버 프로필
 import MemberProfile from '@/components/common/MemberProfile.vue'
 // 더보기 아이콘
-import IconMore from '@/assets/img/common/icon_more.svg'
+import IconMore from '@/assets/img/common/icon_arror_right.svg'
 
 // props
 defineProps<{
