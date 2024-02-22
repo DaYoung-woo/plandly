@@ -1,7 +1,7 @@
 <template>
   <div class="mt-20 mx-4 flex items-center justify-between mb-3">
     <h2>멤버</h2>
-    <IconMore />
+    <IconMore class="rotate-180"/>
   </div>
   <hr />
 
@@ -20,7 +20,7 @@
 // 멤버 프로필
 import MemberProfile from '@/components/common/MemberProfile.vue'
 // 더보기 아이콘
-import IconMore from '@/assets/img/common/icon_more.svg'
+import IconMore from '@/assets/img/common/icon_arrow_left.svg'
 
 // props
 defineProps<{

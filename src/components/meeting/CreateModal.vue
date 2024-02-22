@@ -135,6 +135,10 @@ const submitForm = () => {
   border-radius: 10px;
   border: 1px solid #949494;
   padding: 30px 33px;
+  overflow-y: scroll;
+  margin: 80px;
+  height: 90vh;
+  max-height: 930px;
   .profile-area {
     width: 92px;
     height: 92px;

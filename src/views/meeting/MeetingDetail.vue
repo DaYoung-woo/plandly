@@ -8,17 +8,15 @@
     </div>
     <div>
       <button class="w-12 h-12">공유</button>
-      <button class="w-28 h-12" v-if="activeIdx === 0" @click="timelineEditMode = true">
-        게시글 생성
-      </button>
+      <button class="w-28 h-12" v-if="activeIdx === 0">게시글 생성</button>
       <button class="w-28 h-12" v-if="activeIdx === 2">새멤버 추가</button>
     </div>
   </div>
   <hr class="tab-border" id="tab-border" />
 
   <div>
-    <TiemlineTab v-if="activeIdx === 0 && !timelineEditMode" />
-    <TimelineEditTab v-if="activeIdx === 0 && timelineEditMode" />
+    <TiemlineTab v-if="activeIdx === 0" />
+    <TimelineEditTab v-if="activeIdx === 0" />
     <VoteTab v-if="activeIdx === 1" />
     <MemberTab v-if="activeIdx === 2" />
     <AlbumTab v-if="activeIdx === 3" />
@@ -31,10 +29,14 @@ import TimelineEditTab from '@/components/meeting/tabs/TimelineEditTab.vue'
 import MemberTab from '@/components/meeting/tabs/MemberTab.vue'
 import AlbumTab from '@/components/meeting/tabs/AlbumTab.vue'
 import VoteTab from '@/components/meeting/tabs/VoteTab.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
+// 탭 리스트
+const tabList = ['timeline', 'vote', 'member', 'album']
+
+// 액티브되어 있는 탭
 const activeIdx = ref(0)
-const timelineEditMode = ref(false)
+// 탭 변경
 const changeTab = (order: number) => {
   activeIdx.value = order
   // active 바 위치 변경
@@ -49,9 +51,19 @@ const changeTab = (order: number) => {
   // 현재 활성화시킬 탭에 active 클래스 추가
   const tabItem = document.querySelector(`.tab-div :nth-child(${order + 1})`) as HTMLElement
   tabItem.classList.add('active')
-
-  timelineEditMode.value = false
 }
+
+// 라우터
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
+// query
+const state = route.query.state as string
+
+// mounted
+onMounted(() => {
+  if (state === 'vote') changeTab(1)
+})
 </script>
 
 <style lang="scss">
