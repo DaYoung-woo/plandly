@@ -80,6 +80,12 @@ router.beforeEach((to) => {
 
   // 로그인 권한이 필요한 경우
   if (to.meta.requiresAuth) {
+    // 로그인 안한 경우
+    if (!store.userInfo.accessToken) return '/login'
+
+    // 로그인되어 있고 이메일/닉네임을 세팅 안 한 경우
+    if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
+
     // 로그인된 유저가 로그인 화면 진입할 경우
     if (!!store.userInfo.accessToken && to.path === '/login') return '/home'
 
@@ -87,12 +93,6 @@ router.beforeEach((to) => {
     if (!store.userInfo.accessToken && to.params.meetingNo) {
       return `/login?state=${to.params.meetingNo}`
     }
-
-    // 로그인 안한 경우
-    if (!store.userInfo.accessToken) return '/login'
-
-    // 로그인되어 있고 이메일/닉네임을 세팅 안 한 경우
-    if (!store.userInfo.email || !store.userInfo.displayName) return '/login_setting'
   }
 })
 

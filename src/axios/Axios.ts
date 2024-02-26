@@ -78,7 +78,7 @@ instance.interceptors.response.use(
             resolve(axios(originalRequest))
           })
           .catch((e) => {
-            // 오류가 생긴경우8*87-
+            // 오류가 생긴 경우
             alert(e.response)
             const userStore = useUserStore()
             userStore.setUserLogout()
