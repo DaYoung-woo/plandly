@@ -4,10 +4,12 @@ import HomeView from '@/views/HomeView.vue'
 import MeetingView from '@/views/MeetingView.vue'
 import SimpleFrame from '@/views/SimpleFrame.vue'
 import MeetingHome from '@/views/meeting/MeetingHome.vue'
+import MeetingJoin from '@/views/meeting/board/MeetingJoin.vue'
 import MeetingDetail from '@/views/meeting/MeetingDetail.vue'
 import MeetingBoardDetail from '@/views/meeting/board/DetailForm.vue'
 import MeetingBoardCreate from '@/views/meeting/board/CreateForm.vue'
-import MeetingJoin from '@/views/meeting/board/MeetingJoin.vue'
+import MeetingVoteCreate from '@/views/meeting/vote/CreateForm.vue'
+
 import LoginView from '@/views/LoginView.vue'
 import loginSettingView from '@/views/LoginSettingView.vue'
 import KakaoLogin from '@/views/KakaoLogin.vue'
@@ -16,28 +18,33 @@ import { useUserStore } from '@/stores/user.js'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // 홈 화면
     {
       path: '/home',
       name: 'home',
       component: HomeView,
       meta: { requiresAuth: true }
     },
+    // 홈 화면 리다이렉트
     {
       path: '/',
       redirect: '/home'
     },
+    // 로그인 화면
     {
       path: '/login',
       name: 'login',
       component: LoginView,
       meta: { requiresAuth: false }
     },
+    // kakao auth
     {
       path: '/sso',
       name: 'KakaoLogin',
       component: KakaoLogin,
       meta: { requiresAuth: false }
     },
+    // 닉네임 세팅 화면
     {
       path: '/login_setting',
       name: 'login_setting',
@@ -55,21 +62,27 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/meeting/:meetingNo/board/:boardNo',
+      path: '/meeting/:meetingNo/join',
+      name: 'meetingJoin',
+      component: MeetingJoin,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/meeting/:meetingNo/board',
       name: 'board',
       component: SimpleFrame,
       meta: { requiresAuth: true },
       children: [
         { path: '', component: MeetingBoardCreate, name: 'MeetingBoardCreate' },
-        { path: 'detail', component: MeetingBoardDetail, name: 'MeetingBoardDetail' }
+        { path: ':boardNo', component: MeetingBoardDetail, name: 'MeetingBoardDetail' }
       ]
     },
     {
-      path: '/meeting/:meetingNo/join',
-      name: 'meetingJoin',
+      path: '/meeting/:meetingNo/vote',
+      name: 'vote',
       component: SimpleFrame,
-      children: [{ path: '', component: MeetingJoin, name: 'MeetingJoin' }],
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      children: [{ path: '', component: MeetingVoteCreate, name: 'MeetingVoteCreate' }]
     }
   ]
 })
