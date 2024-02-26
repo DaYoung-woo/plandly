@@ -71,9 +71,9 @@ const saveEmail = () => {
     .catch((e) => {
       if (e.response.status === 400) {
         if (e.response.data.code === 2) alert('이미 사용되고 있는 email입니다.')
-        else alert('Server Error')
+        else alert('에러가 발생했습니다.')
       } else {
-        alert('Server Error')
+        alert('에러가 발생했습니다.')
       }
     })
 }

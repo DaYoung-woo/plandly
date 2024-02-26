@@ -30,8 +30,9 @@ const loginWithKakao = () => {
   const { code } = route.query
   kakaoLogin(String(code))
     .then(({ data }) => {
-      store.setTokenKaKao(data, 'kakao')
+      // 카카오토큰 관련 정보 세팅
       const { email, displayName } = data
+      store.setTokenKaKao(data, 'kakao')
 
       if (!email || !displayName) router.push(`login_setting?state=${state}`)
       else {
