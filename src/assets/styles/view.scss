@@ -400,3 +400,30 @@ input[type='checkbox'] {
   font-size: 14px;
   margin-bottom: 10px;
 }
+
+label.form-label {
+  color: #000;
+  font-family: Noto Sans KR;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  display: block;
+}
+input.form-inputs,
+textarea.form-inputs {
+  border-radius: 5px;
+  border: 1px solid #b1b1b1;
+  font-family: Noto Sans KR;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+input.form-inputs {
+  height: 36px;
+  padding-left: 8px;
+}
+textarea.form-inputs {
+  height: 120px;
+}
