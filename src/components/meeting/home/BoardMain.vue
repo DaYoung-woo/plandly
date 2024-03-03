@@ -1,14 +1,18 @@
 <template>
   <div class="mt-20 mx-4 flex items-center justify-between">
     <h2>게시판</h2>
-    <IconMore class="rotate-180" @click="moveVoteList"/>
+    <router-link :to="`/meeting/${meetingNo}/detail?state=vote`">
+      <IconMore class="rotate-180" />
+    </router-link>
   </div>
 
   <!-- 게시글이 없는 경우 -->
   <div class="no-data-box mt-5 py-12" v-if="!boardList.length">
     생성된 게시글이 없습니다. 게시글을 생성해보세요!
-    <router-link :to="`/meeting/${meetingNo}/board/0`">
-      <button class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm mt-4">게시글 추가</button>
+    <router-link :to="`/meeting/${meetingNo}/board`">
+      <button class="rounded-full bg-main text-white ml-3 px-6 py-2 text-sm mt-4">
+        게시글 추가
+      </button>
     </router-link>
   </div>
 
@@ -41,22 +45,15 @@ import IconMore from '@/assets/img/common/icon_arrow_left.svg'
 import IconChat from '@/assets/img/common/icon_chat.svg'
 
 // 라우터
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 const route = useRoute()
-const router = useRouter()
 
 // param
 const meetingNo = route.params.meetingNo as string
-
 
 // props
 const props = defineProps<{
   boardList: Array<boolean>
   mid: String
 }>()
-
-// 게시판 상세 이동
-const moveVoteList = () => {
-  router.push(`/meeting/${props.mid}/detail?state=vote`)
-}
 </script>

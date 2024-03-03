@@ -18,7 +18,6 @@
 <script setup lang="ts">
 // 멤버프로필 컴포넌트
 import MemberProfile from '@/components/common/MemberProfile.vue'
-
 // < 아이콘
 import IconArrowLeft from '@/assets/img/common/icon_arrow_left.svg'
 // 더보기 아이콘

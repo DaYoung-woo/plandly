@@ -2,7 +2,7 @@
   <Lnb class="hidden lg:block" />
   <Gnb />
   <main class="meeting-main">
-    <div style="max-width: 1024px; margin: 0 auto">
+    <div style="max-width: 760px; margin: 0 auto">
       <RouterView />
     </div>
   </main>

@@ -1,5 +1,5 @@
 <template>
-  <header class="flex items-center justify-between md:px-8 sm:px-4">
+  <header class="flex items-center justify-between md:px-6 sm:px-4">
     <div class="logo" @click="router.push('/')">
       <Logo />
     </div>
