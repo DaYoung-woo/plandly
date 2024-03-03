@@ -27,7 +27,7 @@
     </div>
 
     <div class="mt-4">
-      <input type="text" class="mt-2" placeholder="항목 입력" v-for="item in voteOption" :value="item"/>
+      <input type="text" class="mt-2" placeholder="항목 입력" v-for="item in voteOptions" :value="item"/>
       <button class="button__outline-full">
         + 항목 추가
       </button>
@@ -35,14 +35,14 @@
 
     <div class="mt-10">
       <p class="mb-3">투표 추가 설정</p>
-      <article class="flex-items-center">
-        <input type="checkbox" id="text" />
-        <label for="text" class="bold">종료 시간</label>
-        <div>전원이 투표하면 투표를 종료합니다.</div>
+      <article v-for="item in voteTypes" :key="item.name">
+        <input type="checkbox" :id="item.name" v-model="item.value"/>
+        <label :for="item.name" class="bold">{{ item.title }}</label>
+        <span v-if="item.value === item.descShowValue">{{ item.desc }}</span>
+        <div v-if="item.name === 'autoFinish' && item.value">
+          test
+        </div>
       </article>
-      <span><input type="checkbox" id="text" /> <label for="text" class="bold">익명 투표</label></span>
-      <span><input type="checkbox" id="text" /> <label for="text" class="bold">복수 선택</label></span>
-      <span><input type="checkbox" id="text" /> <label for="text" class="bold">선택항목 추가 허용</label></span>
     </div>
 
     <button class="button__outline-full primary">
@@ -64,5 +64,37 @@ const route = useRoute()
 const meetingNo = route.params.meetingNo as string
 
 // 투표 선택지
-const voteOption = ref(['', ''])
+const voteOptions = ref(['', ''])
+
+// 투표 방식
+const voteTypes = ref([{
+  name: 'autoFinish',
+  title: '자동 종료',
+  desc: '전원이 투표하면 투표를 종료합니다.',
+  value: false,
+  descShowValue: false,
+}, {
+  name: 'anonym',
+  title: '익명 투표',
+  desc: '누가 투표했는지 공개하지 않습니다.',
+  value: false,
+  descShowValue: true,
+}, {
+  name: 'multi',
+  title: '복수 선택',
+  desc: '여러 개의 항목을 고를 수 있습니다.',
+  value: false,
+  descShowValue: true,
+}, {
+  name: 'selection',
+  title: '선택항목 추가 허용',
+  desc: '작성자가 아니라도 선택항목을 추가할 수 있습니다.',
+  value: false,
+  descShowValue: true,
+}])
+
+// 투표 마감일
+const date = new Date();
+console.log(date.getUTCDay())
+//const deadline = ref('')
 </script>

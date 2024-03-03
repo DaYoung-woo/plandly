@@ -458,6 +458,17 @@ input.form-inputs::placeholder {
     border-radius: 0;
     border-bottom: 1px solid #ddd;
   }
+  article{
+    display: grid;
+    grid-template-columns: 28px 152px 1fr;
+    align-items: center;
+    margin-bottom: 8px;
+    span{
+      color: #7E7E7E;
+      font-size: 14px;
+      margin-top: 0;
+    }
+  }
   .button__outline-full{
     margin-top: 8px;
   }
