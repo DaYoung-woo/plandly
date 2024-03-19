@@ -289,7 +289,7 @@ const wsSubscribe = () => {
           title: el.name,
           start: el.dates[0],
           end: el.dates[el.dates.length - 1],
-          id: `${el.mId}`
+          id: `${el.mid}`
         })
       })
       calendar.render()

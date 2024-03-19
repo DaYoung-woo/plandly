@@ -95,6 +95,6 @@ const voteTypes = ref([{
 
 // 투표 마감일
 const date = new Date();
-console.log(date.getUTCDay())
+console.log(date.getDate)
 //const deadline = ref('')
 </script>

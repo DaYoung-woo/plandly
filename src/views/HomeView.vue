@@ -14,9 +14,9 @@
       >
         <div
           class="meeting-item"
-          @click="router.push(`meeting/${item.mId}`)"
+          @click="router.push(`meeting/${item.mid}`)"
           v-for="item in meetings"
-          :key="item.mId"
+          :key="item.mid"
         >
           <div class="thumb">
             <img :src="`${item.mainPicture}`" v-if="item.mainPicture" />
@@ -168,7 +168,7 @@ const deleteDate = (dateStr: string) => {
     body: JSON.stringify({
       uId: store.userInfo.uid,
       currentMonth: currentMonth.value,
-      cId: myCalendarList.filter((el) => el.myDate === dateStr)[0].cId
+      cid: myCalendarList.filter((el) => el.myDate === dateStr)[0].cid
     })
   })
 
@@ -223,7 +223,7 @@ const wsSubscribe = () => {
           title: el.name,
           start: el.dates[0],
           end: el.dates[el.dates.length - 1],
-          id: `${el.mId}`
+          id: `${el.mid}`
         })
       })
       calendar.render()
