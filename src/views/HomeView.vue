@@ -64,6 +64,9 @@ let stompClient: Client
 const socket = new SockJS(`${apiUrl}/ws`) // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket })
 
+// api
+import { meetingList } from '@/axios/api'
+
 const store = useUserStore()
 const router = useRouter()
 
@@ -145,7 +148,7 @@ const calendarOptions = reactive({
       const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
       if (td) {
         td.children[0].style.backgroundColor = '#D5E6E2'
-        td.children[0].style.color = '#00785B'
+        td.children[0].style.color = '#076E49'
       }
     })
   }
@@ -199,16 +202,10 @@ const wsSubscribe = () => {
           const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
           if (td) {
             td.children[0].style.backgroundColor = '#D5E6E2'
-            td.children[0].style.color = '#00785B'
+            td.children[0].style.color = '#076E49'
           }
         })
       }
-    })
-
-    stompClient.subscribe(`/topic/myMeeting/list/${store.userInfo.uid}`, function ({ body }) {
-      const list = JSON.parse(body)
-      Object.assign(meetings, list)
-      if (!list) return
     })
 
     stompClient.subscribe('/topic/myCalendar/failed', function (data) {
@@ -248,10 +245,22 @@ const changeDate = (month: number, year: number): void => {
   })
 }
 
+// 미팅 리스트
+const startNo = ref(1)
+const getMeetingList = async() => {
+  try{
+    const {data} = await meetingList(store.userInfo.uid, startNo.value, 10)
+    Object.assign(meetings, data.info)
+  } catch(e) {
+    alert(e)
+  }
+}
+
 onMounted(() => {
   // 켈린더
   stompClient.activate()
   wsSubscribe()
+  getMeetingList()
 })
 </script>
 

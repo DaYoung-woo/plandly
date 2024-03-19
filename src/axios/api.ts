@@ -42,3 +42,8 @@ export const meetingInvitingCheck = (mid: string, uid: string) => {
 export const meetingInviting = (param: meetingInviteParam) => {
   return instance.post(`/api/inviteMeeting`, param)
 }
+
+// 내 모임 목록 조회 API
+export const meetingList = (uid: string, startNo: number, pageSize: number) => {
+  return instance.get(`/api/myMeeting/list/${uid}?startNo=${startNo}&pageSize=${pageSize}`)
+}

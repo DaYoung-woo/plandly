@@ -265,7 +265,7 @@ const wsSubscribe = () => {
           const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
           if (td) {
             td.children[0].style.backgroundColor = '#D5E6E2'
-            td.children[0].style.color = '#00785B'
+            td.children[0].style.color = '#076E49'
           }
         })
       }

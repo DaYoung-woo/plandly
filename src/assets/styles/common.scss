@@ -5,6 +5,10 @@ input[type='checkbox'] {
   cursor: pointer;
 }
 
+input[type="text"]:active {
+
+}
+
 .flex-items-center{
   display: flex;
   align-items: center;
