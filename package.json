@@ -31,6 +31,7 @@
     "vue-final-modal": "^3.4.11",
     "vue-nav-tabs": "^0.5.7",
     "vue-router": "^4.2.4",
+    "vue3-dayjs-plugin": "^1.0.2",
     "ws": "^8.14.2"
   },
   "devDependencies": {

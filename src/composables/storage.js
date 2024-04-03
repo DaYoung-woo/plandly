@@ -8,3 +8,4 @@ export function useDecrypt(ciphertext) {
   const bytes = CryptoJS.AES.decrypt(ciphertext, "secret key 123");
   return bytes.toString(CryptoJS.enc.Utf8);
 }
+

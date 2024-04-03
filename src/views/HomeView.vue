@@ -13,19 +13,26 @@
         class="meeting-list pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4"
       >
         <div
-          class="meeting-item"
+          class="meeting-list__box"
           @click="router.push(`meeting/${item.mid}`)"
           v-for="item in meetings"
           :key="item.mid"
         >
-          <div class="thumb">
+          <div class="meeting-list__box__thumb">
             <img :src="`${item.mainPicture}`" v-if="item.mainPicture" />
           </div>
-          <div class="desc">
-            <p>{{ item.name }}</p>
-            <span>{{ item.updateDate.split(' ')[0] }}</span>
-            <span>멤버 수</span>
-            <span>총 게시글</span>
+          <div class="meeting-list__box__content">
+            <div class="meeting-list__box__content-detail">
+              <p>{{ item.name }}</p>
+              <span>{{ $dayjs(item.updateDate.split(' ')[0]).format('DD/MM/YYYY') }}</span>
+              <span>멤버 수</span>
+              <span>총 게시글</span>
+            </div>
+             <!-- 더보기 아이콘 -->
+            <button class="bg-slate-200 text-xs ml-2" @click="$emit('closeModal')">
+              <IconMore />
+            </button>
+
           </div>
         </div>
       </div>
@@ -40,6 +47,9 @@
 // 프레임
 import Lnb from '@/components/frame/LnbFrame.vue'
 import Gnb from '@/components/frame/GnbFrame.vue'
+
+// 더보기 아이콘
+import IconMore from '@/assets/img/common/icon_more.svg'
 
 // 달력 로딩
 import PageLoading from '@/components/common/PageLoading.vue'
@@ -127,6 +137,7 @@ const calendarOptions = reactive({
     }
   },
   customButtons: {
+    // 이전 달 달력 보기 버튼
     prev: {
       click: function () {
         calendar.prev()
@@ -135,6 +146,7 @@ const calendarOptions = reactive({
         } else changeDate(currentMonth.value - 1, currentYear.value)
       }
     },
+    // 다음 달 달력 보기 버튼
     next: {
       click: function () {
         calendar.next()
@@ -183,7 +195,6 @@ const deleteDate = (dateStr: string) => {
 
 //  나의 모임 리스트
 const meetings: meeting[] = reactive([])
-
 // 소켓 연결
 const wsSubscribe = () => {
   stompClient.onConnect = () => {

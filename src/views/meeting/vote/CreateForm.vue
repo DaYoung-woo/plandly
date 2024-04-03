@@ -9,15 +9,15 @@
   <!-- 게시판 폼 -->
   <form class="basic__form" action="" >
     <h2>새 투표 작성하기</h2>
-    
-    <input
+
+    <p class="mt-2">투표명</p>
+    <input type="text" placeholder="투표명 작성" class="basic__form_underline-input"/>
+
+    <textarea
       type="text"
       class="basic__form_underline-input"
       placeholder="어떤 투표인지 설명해주세요"
     />
-
-    <p class="mt-2">투표명</p>
-    <input type="text" placeholder="투표명 작성" />
 
     <p>선택지 입력</p>
     <div class="flex-items-center">
@@ -27,7 +27,7 @@
     </div>
 
     <div class="mt-4">
-      <input type="text" class="mt-2" placeholder="항목 입력" v-for="item in voteOptions" :value="item"/>
+      <input type="text" class="mt-2 vote_option_input" placeholder="항목 입력" v-for="item in voteOptions" :value="item"/>
       <button class="button__outline-full">
         + 항목 추가
       </button>
