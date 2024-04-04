@@ -24,9 +24,9 @@
           <div class="meeting-list__box__content">
             <div class="meeting-list__box__content-detail">
               <p>{{ item.name }}</p>
-              <span>{{ $dayjs(item.updateDate.split(' ')[0]).format('DD/MM/YYYY') }}</span>
-              <span>멤버 수</span>
-              <span>총 게시글</span>
+              <span>{{ calculateDate(item.updateDate.split(' ')[0]) }}</span>
+              <span> · </span>
+              <span>멤버</span>
             </div>
              <!-- 더보기 아이콘 -->
             <button class="bg-slate-200 text-xs ml-2" @click="$emit('closeModal')">
@@ -80,6 +80,8 @@ import { meetingList } from '@/axios/api'
 const store = useUserStore()
 const router = useRouter()
 
+import {calculateDate, titleFormat, dayHeaderFormat} from '@/composables/date'
+
 // 캘린더 로드 대기 화면 show 여부
 let showLoading = ref(true)
 
@@ -100,32 +102,8 @@ const calendarOptions = reactive({
   weekends: true,
   fixedWeekCount: false,
   contentHeight: 850,
-  //titleFormat: {year: "numeric", month: 'numeric'},
-  titleFormat: function (date) {
-    return `${date.date.year}.${
-      String(date.date.month + 1).length === 1 ? `0${date.date.month + 1}` : date.date.month + 1
-    }`
-  },
-  dayHeaderFormat: function (date) {
-    switch (date.date.day) {
-      case 4:
-        return 'SUN'
-      case 5:
-        return 'MON'
-      case 6:
-        return 'TUE'
-      case 7:
-        return 'WED'
-      case 8:
-        return 'THU'
-      case 9:
-        return 'FRI'
-      case 10:
-        return 'SAT'
-      default:
-        return date.date.day
-    }
-  },
+  titleFormat,
+  dayHeaderFormat,
   buttonText: { today: 'Today' },
   dateClick: function (info: DateClickArg) {
     if (myCalendarList.find((el) => el.myDate === info.dateStr)) {
