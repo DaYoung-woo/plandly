@@ -470,12 +470,9 @@ label.form-label {
     height: 3rem;
     width: 3rem;
     top: 50%;
-  
     transform: translate(-50%, -50%);
     right: 0rem;
     content: "";
-    background-image: url('../img/vote/icon_picture.svg');
-    background-size: contain;
   }
   textarea {
     border-radius: 5px;
@@ -518,4 +515,26 @@ label.form-label {
 .svg-image{
   width: 20px;
   height: 16px;
+}
+
+.vote-form__option{
+  display: flex;
+  margin-top: 8px;
+  align-items: center;
+  input[type='text']{
+    border: none;
+    outline: none;
+  }
+  .vote-form__option__gallery-icon{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+  }
+  border: 1px solid #b1b1b1;
+  border-radius: 5px;
+}
+
+.vote-form__option:focus:active{
+  border: 1px solid #00785b;
 }

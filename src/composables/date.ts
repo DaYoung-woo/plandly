@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
 // 캘린더 상단 요일 표시
-export function dayHeaderFormat (date) {
+export function dayHeaderFormat (date: { date: { day: number } }) {
   switch (date.date.day) {
     case 4:
       return 'SUN'
@@ -23,7 +23,7 @@ export function dayHeaderFormat (date) {
 }
 
 // 캘린더 제목
-export function titleFormat (date) {
+export function titleFormat (date: { date: { year: number; month: number } }) {
   return `${date.date.year}.${
     String(date.date.month + 1).length === 1 ? `0${date.date.month + 1}` : date.date.month + 1
   }`
@@ -46,7 +46,7 @@ export function calculateDate(date: Date) {
 }
 
 //date 기본 format
-export function getBasicDateFormat(voteEndDate) {
+export function getBasicDateFormat(voteEndDate: Date | string) {
   return dayjs(voteEndDate).format("YYYY년 MM월 DD일 HH:mm")
 }
 

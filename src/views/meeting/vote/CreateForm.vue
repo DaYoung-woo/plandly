@@ -9,7 +9,7 @@
   <!-- 게시판 폼 -->
   <form class="basic-form" action="" >
     <h2>새 투표 작성하기</h2>
-
+    
     <p class="mt-5">투표명</p>
     <input type="text" placeholder="투표명 작성" v-model="formData.name"/>
 
@@ -19,7 +19,8 @@
       placeholder="어떤 투표인지 설명해주세요"
       v-model="formData.description"
     />
-
+    
+    <!-- 텍스트/날짜/장소 선택 라디오 -->
     <p>선택지 입력</p>
     <div class="flex-items-center">
       <input type="radio" id="text" value="text" name="optionType"/> <label for="text">텍스트</label>
@@ -27,19 +28,22 @@
       <input type="radio" id="location" value="location" name="optionType"/><label for="location">장소</label>
     </div>
 
+    <!-- 항목 입력 -->
     <div class="mt-4">
-      <input 
-        type="text" 
-        class="mt-2 vote_option_input" 
-        placeholder="항목 입력" 
-        v-for="item in voteOptions" 
-        v-model="item.text"
-      />
+      <div v-for="item in voteOptions" class="vote-form__option" >
+        <input 
+          type="text" 
+          placeholder="항목 입력" 
+          v-model="item.text"
+        />
+        <div class="vote-form__option__gallery-icon"><IconGallery /></div>
+      </div>
       <button class="button__outline-full" @click="addVoteOption" type="button">
         + 항목 추가
       </button>
     </div>
 
+    <!-- 투표 추가 설정 -->
     <div class="mt-10">
       <p class="mb-3">투표 추가 설정</p>
       <article v-for="item in voteTypes" :key="item.name">
@@ -53,6 +57,7 @@
       </article>
     </div>
 
+    
     <button class="button__outline-full primary" type="button" @click="submitVoteForm">
       작성 완료
     </button>
@@ -65,8 +70,12 @@ import { reactive, ref } from 'vue';
 import IconArrowLeft from '@/assets/img/common/icon_arrow_left.svg'
 // 캘린더 아이콘
 import IconCalendar from '@/assets/img/common/icon_calendar.svg'
+// 갤러리 아이콘
+import IconGallery from '@/assets/img/vote/icon_picture.svg'
 // composable
 import {getBasicDateFormat} from '@/composables/date'
+// api
+import { createVote } from '@/axios/api'
 // 라우터
 import { useRoute } from 'vue-router'
 const route = useRoute()
@@ -114,7 +123,8 @@ const voteEndDate = ref(new Date());
 const formData = reactive({
   name: '',
   description: '',
-  uId: store.userInfo.uid,
+  uid: store.userInfo.uid,
+  mid: '',
   deadLine: '',
   anonymousYn: 0,
   multiChoiceYn: 0,
@@ -128,7 +138,7 @@ const addVoteOption = () => {
 }
 
 // 투표 생성
-const submitVoteForm = () => {
+const submitVoteForm = async() => {
   // 투표명이 빈 값인지 체크
   if(!formData.name) {
     alert("투표명을 입력해주세요."); 
@@ -150,6 +160,15 @@ const submitVoteForm = () => {
 
   // 복수 선택 세팅
   formData.multiChoiceYn = voteTypes.find(el => el.name === 'multiChoiceYn')?.value === true ? 1 : 0
+
+  // mid 세팅
+  formData.mid = meetingNo
+  try{
+    const { data } = await createVote(formData)
+    console.log(data)
+  } catch(e) {
+    alert(e)
+  }
 }
 
 </script>

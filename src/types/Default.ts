@@ -24,3 +24,7 @@ export interface meeingInfo {
   description?: string
   mainPicture?: File
 }
+export type meetingParam = {
+  mid: string
+  uid: string
+}
