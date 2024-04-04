@@ -6,7 +6,7 @@ type DateInfo = {
 }
 
 type myDateInfo = {
-  cId: string
+  cid: string
   myDate: string
 }
 
@@ -16,14 +16,14 @@ interface apiResponse {
 }
 interface meeting {
   name: string
-  mId: number
+  mid: number
   updateDate: string
   mainPicture: string
 }
 
 interface meetingDateInfo {
   name: string
-  mId: number
+  mid: number
   dates: string[]
 }
 

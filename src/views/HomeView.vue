@@ -13,19 +13,26 @@
         class="meeting-list pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4"
       >
         <div
-          class="meeting-item"
-          @click="router.push(`meeting/${item.mId}`)"
+          class="meeting-list__box"
+          @click="router.push(`meeting/${item.mid}`)"
           v-for="item in meetings"
-          :key="item.mId"
+          :key="item.mid"
         >
-          <div class="thumb">
+          <div class="meeting-list__box__thumb">
             <img :src="`${item.mainPicture}`" v-if="item.mainPicture" />
           </div>
-          <div class="desc">
-            <p>{{ item.name }}</p>
-            <span>{{ item.updateDate.split(' ')[0] }}</span>
-            <span>멤버 수</span>
-            <span>총 게시글</span>
+          <div class="meeting-list__box__content">
+            <div class="meeting-list__box__content-detail">
+              <p>{{ item.name }}</p>
+              <span>{{ calculateDate(item.updateDate.split(' ')[0]) }}</span>
+              <span> · </span>
+              <span>멤버</span>
+            </div>
+             <!-- 더보기 아이콘 -->
+            <button class="bg-slate-200 text-xs ml-2" @click="$emit('closeModal')">
+              <IconMore />
+            </button>
+
           </div>
         </div>
       </div>
@@ -40,6 +47,9 @@
 // 프레임
 import Lnb from '@/components/frame/LnbFrame.vue'
 import Gnb from '@/components/frame/GnbFrame.vue'
+
+// 더보기 아이콘
+import IconMore from '@/assets/img/common/icon_more.svg'
 
 // 달력 로딩
 import PageLoading from '@/components/common/PageLoading.vue'
@@ -64,8 +74,13 @@ let stompClient: Client
 const socket = new SockJS(`${apiUrl}/ws`) // 소켓 서버 URL에 맞게 수정
 stompClient = new Client({ webSocketFactory: () => socket })
 
+// api
+import { meetingList } from '@/axios/api'
+
 const store = useUserStore()
 const router = useRouter()
+
+import {calculateDate, titleFormat, dayHeaderFormat} from '@/composables/date'
 
 // 캘린더 로드 대기 화면 show 여부
 let showLoading = ref(true)
@@ -87,32 +102,8 @@ const calendarOptions = reactive({
   weekends: true,
   fixedWeekCount: false,
   contentHeight: 850,
-  //titleFormat: {year: "numeric", month: 'numeric'},
-  titleFormat: function (date) {
-    return `${date.date.year}.${
-      String(date.date.month + 1).length === 1 ? `0${date.date.month + 1}` : date.date.month + 1
-    }`
-  },
-  dayHeaderFormat: function (date) {
-    switch (date.date.day) {
-      case 4:
-        return 'SUN'
-      case 5:
-        return 'MON'
-      case 6:
-        return 'TUE'
-      case 7:
-        return 'WED'
-      case 8:
-        return 'THU'
-      case 9:
-        return 'FRI'
-      case 10:
-        return 'SAT'
-      default:
-        return date.date.day
-    }
-  },
+  titleFormat,
+  dayHeaderFormat,
   buttonText: { today: 'Today' },
   dateClick: function (info: DateClickArg) {
     if (myCalendarList.find((el) => el.myDate === info.dateStr)) {
@@ -124,6 +115,7 @@ const calendarOptions = reactive({
     }
   },
   customButtons: {
+    // 이전 달 달력 보기 버튼
     prev: {
       click: function () {
         calendar.prev()
@@ -132,6 +124,7 @@ const calendarOptions = reactive({
         } else changeDate(currentMonth.value - 1, currentYear.value)
       }
     },
+    // 다음 달 달력 보기 버튼
     next: {
       click: function () {
         calendar.next()
@@ -145,7 +138,7 @@ const calendarOptions = reactive({
       const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
       if (td) {
         td.children[0].style.backgroundColor = '#D5E6E2'
-        td.children[0].style.color = '#00785B'
+        td.children[0].style.color = '#076E49'
       }
     })
   }
@@ -168,7 +161,7 @@ const deleteDate = (dateStr: string) => {
     body: JSON.stringify({
       uId: store.userInfo.uid,
       currentMonth: currentMonth.value,
-      cId: myCalendarList.filter((el) => el.myDate === dateStr)[0].cId
+      cid: myCalendarList.filter((el) => el.myDate === dateStr)[0].cid
     })
   })
 
@@ -180,7 +173,6 @@ const deleteDate = (dateStr: string) => {
 
 //  나의 모임 리스트
 const meetings: meeting[] = reactive([])
-
 // 소켓 연결
 const wsSubscribe = () => {
   stompClient.onConnect = () => {
@@ -199,16 +191,10 @@ const wsSubscribe = () => {
           const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
           if (td) {
             td.children[0].style.backgroundColor = '#D5E6E2'
-            td.children[0].style.color = '#00785B'
+            td.children[0].style.color = '#076E49'
           }
         })
       }
-    })
-
-    stompClient.subscribe(`/topic/myMeeting/list/${store.userInfo.uid}`, function ({ body }) {
-      const list = JSON.parse(body)
-      Object.assign(meetings, list)
-      if (!list) return
     })
 
     stompClient.subscribe('/topic/myCalendar/failed', function (data) {
@@ -223,7 +209,7 @@ const wsSubscribe = () => {
           title: el.name,
           start: el.dates[0],
           end: el.dates[el.dates.length - 1],
-          id: `${el.mId}`
+          id: `${el.mid}`
         })
       })
       calendar.render()
@@ -248,10 +234,22 @@ const changeDate = (month: number, year: number): void => {
   })
 }
 
+// 미팅 리스트
+const startNo = ref(1)
+const getMeetingList = async() => {
+  try{
+    const {data} = await meetingList(store.userInfo.uid, startNo.value, 10)
+    Object.assign(meetings, data.info)
+  } catch(e) {
+    alert(e)
+  }
+}
+
 onMounted(() => {
   // 켈린더
   stompClient.activate()
   wsSubscribe()
+  getMeetingList()
 })
 </script>
 
