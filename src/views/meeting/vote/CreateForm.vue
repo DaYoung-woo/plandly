@@ -81,6 +81,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 // 스토어
 import { useUserStore } from '@/stores/user.js'
+import type { createVoteType } from '@/types/Vote';
 const store = useUserStore()
 
 // param
@@ -117,17 +118,17 @@ const voteTypes = reactive([{
 }])
 
 // 투표 마감일
-const voteEndDate = ref(new Date());
+const voteEndDate = ref(Date());
 
 // 투표 form 값
-const formData = reactive({
+const formData: createVoteType = reactive({
   name: '',
   description: '',
   uid: store.userInfo.uid,
   mid: '',
-  deadLine: '',
+  deadLine: null,
   anonymousYn: 0,
-  multiChoiceYn: 0,
+  // multiChoiceYn: 0,
   addItemYn: 0,
   locationFlag: 0
 })
@@ -153,19 +154,22 @@ const submitVoteForm = async() => {
   }
 
   // 자동 종료 세팅
-  if(voteTypes.find(el => el.name === 'autoFinish')?.value) formData.deadLine = String(voteEndDate.value)
+  if(voteTypes.find(el => el.name === 'autoFinish')?.value) formData.deadLine = voteEndDate.value 
   
   // 익명 투표 세팅
   formData.anonymousYn = voteTypes.find(el => el.name === 'anonymousYn')?.value === true ? 1 : 0
 
   // 복수 선택 세팅
-  formData.multiChoiceYn = voteTypes.find(el => el.name === 'multiChoiceYn')?.value === true ? 1 : 0
+  //formData.multiChoiceYn = voteTypes.find(el => el.name === 'multiChoiceYn')?.value === true ? 1 : 0
 
   // mid 세팅
   formData.mid = meetingNo
+
+  // 투표 생성 api 호출
   try{
     const { data } = await createVote(formData)
-    console.log(data)
+    const vid = data.info
+    console.log(vid)
   } catch(e) {
     alert(e)
   }

@@ -15,7 +15,7 @@
         <div
           class="meeting-list__box"
           @click="router.push(`meeting/${item.mid}`)"
-          v-for="item in meetings"
+          v-for="(item, idx) in meetings"
           :key="item.mid"
         >
           <div class="meeting-list__box__thumb">
@@ -29,10 +29,15 @@
               <span>멤버</span>
             </div>
              <!-- 더보기 아이콘 -->
-            <button class="bg-slate-200 text-xs ml-2" @click="$emit('closeModal')">
-              <IconMore />
-            </button>
-
+             <div>
+              <button class="bg-slate-200 text-xs ml-2" @click="$emit('closeModal')">
+                <IconMore />
+              </button>
+              <div class="meeting-list__box__content-setting" v-if="item.open"  @click="changeOpen(idx)">
+                hello<br/>
+                HI
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -239,6 +244,7 @@ const startNo = ref(1)
 const getMeetingList = async() => {
   try{
     const {data} = await meetingList(store.userInfo.uid, startNo.value, 10)
+    data.info.forEach(el => el.open = false)
     Object.assign(meetings, data.info)
   } catch(e) {
     alert(e)
@@ -251,6 +257,10 @@ onMounted(() => {
   wsSubscribe()
   getMeetingList()
 })
+
+const changeOpen = (idx:number) => {
+  meetings[idx].open = !meetings[idx].open
+}
 </script>
 
 <style lang="scss">

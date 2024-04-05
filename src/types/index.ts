@@ -19,6 +19,7 @@ interface meeting {
   mid: number
   updateDate: string
   mainPicture: string
+  open?: boolean
 }
 
 interface meetingDateInfo {

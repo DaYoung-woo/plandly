@@ -27,4 +27,5 @@ export interface meeingInfo {
 export type meetingParam = {
   mid: string
   uid: string
+  updateDate?: Date
 }

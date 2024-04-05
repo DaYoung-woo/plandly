@@ -3,7 +3,7 @@ export interface createVoteType {
   uid: string | number,
   name: string,
   description: string,
-  deadLine: Date | string,
+  deadLine: string | null,
   anonymousYn: number,
   addItemYn: number,
   locationFlag: number

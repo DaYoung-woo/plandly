@@ -54,3 +54,8 @@ export const meetingList = (uid: string, startNo: number, pageSize: number) => {
 export const createVote = (param: createVoteType) => {
   return instance.post(`/api/add/vote`, param)
 }
+
+// 투표 항목 등록 
+export const createVoteOption = (param: createVoteType) => {
+  return instance.post(`/api/add/vote`, param)
+}
