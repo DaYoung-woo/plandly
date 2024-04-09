@@ -3,10 +3,7 @@
   <Gnb />
   <main>
     <div class="home-main">
-      <div class="calendar-padding" v-if="showLoading">
-        <PageLoading width="45px" />
-      </div>
-      <div id="calendar"></div>
+      <Calendar />
       <h2 class="pt-10">나의 모임</h2>
 
       <div
@@ -49,6 +46,14 @@
 </template>
 
 <script setup lang="ts">
+import { reactive, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user.js'
+import { useCalendarStore } from '@/stores/calendar.js'
+import {calculateDate} from '@/composables/date'
+// 캘린더
+import Calendar from '@/components/calendar/Calendar.vue'
+
 // 프레임
 import Lnb from '@/components/frame/LnbFrame.vue'
 import Gnb from '@/components/frame/GnbFrame.vue'
@@ -56,194 +61,20 @@ import Gnb from '@/components/frame/GnbFrame.vue'
 // 더보기 아이콘
 import IconMore from '@/assets/img/common/icon_more.svg'
 
-// 달력 로딩
-import PageLoading from '@/components/common/PageLoading.vue'
-
-// 캘린더 설정
-import { Calendar } from '@fullcalendar/core'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import type { DateClickArg } from 'fullcalendar-scheduler/index.js'
-
-// 변수 설정
-import { reactive, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user.js'
-
-//소켓 api url
-const apiUrl = import.meta.env.VITE_APP_API_URL
-// 소켓
-import { Client } from '@stomp/stompjs'
-import SockJS from 'sockjs-client'
-let stompClient: Client
-const socket = new SockJS(`${apiUrl}/ws`) // 소켓 서버 URL에 맞게 수정
-stompClient = new Client({ webSocketFactory: () => socket })
-
 // api
-import { meetingList } from '@/axios/api'
+import { getMyCalendar, meetingList } from '@/axios/api'
 
-const store = useUserStore()
+// 스토어 라우터 설정
+const userStore = useUserStore()
+const calendarStore = useCalendarStore()
 const router = useRouter()
-
-import {calculateDate, titleFormat, dayHeaderFormat} from '@/composables/date'
-
-// 캘린더 로드 대기 화면 show 여부
-let showLoading = ref(true)
-
-// 캘린더
-let calendar: Calendar
-
-// 내 일정 리스트
-let myCalendarList: myDateInfo[] = reactive([])
-// 현재 월
-let currentMonth = ref(new Date().getMonth())
-// 현재 년도
-let currentYear = ref(new Date().getFullYear())
-
-// 캘린더 옵션
-const calendarOptions = reactive({
-  plugins: [interactionPlugin, dayGridPlugin],
-  initialView: 'dayGridMonth',
-  weekends: true,
-  fixedWeekCount: false,
-  contentHeight: 850,
-  titleFormat,
-  dayHeaderFormat,
-  buttonText: { today: 'Today' },
-  dateClick: function (info: DateClickArg) {
-    if (myCalendarList.find((el) => el.myDate === info.dateStr)) {
-      info.dayEl.children[0].style.backgroundColor = '#fff'
-      deleteDate(info.dateStr)
-    } else {
-      info.dayEl.children[0].style.backgroundColor = '#D5E6E2'
-      addDate(info.dateStr)
-    }
-  },
-  customButtons: {
-    // 이전 달 달력 보기 버튼
-    prev: {
-      click: function () {
-        calendar.prev()
-        if (currentMonth.value === 1) {
-          changeDate(12, currentYear.value - 1)
-        } else changeDate(currentMonth.value - 1, currentYear.value)
-      }
-    },
-    // 다음 달 달력 보기 버튼
-    next: {
-      click: function () {
-        calendar.next()
-        if (currentMonth.value === 12) changeDate(1, currentYear.value + 1)
-        else changeDate(currentYear.value + 1, currentYear.value)
-      }
-    }
-  },
-  datesSet: function () {
-    myCalendarList.forEach((el: myDateInfo) => {
-      const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
-      if (td) {
-        td.children[0].style.backgroundColor = '#D5E6E2'
-        td.children[0].style.color = '#076E49'
-      }
-    })
-  }
-})
-
-const addDate = (dateStr: string) => {
-  stompClient.publish({
-    destination: '/calendar.send',
-    body: JSON.stringify({
-      uId: store.userInfo.uid,
-      myDate: dateStr,
-      currentMonth: currentMonth.value
-    })
-  })
-}
-
-const deleteDate = (dateStr: string) => {
-  stompClient.publish({
-    destination: '/calendar.delete',
-    body: JSON.stringify({
-      uId: store.userInfo.uid,
-      currentMonth: currentMonth.value,
-      cid: myCalendarList.filter((el) => el.myDate === dateStr)[0].cid
-    })
-  })
-
-  Object.assign(
-    myCalendarList,
-    myCalendarList.filter((el) => el.myDate !== dateStr)
-  )
-}
 
 //  나의 모임 리스트
 const meetings: meeting[] = reactive([])
-// 소켓 연결
-const wsSubscribe = () => {
-  stompClient.onConnect = () => {
-    stompClient.publish({
-      destination: '/myCalendar.view',
-      body: JSON.stringify({
-        uId: store.userInfo.uid, // 사용자 아이디
-        currentMonth: currentMonth.value // 현재 월
-      })
-    })
-
-    stompClient.subscribe(`/topic/myCalendar/${store.userInfo.uid}`, function ({ body }) {
-      if (JSON.parse(body)) {
-        Object.assign(myCalendarList, JSON.parse(body))
-        myCalendarList.forEach((el: myDateInfo) => {
-          const td = document.querySelector(`td[data-date="${el.myDate}"]`) as HTMLElement
-          if (td) {
-            td.children[0].style.backgroundColor = '#D5E6E2'
-            td.children[0].style.color = '#076E49'
-          }
-        })
-      }
-    })
-
-    stompClient.subscribe('/topic/myCalendar/failed', function (data) {
-      console.log(data)
-    })
-
-    stompClient.subscribe(`/topic/myMeeting/${store.userInfo.uid}`, function ({ body }) {
-      const list = JSON.parse(body)
-      if (!list) return
-      list.forEach((el: meetingDateInfo) => {
-        calendar.addEvent({
-          title: el.name,
-          start: el.dates[0],
-          end: el.dates[el.dates.length - 1],
-          id: `${el.mid}`
-        })
-      })
-      calendar.render()
-    })
-
-    let calendarEl: HTMLElement = document.getElementById('calendar')!
-    calendar = new Calendar(calendarEl, calendarOptions)
-    calendar.render()
-    showLoading.value = false
-  }
-}
-
-const changeDate = (month: number, year: number): void => {
-  currentMonth.value = month
-  stompClient.publish({
-    destination: '/myCalendar.view',
-    body: JSON.stringify({
-      uId: store.userInfo.uid, // 사용자 아이디
-      currentMonth: month, // 현재 월
-      currenYear: year // 현재 년도
-    })
-  })
-}
-
-// 미팅 리스트
 const startNo = ref(1)
 const getMeetingList = async() => {
   try{
-    const {data} = await meetingList(store.userInfo.uid, startNo.value, 10)
+    const {data} = await meetingList(userStore.userInfo.uid, startNo.value, 10)
     data.info.forEach(el => el.open = false)
     Object.assign(meetings, data.info)
   } catch(e) {
@@ -251,11 +82,23 @@ const getMeetingList = async() => {
   }
 }
 
+// 내 일정 조회 요청 api
+const loadMyCalendar = async() => {
+  try {
+    const param: myCalendarParam = {
+      uid: userStore.userInfo.uid, 
+      currentMonth: calendarStore.currentMonth,
+      currentYear: calendarStore.currentYear
+    }
+    await getMyCalendar(param)
+  }catch(e) {
+    alert(e)
+  }
+}
+
 onMounted(() => {
-  // 켈린더
-  stompClient.activate()
-  wsSubscribe()
   getMeetingList()
+  loadMyCalendar()
 })
 
 const changeOpen = (idx:number) => {

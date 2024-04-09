@@ -59,3 +59,8 @@ export const createVote = (param: createVoteType) => {
 export const createVoteOption = (param: createVoteType) => {
   return instance.post(`/api/add/vote`, param)
 }
+
+// 캘린더 내 일정 조회
+export const getMyCalendar = (param: myCalendarParam) => {
+  return instance.post(`/api/myCalendar`, param)
+}
