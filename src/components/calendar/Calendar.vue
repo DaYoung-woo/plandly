@@ -9,6 +9,7 @@
   import { onMounted, reactive, ref } from 'vue';
   import { useRouter } from 'vue-router'
   import { useUserStore } from '@/stores/user.js'
+  import { useCalendarStore } from '@/stores/calendar.js'
  
 
   // 캘린더 설정
@@ -26,9 +27,11 @@
   
   // 달력 로딩
   import PageLoading from '@/components/common/PageLoading.vue'
+import { addCalendar, deleteCalendar } from '@/axios/api';
 
   // 스토어
-  const store = useUserStore()
+  const userStore = useUserStore()
+  const calendarStore = useCalendarStore()
   // 라우터
   const router = useRouter()  
 
@@ -57,7 +60,7 @@
     stompClient.publish({
       destination: '/myCalendar.view',
       body: JSON.stringify({
-        uId: store.userInfo.uid, // 사용자 아이디
+        uId: userStore.userInfo.uid, // 사용자 아이디
         currentMonth: month, // 현재 월
         currenYear: year // 현재 년도
       })
@@ -114,32 +117,39 @@
   })
 
   // 일정 추가
-  const addDate = (dateStr: string) => {
-    stompClient.publish({
-      destination: '/calendar.send',
-      body: JSON.stringify({
-        uId: store.userInfo.uid,
-        myDate: dateStr,
-        currentMonth: currentMonth.value
-      })
-    })
+  const addDate = async(dateStr: string) => {
+    const param = {
+      uid: userStore.userInfo.uid,
+      myDate: dateStr,
+      currentMonth: calendarStore.currentMonth,
+      currentYear: calendarStore.currentYear,
+    }
+
+    try{
+      const res = addCalendar(param)
+      console.log(res)
+    }catch(e) {
+      alert(e)
+    }
   }
 
   // 일정 삭제
-  const deleteDate = (dateStr: string) => {
-    stompClient.publish({
-      destination: '/calendar.delete',
-      body: JSON.stringify({
-        uId: store.userInfo.uid,
-        currentMonth: currentMonth.value,
-        cid: myCalendarList.filter((el) => el.myDate === dateStr)[0].cid
-      })
-    })
-
-    Object.assign(
-      myCalendarList,
-      myCalendarList.filter((el) => el.myDate !== dateStr)
-    )
+  const deleteDate = async(dateStr: string) => {
+    const param = {
+      uid: userStore.userInfo.uid,
+      currentMonth: calendarStore.currentMonth,
+      currentYear: calendarStore.currentYear,
+      cid: myCalendarList.filter((el) => el.myDate === dateStr)[0].cid
+    }
+    try {
+      deleteCalendar(param)
+      Object.assign(
+        myCalendarList,
+        myCalendarList.filter((el) => el.myDate !== dateStr)
+      )
+    }catch(e) {
+      alert("오류가 발생했습니다.")
+    }
   }
 
   // 소켓 연결
@@ -148,12 +158,12 @@ const wsSubscribe = () => {
     stompClient.publish({
       destination: '/myCalendar.view',
       body: JSON.stringify({
-        uId: store.userInfo.uid, // 사용자 아이디
-        currentMonth: currentMonth.value // 현재 월
+        uId: userStore.userInfo.uid, // 사용자 아이디
+        currentMonth: calendarStore.currentMonth, // 현재 월
       })
     })
 
-    stompClient.subscribe(`/topic/myCalendar/${store.userInfo.uid}`, function ({ body }) {
+    stompClient.subscribe(`/topic/myCalendar/${userStore.userInfo.uid}`, function ({ body }) {
       console.log(JSON.parse(body))
       if (JSON.parse(body)) {
         Object.assign(myCalendarList, JSON.parse(body))
@@ -171,7 +181,7 @@ const wsSubscribe = () => {
       console.log(data)
     })
 
-    stompClient.subscribe(`/topic/myMeeting/${store.userInfo.uid}`, function ({ body }) {
+    stompClient.subscribe(`/topic/myMeeting/${userStore.userInfo.uid}`, function ({ body }) {
       const list = JSON.parse(body)
       if (!list) return
       list.forEach((el: meetingDateInfo) => {

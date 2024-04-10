@@ -1,6 +1,6 @@
 import { type userInfo, type meeingInfo, type meetingParam } from '@/types/Default'
 import instance from '@/axios/Axios'
-import type { createVoteType } from '@/types/Vote'
+import type { createVoteOptionType, createVoteType } from '@/types/Vote'
 
 export const login = (param: userInfo) => {
   return instance.post('/login', param)
@@ -56,11 +56,25 @@ export const createVote = (param: createVoteType) => {
 }
 
 // 투표 항목 등록 
-export const createVoteOption = (param: createVoteType) => {
-  return instance.post(`/api/add/vote`, param)
+export const addVoteOptions = (vid:number, param: any) => {
+  return instance.post(`/api/add/item/${vid}`, param, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 
 // 캘린더 내 일정 조회
 export const getMyCalendar = (param: myCalendarParam) => {
   return instance.post(`/api/myCalendar`, param)
+}
+
+// 캘린더 내 일정 추가
+export const addCalendar = (param: myCalendarParam) => {
+  return instance.post(`/api/add/myCalendar`, param)
+}
+
+// 캘린더 내 일정 삭제
+export const deleteCalendar = (param: myCalendarParam) => {
+  return instance.post(`/api/delete/myCalendar`, param)
 }

@@ -26,13 +26,12 @@
               <span>멤버</span>
             </div>
              <!-- 더보기 아이콘 -->
-             <div>
-              <button class="bg-slate-200 text-xs ml-2" @click="$emit('closeModal')">
+             <div class="meeting-list__box__icon-more">
+              <button class="bg-slate-200 text-xs ml-2" @click.stop="changeOpen(idx)">
                 <IconMore />
               </button>
               <div class="meeting-list__box__content-setting" v-if="item.open"  @click="changeOpen(idx)">
-                hello<br/>
-                HI
+                <button @click.stop="deleteMeeting" type="button">탈퇴</button>
               </div>
             </div>
           </div>
@@ -51,6 +50,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.js'
 import { useCalendarStore } from '@/stores/calendar.js'
 import {calculateDate} from '@/composables/date'
+
 // 캘린더
 import Calendar from '@/components/calendar/Calendar.vue'
 
@@ -96,14 +96,20 @@ const loadMyCalendar = async() => {
   }
 }
 
+// 모임 더보기 버튼 클릭
+const changeOpen = (idx:number) => {
+  meetings[idx].open = !meetings[idx].open
+}
+
+// 모임 삭제
+const deleteMeeting = () => {}
+
 onMounted(() => {
   getMeetingList()
   loadMyCalendar()
 })
 
-const changeOpen = (idx:number) => {
-  meetings[idx].open = !meetings[idx].open
-}
+
 </script>
 
 <style lang="scss">

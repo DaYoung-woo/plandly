@@ -4,8 +4,6 @@
     <IconArrowLeft class="mr-1" />투표
   </router-link>
 
-  
-
   <!-- 게시판 폼 -->
   <form class="basic-form" action="" >
     <h2>새 투표 작성하기</h2>
@@ -23,23 +21,40 @@
     <!-- 텍스트/날짜/장소 선택 라디오 -->
     <p>선택지 입력</p>
     <div class="flex-items-center">
-      <input type="radio" id="text" value="text" name="optionType"/> <label for="text">텍스트</label>
+      <input type="radio" id="text" value="text" name="optionType" v-model="optionType"/> <label for="text">텍스트</label>
       <input type="radio" id="date" value="date" name="optionType"/> <label for="date">날짜</label>
       <input type="radio" id="location" value="location" name="optionType"/><label for="location">장소</label>
     </div>
 
-    <!-- 항목 입력 -->
+    <!-- 선택지 입력 -->
     <div class="mt-4">
-      <div v-for="item in voteOptions" class="vote-form__option" >
+      <div 
+        v-for="(item, idx) in voteOptions" 
+        :class="`vote-form__option ${item.active && 'active'}`" 
+        @click="addActiveClass(item)" 
+        @focusout="removeActiveClass(item)"
+      >
+        <img :src="item.previewImage"  v-if="item.previewImage" class="vote-form__option__preview-image"/>
         <input 
           type="text" 
-          placeholder="항목 입력" 
+          placeholder="선택지 입력" 
           v-model="item.text"
         />
-        <div class="vote-form__option__gallery-icon"><IconGallery /></div>
+        <div class="vote-form__option__gallery-icon">
+          <label :for="`upload-image-${idx}`">
+            <IconGallery />
+          </label>
+          <input
+            type="file"
+            hidden
+            :id="`upload-image-${idx}`"
+            accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
+            @change="getFile($event, item)"
+          />
+        </div>
       </div>
       <button class="button__outline-full" @click="addVoteOption" type="button">
-        + 항목 추가
+        + 선택지 추가
       </button>
     </div>
 
@@ -75,20 +90,23 @@ import IconGallery from '@/assets/img/vote/icon_picture.svg'
 // composable
 import {getBasicDateFormat} from '@/composables/date'
 // api
-import { createVote } from '@/axios/api'
+import { addVoteOptions, createVote } from '@/axios/api'
 // 라우터
 import { useRoute } from 'vue-router'
 const route = useRoute()
 // 스토어
 import { useUserStore } from '@/stores/user.js'
-import type { createVoteType } from '@/types/Vote';
+import type { createVoteType, voteOptionType } from '@/types/Vote';
 const store = useUserStore()
 
 // param
 const meetingNo = route.params.meetingNo as string
 
+// 투표 선택지 타입
+const optionType = ref('text')
+
 // 투표 선택지
-const voteOptions = reactive([{text: ''}, {text: ''}])
+const voteOptions: voteOptionType[] = reactive([{text: '', active: false}, {text: '', active: false}])
 
 // 투표 방식
 const voteTypes = reactive([{
@@ -135,7 +153,36 @@ const formData: createVoteType = reactive({
 
 // 선택지 추가
 const addVoteOption = () => {
-  voteOptions.push({text: ''})
+  voteOptions.push({text: '', active: false})
+}
+
+// 이미지 설정 이벤트
+const getFile = (e: Event, item: voteOptionType) => {
+  const files = (e.target as HTMLInputElement).files
+
+  if (files) {
+    const file = files[0]
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const result = (event.target as FileReader)?.result as string
+      if (result) item.previewImage = result
+    }
+    reader.readAsDataURL(file)
+
+    // Add the file to the fileList
+    item.image = file
+  }
+}
+
+
+// 선택지 active 클래스 추가
+const addActiveClass = (item: voteOptionType) => {
+  item.active = true
+}
+
+// 선택지 active 클래스 삭제
+const removeActiveClass = (item: voteOptionType) => {
+  item.active = false
 }
 
 // 투표 생성
@@ -169,10 +216,35 @@ const submitVoteForm = async() => {
   try{
     const { data } = await createVote(formData)
     const vid = data.info
-    console.log(vid)
+    if(vid) createVoteOptions(vid)
   } catch(e) {
     alert(e)
   }
 }
+
+// 투표 선택지 생성
+const createVoteOptions = async(vid: number) => {
+  try { 
+    const formData = new FormData();
+
+    voteOptions.forEach(el => {
+      if(!el.image) return;
+      formData.append("image", el.image, el.image.name);
+    })
+
+    const reqBody = voteOptions.map(el => ({fileName: el.image?.name || '', name: el.text}))
+    formData.append(
+      "reqBody",
+      new Blob([JSON.stringify(reqBody)], {type: "application/json"})
+    );
+
+    const res = addVoteOptions(vid, formData)
+    console.log(res)
+
+  } catch(e) {
+    alert(e)
+  }
+}
+
 
 </script>

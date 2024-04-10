@@ -8,3 +8,19 @@ export interface createVoteType {
   addItemYn: number,
   locationFlag: number
 }
+export interface voteOptionType {
+  text: string,
+  active: boolean,
+  image?: File,
+  previewImage?: string
+}
+
+export interface createVoteOptionReqBody {
+  fileName?: string,
+  name: string
+}
+
+export interface createVoteOptionType {
+  image: File[],
+  reqBody: createVoteOptionReqBody[],
+}
